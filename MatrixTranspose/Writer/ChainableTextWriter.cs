@@ -65,16 +65,17 @@ namespace Writer {
       // ******** Implementation of IDisposable ********
 
       protected override void Dispose(bool disposing) {
-         if (!_isDisposed) {
-            if (disposing) {
-               _innerWriter?.Dispose();
-               _innerWriter = null;
-            }
+         if (_isDisposed)
+            return;
 
-            _isDisposed = true;
+         if (disposing) {
+            _innerWriter?.Dispose();
+            _innerWriter = null;
          }
-       
+
          base.Dispose(disposing);
+
+         _isDisposed = true;
       }
    }
 }

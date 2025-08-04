@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MatrixTranspose"
+        xmlns:userControls="clr-namespace:MatrixTranspose.UserControls"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="441"
@@ -383,7 +384,7 @@
 							       Content="Group Size:"
 							       FontWeight="Bold"
 							       VerticalAlignment="Center"/>
-                     <local:NumericUpDown x:Name="NumberGroupSize"
+                     <userControls:NumericUpDown x:Name="NumberGroupSize"
 							                     Grid.Row="0"
 							                     Grid.Column="1"
 							                     Value="0"
@@ -397,7 +398,7 @@
 							       FontWeight="Bold"
 							       VerticalAlignment="Center"
 							       Margin="0,10,0,0"/>
-                     <local:NumericUpDown x:Name="NumberMaxLineLength"
+                     <userControls:NumericUpDown x:Name="NumberMaxLineLength"
 							                     Grid.Row="1"
 							                     Grid.Column="1"
 							                     Value="0"

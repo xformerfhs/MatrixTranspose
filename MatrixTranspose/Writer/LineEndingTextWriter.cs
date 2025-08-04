@@ -40,11 +40,10 @@ namespace Writer {
       // ******** Implementation of TextWriter ********
 
       public override void Write(char value) {
-         if (value == '\n') {
+         if (value == '\n')
             _innerWriter.Write('\r');
-            _innerWriter.Write(value);
-         } else
-            _innerWriter.Write(value);
+
+         _innerWriter.Write(value);
       }
    }
 }

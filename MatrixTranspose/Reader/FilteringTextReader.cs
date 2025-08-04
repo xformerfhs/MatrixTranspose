@@ -103,20 +103,21 @@ namespace Reader {
       // ******** Implementation of IDisposable ********
 
       protected override void Dispose(bool disposing) {
-         if (!_isDisposed) {
-            if (disposing) {
-               if (_peekedChar != null) {
-                  _peekedChar = 0;
-                  _peekedChar = null;
-               }
+         if (_isDisposed)
+            return;
 
-               _allowedChars.Clear();
+         if (disposing) {
+            if (_peekedChar != null) {
+               _peekedChar = 0;
+               _peekedChar = null;
             }
 
-            _isDisposed = true;
+            _allowedChars.Clear();
          }
 
          base.Dispose(disposing);
+
+         _isDisposed = true;
       }
 
    }

@@ -29,30 +29,17 @@ namespace TranspositionNS {
    /// <typeparam name="K">Type of key.</typeparam>
    /// <typeparam name="V">Type of value.</typeparam>
    internal class ClearableKeyValuePair<K, V> {
-      // ******** Instance Variables ********
+      // ******** Public Properties ********
 
       /// <summary>
       /// Key.
       /// </summary>
-      private K _key;
+      public K Key { get; private set; }
 
       /// <summary>
       /// Value.
       /// </summary>
-      private V _value;
-
-
-      // ******** Public Properties ********
-
-      /// <summary>
-      /// Key (read-only property).
-      /// </summary>
-      public K Key { get => _key; }
-
-      /// <summary>
-      /// Value (read-only property).
-      /// </summary>
-      public V Value { get => _value; }
+      public V Value { get; private set; }
 
 
       // ******** Constructors ********
@@ -63,8 +50,8 @@ namespace TranspositionNS {
       /// <param name="key">Key.</param>
       /// <param name="value">Value.</param>
       public ClearableKeyValuePair(K key, V value) {
-         _key = key;
-         _value = value;
+         Key = key;
+         Value = value;
       }
 
 
@@ -74,8 +61,8 @@ namespace TranspositionNS {
       /// Clears the key-value-pair to overwrite sensitive data.
       /// </summary>
       public void Clear() {
-         _key = default;
-         _value = default;
+         Key = default;
+         Value = default;
       }
    }
 }

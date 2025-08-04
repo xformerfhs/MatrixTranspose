@@ -233,7 +233,7 @@ namespace MatrixTranspose {
             Passwords.Remove(droppedData);
             Passwords.Insert(index, droppedData);
          } else {
-            // ans Ende hängen
+            // Add to end.
             Passwords.Remove(droppedData);
             Passwords.Add(droppedData);
          }
@@ -449,21 +449,22 @@ namespace MatrixTranspose {
 
          // Check, if the character is valid in the current alphabet.
          if (!_alphabet.AlphabetSet.Contains(inputChar)) {
-            e.Handled = true; // Eingabe blockieren
+            e.Handled = true; // Do not accept character, if it is not in the alphabet.
             return;
          }
 
          // If the character had been converted to uppercase, replace it in the TextBox.
-         if (inputChar != e.Text[0]) {
-            e.Handled = true;
+         if (inputChar == e.Text[0])
+            return;
+         
+         e.Handled = true;
 
-            TextBox textBox = sender as TextBox;
-            int cursorPosition = textBox.SelectionStart;
+         TextBox textBox = sender as TextBox;
+         int cursorPosition = textBox.SelectionStart;
 
-            // Insert converted character at the correct cursor position.
-            textBox.Text = textBox.Text.Insert(cursorPosition, inputChar.ToString());
-            textBox.SelectionStart = cursorPosition + 1;
-         }
+         // Insert converted character at the correct cursor position.
+         textBox.Text = textBox.Text.Insert(cursorPosition, inputChar.ToString());
+         textBox.SelectionStart = cursorPosition + 1;
       }
 
 

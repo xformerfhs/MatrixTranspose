@@ -62,7 +62,7 @@ namespace ArrayHelper {
       /// Creates a new instance of <see cref="SlidingWindowCharBufferForReader"/> with the specified capacity.
       /// </summary>
       /// <param name="capacity">Number of characters in the window.</param>
-      /// <exception cref="ArgumentOutOfRangeException">Thrown, if the capacity is <= 0.</exception>
+      /// <exception cref="ArgumentOutOfRangeException">Thrown, if the capacity is less or equal 0.</exception>
       public SlidingWindowCharBufferForReader(int capacity) {
          if (capacity <= 0)
             throw new ArgumentOutOfRangeException(nameof(capacity), "Capacity must be > 0");
@@ -106,18 +106,17 @@ namespace ArrayHelper {
       // ******** Implementation of IDisposable  ********
 
       protected virtual void Dispose(bool disposing) {
-         if (!_isDisposed) {
-            if (disposing) {
-               Array.Clear(_buffer, 0, _buffer.Length);
-            }
-
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            // TODO: set large fields to null
-            _isDisposed = true;
+         if (_isDisposed)
+            return;
+         
+         if (disposing) {
+            Array.Clear(_buffer, 0, _buffer.Length);
          }
+
+         _isDisposed = true;
       }
 
-      // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+      // // Override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
       // ~SlidingWindowCharBufferForReader()
       // {
       //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method

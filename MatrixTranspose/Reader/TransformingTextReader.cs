@@ -35,7 +35,7 @@ namespace Reader {
       /// <summary>
       /// Transforming function to apply to each character read.
       /// </summary>
-      private readonly Func<char, char> transformer;
+      private readonly Func<char, char> _transformer;
 
 
       // ******** Public Static Properties ********
@@ -58,7 +58,7 @@ namespace Reader {
       /// </summary>
       public TransformingTextReader(TextReader innerReader, Func<char, char> transformer)
           : base(innerReader) {
-         this.transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+         _transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
       }
 
 
@@ -69,7 +69,7 @@ namespace Reader {
          if (ch == -1)
             return ch;
 
-         return transformer((char)ch);
+         return _transformer((char)ch);
       }
 
       public override int Peek() {
@@ -77,7 +77,7 @@ namespace Reader {
          if (ch == -1)
             return ch;
 
-         return transformer((char)ch);
+         return _transformer((char)ch);
       }
    }
 }

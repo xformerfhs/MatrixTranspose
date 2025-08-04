@@ -259,6 +259,7 @@ namespace MatrixTranspose {
          return fileInfo.Length;
       }
 
+
       // ******** Private Methods ********
 
       /// <summary>

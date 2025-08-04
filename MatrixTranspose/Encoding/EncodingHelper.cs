@@ -42,7 +42,7 @@ namespace MatrixTranspose {
       /// <summary>
       /// Code pages that can have a BOM.
       /// </summary>
-      private static readonly int[] _BomCodePages = {
+      private static readonly int[] BomCodePages = {
          CP_UTF8,
          CP_UTF16_LE,
          CP_UTF16_BE,
@@ -256,7 +256,7 @@ namespace MatrixTranspose {
       /// <param name="codePage">Codepage to check.</param>
       /// <returns><c>True</c>, if the codepage may have a BOM; <c>False</c>, if not.</returns>
       public static bool SupportsBom(int codePage) {
-         return _BomCodePages.Contains(codePage);
+         return BomCodePages.Contains(codePage);
       }
    }
 }

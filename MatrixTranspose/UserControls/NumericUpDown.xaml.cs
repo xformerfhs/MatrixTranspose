@@ -27,7 +27,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace MatrixTranspose {
+namespace MatrixTranspose.UserControls {
    /// <summary>
    /// Class to implement a spin button.
    /// </summary>
@@ -38,21 +38,21 @@ namespace MatrixTranspose {
       /// Registers the "Value" property of the NumericUpDown control.
       /// </summary>
       public static readonly DependencyProperty ValueProperty =
-          DependencyProperty.Register("Value", typeof(int), typeof(NumericUpDown),
+          DependencyProperty.Register(nameof(Value), typeof(int), typeof(NumericUpDown),
               new PropertyMetadata(1, OnValueChanged, CoerceValue));
 
       /// <summary>
       /// Registers the "Minimum" property of the NumericUpDown control.
       /// </summary>
       public static readonly DependencyProperty MinimumProperty =
-          DependencyProperty.Register("Minimum", typeof(int), typeof(NumericUpDown),
+          DependencyProperty.Register(nameof(Minimum), typeof(int), typeof(NumericUpDown),
               new PropertyMetadata(1, OnMinMaxChanged));
 
       /// <summary>
       /// Registers the "Maximum" property of the NumericUpDown control.
       /// </summary>
       public static readonly DependencyProperty MaximumProperty =
-          DependencyProperty.Register("Maximum", typeof(int), typeof(NumericUpDown),
+          DependencyProperty.Register(nameof(Maximum), typeof(int), typeof(NumericUpDown),
               new PropertyMetadata(20, OnMinMaxChanged));
 
       // ******** Public Properties ********
@@ -61,24 +61,24 @@ namespace MatrixTranspose {
       /// Value of the NumericUpDown control.
       /// </summary>
       public int Value {
-         get { return (int)GetValue(ValueProperty); }
-         set { SetValue(ValueProperty, value); }
+         get => (int)GetValue(ValueProperty);
+         set => SetValue(ValueProperty, value);
       }
 
       /// <summary>
       /// Minimum allowed value of the NumericUpDown control.
       /// </summary>
       public int Minimum {
-         get { return (int)GetValue(MinimumProperty); }
-         set { SetValue(MinimumProperty, value); }
+         get => (int)GetValue(MinimumProperty);
+         set => SetValue(MinimumProperty, value);
       }
 
       /// <summary>
       /// Maximum allowed value of the NumericUpDown control.
       /// </summary>
       public int Maximum {
-         get { return (int)GetValue(MaximumProperty); }
-         set { SetValue(MaximumProperty, value); }
+         get => (int)GetValue(MaximumProperty);
+         set => SetValue(MaximumProperty, value);
       }
 
 
@@ -89,7 +89,6 @@ namespace MatrixTranspose {
       /// </summary>
       public NumericUpDown() {
          InitializeComponent();
-
       }
 
 
@@ -195,21 +194,22 @@ namespace MatrixTranspose {
       /// <param name="sender">Sender control.</param>
       /// <param name="e">Event parameters.</param>
       private void TextBoxValue_TextChanged(object sender, TextChangedEventArgs e) {
-         if (sender is TextBox textBox &&
-             !string.IsNullOrEmpty(textBox.Text)) {
-            if (int.TryParse(textBox.Text, out int newValue)) {
-               if (newValue >= Minimum && newValue <= Maximum) {
-                  Value = newValue;
-               } else {
-                  // Do not allow values outside the range.
-                  textBox.Text = Value.ToString();
-                  textBox.CaretIndex = textBox.Text.Length;
-               }
+         if (!(sender is TextBox textBox) ||
+             string.IsNullOrEmpty(textBox.Text))
+            return;
+         
+         if (int.TryParse(textBox.Text, out int newValue)) {
+            if (newValue >= Minimum && newValue <= Maximum) {
+               Value = newValue;
             } else {
                // Do not allow values outside the range.
                textBox.Text = Value.ToString();
                textBox.CaretIndex = textBox.Text.Length;
             }
+         } else {
+            // Do not allow values outside the range.
+            textBox.Text = Value.ToString();
+            textBox.CaretIndex = textBox.Text.Length;
          }
       }
 

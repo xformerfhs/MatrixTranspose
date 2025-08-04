@@ -1,6 +1,6 @@
 ﻿<!-- Custom control that implements a numeric spin button. -->
 <!-- I do not understand why this is not a basic WPF control. -->
-   <UserControl x:Class="MatrixTranspose.NumericUpDown"
+   <UserControl x:Class="MatrixTranspose.UserControls.NumericUpDown"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Name="Root">

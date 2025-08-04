@@ -62,7 +62,7 @@ namespace TranspositionNS {
             string password = passwords[i];
 
             if (password.Length < 2)
-               throw new ArgumentException($"{i+1}. password is too short", nameof(passwords));
+               throw new ArgumentException($"{i + 1}. password is too short", nameof(passwords));
 
             orders[i] = ColumnOrder(passwords[i]);
          }
@@ -76,7 +76,7 @@ namespace TranspositionNS {
       /// Transposes the input array based on the derived column orders.
       /// </summary>
       /// <remarks>
-      /// The source array is overwritten if there two or more passwords.
+      /// The source array is overwritten if there are two or more passwords.
       /// This saves memory by not allocating yet another array.
       /// </remarks>
       /// <typeparam name="T">Type of the input array data.</typeparam>
@@ -102,7 +102,7 @@ namespace TranspositionNS {
       /// Untransposes the input array based on the derived column orders.
       /// </summary>
       /// <remarks>
-      /// The source array is overwritten if there two or more passwords.
+      /// The source array is overwritten if there are two or more passwords.
       /// This saves memory by not allocating yet another array.
       /// </remarks>
       /// <typeparam name="T">Type of the input array data.</typeparam>
@@ -135,7 +135,7 @@ namespace TranspositionNS {
       /// <typeparam name="T">Type of the input array data.</typeparam>
       /// <param name="source">The password array to be transposed.</param>
       /// <param name="target">The target array that receives the transposed data.</param>
-      /// <param name="sourceLen">Length of the data in <paramref name="source"/>.
+      /// <param name="sourceLen">Length of the data in <paramref name="source"/>.</param>
       /// <param name="offsets">The list of offsets for the transposition.</param>
       private static void TransposeToTarget<T>(T[] source, T[] target, int sourceLen, in int[] offsets) {
          int transposeLen = offsets.Length;
@@ -163,7 +163,7 @@ namespace TranspositionNS {
       /// <typeparam name="T">Type of the input array data.</typeparam>
       /// <param name="source">The password array to be transposed.</param>
       /// <param name="target">The target array that receives the transposed data.</param>
-      /// <param name="sourceLen">Length of the data in <paramref name="source"/>.
+      /// <param name="sourceLen">Length of the data in <paramref name="source"/></param>.
       /// <param name="transposeLen">Length of all column transpositions, i.e. length of password.</param>
       /// <param name="offset">The offset of the column.</param>
       /// <param name="destinationIndex">The start index in <paramref name="target"/>.</param>
@@ -186,7 +186,7 @@ namespace TranspositionNS {
       /// <typeparam name="T">Type of the input array data.</typeparam>
       /// <param name="source">The password array to be transposed.</param>
       /// <param name="target">The target array that receives the transposed data.</param>
-      /// <param name="sourceLen">Length of the data in <paramref name="source"/>.
+      /// <param name="sourceLen">Length of the data in <paramref name="source"/>.</param>
       /// <param name="offsets">The list of offsets for the transposition.</param>
       private static void UntransposeToTarget<T>(T[] source, T[] target, int sourceLen, in int[] offsets) {
          int transposeLen = offsets.Length;
@@ -215,10 +215,10 @@ namespace TranspositionNS {
       /// <typeparam name="T">Type of the input array data.</typeparam>
       /// <param name="source">The password array to be transposed.</param>
       /// <param name="target">The target array that receives the transposed data.</param>
-      /// <param name="sourceLen">Length of the data in <paramref name="source"/>.
+      /// <param name="sourceLen">Length of the data in <paramref name="source"/>.</param>
       /// <param name="transposeLen">Length of all column transpositions, i.e. length of password.</param>
       /// <param name="offset">The offset of the column.</param>
-      /// <param name="destinationIndex">The start index in <paramref name="target"/>.</param>
+      /// <param name="sourceIndex">The start index in <paramref name="source"/>.</param>
       private static void UntransposeColumn<T>(
          T[] source,
          T[] target,
@@ -235,7 +235,7 @@ namespace TranspositionNS {
       /// <summary>
       /// Calculates the length of a column in the transposed array.
       /// </summary>
-      /// <param name="sourceLen">Length of the data in <paramref name="source"/>.
+      /// <param name="sourceLen">Length of source.</param>
       /// <param name="transposeLen">Length of all column transpositions, i.e. length of password.</param>
       /// <param name="offset">The offset of the column.</param>
       /// <returns>The length of the column <paramref name="offset"/>.</returns>
@@ -272,24 +272,23 @@ namespace TranspositionNS {
       /// Disposes the resources used by the Transposition and clears sensitive data.
       /// </summary>
       protected virtual void Dispose(bool disposing) {
-         if (!_isDisposed) {
-            if (disposing) {
-               // Delete sensitive data.
-               foreach (var order in _orders)
-                  Array.Clear(order, 0, order.Length);
+         if (_isDisposed)
+            return;
 
-               Array.Clear(_orders, 0, _orders.Length);
+         if (disposing) {
+            // Delete sensitive data.
+            foreach (var order in _orders)
+               Array.Clear(order, 0, order.Length);
 
-               _orders = null; // Release the reference to the orders array.
-            }
+            Array.Clear(_orders, 0, _orders.Length);
 
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            // TODO: set large fields to null
-            _isDisposed = true;
+            _orders = null; // Release the reference to the orders array.
          }
+
+         _isDisposed = true;
       }
 
-      // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+      // Override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
       // ~Transposition()
       // {
       //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method

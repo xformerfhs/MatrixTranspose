@@ -137,20 +137,22 @@ namespace Writer {
       // ******** Implementation of IDisposable ********
 
       protected override void Dispose(bool disposing) {
-         if (!_isDisposed) {
-            if (disposing) {
-               try {
-                  Flush();
-               } catch {
-                  // Ignore flush errors during disposal
-               }
-               _buffer?.Dispose();
+         if (_isDisposed)
+            return;
+
+         if (disposing) {
+            try {
+               Flush();
+            } catch {
+               // Ignore flush errors during disposal.
             }
 
-            _isDisposed = true;
+            _buffer?.Dispose();
          }
 
          base.Dispose(disposing);
+
+         _isDisposed = true;
       }
    }
 }

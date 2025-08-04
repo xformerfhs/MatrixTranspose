@@ -2,7 +2,7 @@
 using ArrayHelper;
 using System.Collections;
 
-namespace SubstitutionAlphabetTest {
+namespace MatrixTransposeTest {
    [TestClass]
    public sealed class SubstitutionAlphabetTest {
       [TestMethod]

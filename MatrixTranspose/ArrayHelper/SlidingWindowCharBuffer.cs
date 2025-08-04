@@ -133,13 +133,14 @@ namespace ArrayHelper {
       // ******** Implementation of IDisposable  ********
 
       protected virtual void Dispose(bool disposing) {
-         if (!_isDisposed) {
-            if (disposing) {
-               Array.Clear(_buffer, 0, _buffer.Length);
-            }
-      
-            _isDisposed = true;
+         if (_isDisposed)
+            return;
+
+         if (disposing) {
+            Array.Clear(_buffer, 0, _buffer.Length);
          }
+
+         _isDisposed = true;
       }
 
       public void Dispose() {

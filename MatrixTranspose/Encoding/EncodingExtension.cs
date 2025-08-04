@@ -46,17 +46,20 @@ namespace MatrixTranspose {
       public static int BytesPerCharacter(this Encoding encoding) {
          if (encoding.IsSingleByte)
             return 1;
-         else
-            if (encoding is UTF8Encoding)
+
+         switch (encoding) {
+            case UTF8Encoding _:
                return 1;
-            else
-               if (encoding is UnicodeEncoding)
-                  return 2;
-               else
-                  if (encoding is UTF32Encoding)
-                     return 4;
-                  else
-                     return 1;  // This is the default. We assume 1 byte / character.
+
+            case UnicodeEncoding _:
+               return 2;
+
+            case UTF32Encoding _:
+               return 4;
+
+            default:
+               return 1;  // This is the default. We assume 1 byte / character.
+         }
       }
    }
 }

@@ -34,12 +34,12 @@ namespace Reader {
       /// <summary>
       /// Remember if the last character read was a carriage return (CR).
       /// </summary>
-      private bool lastWasCR = false;
+      private bool _lastWasCR = false;
 
       /// <summary>
       /// Peeked character, if any.
       /// </summary>
-      private int? peekedChar;
+      private int? _peekedChar;
 
 
       // ******** Constructors ********
@@ -53,26 +53,25 @@ namespace Reader {
       // ******** Implementation of TextReader ********
 
       public override int Read() {
-         // 1. Check if we have a peeked character and return it if available.
-         if (peekedChar.HasValue) {
-            int result = peekedChar.Value;
-            peekedChar = null;
-            return result;
-         }
+         // 1. If there is no peeked character read the next one.
+         if (!_peekedChar.HasValue)
+            return ReadInternal();
 
-         // 2. Read character.
-         return ReadInternal();
+         // 2. There is a peeked character: Return it.
+         int result = _peekedChar.Value;
+         _peekedChar = null;
+         return result;
       }
 
       public override int Peek() {
          // 1. Check if we have a peeked character and return it if available.
-         if (peekedChar.HasValue)
-            return peekedChar.Value;
+         if (_peekedChar.HasValue)
+            return _peekedChar.Value;
 
          // 2. Read character and store it for Read and Peek.
-         peekedChar = ReadInternal();
+         _peekedChar = ReadInternal();
 
-         return peekedChar.Value;
+         return _peekedChar.Value;
       }
 
 
@@ -89,29 +88,32 @@ namespace Reader {
 
          char c = (char)ch;
 
-         if (lastWasCR) {
-            lastWasCR = false;
+         if (_lastWasCR) {
+            _lastWasCR = false;
 
             if (c == '\n') {
                // CRLF -> skip the LF, we already returned LF for CR
                return ReadInternal();
             } else {
                // CR followed by something else, process this character
-               if (c == '\r') {
-                  lastWasCR = true;
-                  return '\n';
-               }
-
-               return c;
+               return HandleCR(c);
             }
          }
 
-         if (c == '\r') {
-            lastWasCR = true;
-            return '\n';
-         }
+         return HandleCR(c);
+      }
 
-         return c;
+      /// <summary>
+      /// Returns <paramref name="c"/> if it is not CR, LF, if it is.
+      /// </summary>
+      /// <param name="c">Character to handle.</param>
+      /// <returns>Either <paramref name="c"/> or LF.</returns>
+      private int HandleCR(char c) {
+         if (c != '\r')
+            return c;
+
+         _lastWasCR = true;
+         return '\n';
       }
    }
 }

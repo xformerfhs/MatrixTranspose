@@ -84,7 +84,7 @@ namespace Alphabet {
          if (numCharacters == 0 || numCharacters > MAX_VALUE)
             throw new ArgumentException(string.Format(FORMAT_INVALID_VALUE, @"characters", MAX_VALUE));
 
-         if (alphabet == null || alphabet.Length == 0)
+         if (string.IsNullOrEmpty(alphabet))
             throw new ArgumentException(@"Alphabet must not be null or empty");
 
          int combinationCount = (int)Math.Pow((double)numCharacters, (double)numPlaces);

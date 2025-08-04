@@ -102,7 +102,7 @@ namespace Reader {
 
          // 2. Read next character from the inner reader until a mapped character is found.
          int ch;
-         while ((ch = _innerReader.Read()) != -1) {         
+         while ((ch = _innerReader.Read()) != -1) {
             char c = (char)ch;
 
             if (_mapping.TryGetValue(c, out var replacements)) {
@@ -121,18 +121,17 @@ namespace Reader {
       // ******** Implementation of IDisposable ********
 
       protected override void Dispose(bool disposing) {
-         if (!_isDisposed) {
-            if (disposing) {
-               if (_currentReplacement != null)
-                  _currentReplacement = null;
+         if (!_isDisposed)
+            return;
 
-               _replacementIndex = 0;
-            }
-
-            _isDisposed = true;
+         if (disposing) {
+            _currentReplacement = null;
+            _replacementIndex = 0;
          }
 
          base.Dispose(disposing);
+
+         _isDisposed = true;
       }
    }
 }

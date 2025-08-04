@@ -99,7 +99,7 @@ namespace Alphabet {
       /// </summary>
       /// <param name="numCharacters">Number of characters to generate.</param>
       /// <returns>Character array with <paramref name="numCharacters"/> random elements.</returns>
-      static public char[] GetRandomSubstitutionCharacters(byte numCharacters) {
+      public static char[] GetRandomSubstitutionCharacters(byte numCharacters) {
          if (numCharacters == 0)
             throw new ArgumentException("Number of characters must not be 0", nameof(numCharacters));
 
@@ -107,8 +107,9 @@ namespace Alphabet {
          Random rnd = new Random();
          while ((byte)alphabetSet.Count < numCharacters) {
             char c = (char)('A' + rnd.Next(0, 26));
-            if (!alphabetSet.Contains(c))
-               alphabetSet.Add(c);
+            // No need to check if character is already in set, as the Add method
+            // simply will not add it, if it is already present.
+            alphabetSet.Add(c);
          }
 
          return alphabetSet.ToArray();
@@ -186,7 +187,5 @@ namespace Alphabet {
 
          return -1; // This means that the password contained all valid characters.
       }
-
-
    }
 }

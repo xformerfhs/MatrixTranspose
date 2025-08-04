@@ -57,16 +57,17 @@ namespace Reader {
       // ******** Implementation of IDisposable ********
 
       protected override void Dispose(bool disposing) {
-         if (!_isDisposed) {
+         if (_isDisposed)
+            return;
+
             if (disposing) {
                _innerReader.Dispose();
                _innerReader = null;
             }
 
-            _isDisposed = true;
-         }
-
          base.Dispose(disposing);
+
+         _isDisposed = true;
       }
    }
 }

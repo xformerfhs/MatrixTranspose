@@ -1,7 +1,6 @@
-﻿using MatrixTranspose;
-using TranspositionNS;
+﻿using TranspositionNS;
 
-namespace SubstitutionAlphabetTest {
+namespace MatrixTransposeTest {
    [TestClass]
    public sealed class TranspositionTest {
       private const int PASSWORD_LOOP_COUNT = 100;
