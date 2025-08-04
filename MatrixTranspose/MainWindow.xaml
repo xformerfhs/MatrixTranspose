@@ -1,0 +1,439 @@
+﻿<Window x:Name="WindowMain"
+        x:Class="MatrixTranspose.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MatrixTranspose"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="441"
+        Width="977">
+   <TabControl x:Name="TabCon">
+      <TabItem x:Name="TabMatrix"
+		         Header="Matrix Substitution"
+		         Background="MediumPurple"
+		         FontSize="14">
+         <StackPanel x:Name="StackMatrix"
+			            Orientation="Vertical">
+            <GroupBox x:Name="GroupCharacterClasses"
+				          HorizontalAlignment="Left"
+				          Height="167"
+				          Header="Character Classes"
+				          Margin="10,10,0,0"
+				          Width="408">
+               <StackPanel x:Name="StackCharacterClasses"
+					            Margin="10,0,0,0">
+                  <RadioButton x:Name="Radio25"
+						             Content="2x5 characters [A-Z], J mapped to I"
+						             IsChecked="True"
+						             Margin="0,5,0,0"
+						             Checked="Radio25_Checked"/>
+                  <RadioButton x:Name="Radio26"
+						             Content="2x6 characters [A-Z][0-9]"
+						             Margin="0,5,0,0"
+						             Checked="Radio26_Checked"/>
+                  <RadioButton x:Name="Radio33"
+						             Content="3x3 characters [A-Z][ ]"
+						             Margin="0,5,0,0"
+						             Checked="Radio33_Checked"/>
+                  <RadioButton x:Name="Radio34"
+						             Content="3x4 characters [A-Z][a-z][0-9][ .]"
+						             Margin="0,5,0,0"
+						             Checked="Radio34_Checked"/>
+                  <RadioButton x:Name="Radio43"
+						             Content="4x3 characters [A-Z][a-z][0-9][specials]"
+						             Margin="0,5,0,0"
+						             Checked="Radio43_Checked"/>
+                  <RadioButton x:Name="Radio36"
+						             Content="3x6 characters [A-Z][a-z][0-9][european][extended_specials]"
+						             Margin="0,5,0,0"
+						             Checked="Radio36_Checked"/>
+               </StackPanel>
+            </GroupBox>
+            <GroupBox x:Name="GroupMatrixAlphabet"
+				          HorizontalAlignment="Left"
+				          Header="Matrix Characters"
+				          Margin="10,10,0,0"
+				          Width="360">
+               <StackPanel x:Name="StackMatrixAlphabet"
+					            Orientation="Horizontal">
+                  <Label x:Name="LabelMatrixCharacters"
+						       Content="Characters:"
+						       FontWeight="Bold"
+						       HorizontalContentAlignment="Left"
+						       VerticalAlignment="Center"
+						       VerticalContentAlignment="Center"
+						       Margin="0,0,0,0"/>
+                  <TextBox x:Name="TextAlphabet"
+						         MaxLength="6"
+						         HorizontalAlignment="Left"
+						         Height="20"
+						         Width="64"
+						         PreviewTextInput="TextAlphabet_PreviewTextInput"
+                           PreviewKeyDown="TextAlphabet_PreviewKeyDown"/>
+                  <Button x:Name="ButtonAlphabet"
+						        Content="Random Alphabet"
+						        HorizontalAlignment="Left"
+						        Width="120"
+						        Margin="20,0,0,0"
+						        Click="ButtonAlphabet_Click"/>
+               </StackPanel>
+            </GroupBox>
+            <GroupBox x:Name="GroupMatrixPassword"
+				          HorizontalAlignment="Left"
+				          Header="Password"
+				          Margin="10,10,0,0"
+				          Width="400">
+               <StackPanel x:Name="StackMatrixPassword"
+					            Orientation="Horizontal">
+                  <Label x:Name="LabelMatrixPassword"
+						       Content="Password:"
+						       FontWeight="Bold"
+						       HorizontalContentAlignment="Left"
+						       Margin="0,0,7,0"/>
+                  <TextBox x:Name="TextMatrixPassword"
+						         Height="20"
+						         Width="300"
+						         PreviewTextInput="TextMatrixPassword_PreviewTextInput"
+                           PreviewKeyDown="TextMatrixPassword_PreviewKeyDown"/>
+               </StackPanel>
+            </GroupBox>
+         </StackPanel>
+      </TabItem>
+      <TabItem x:Name="TabTransposition"
+		         Header="Transposition"
+		         Background="Orange"
+		         FontSize="14">
+         <StackPanel x:Name="StackPasswords"
+			            Orientation="Vertical"
+			            Margin="0,0,0,0">
+            <Label x:Name="LabelExplanation"
+				       Content="Enter a password to add it to the list. Drag and drop passwords to change their order. Click on the 'X' button to remove a password from the list."
+				       Margin="5,10,10,0"/>
+            <StackPanel x:Name="StackPasswordInput"
+				            Orientation="Horizontal"
+				            Margin="5,10,0,0">
+               <Label x:Name="LabelPassword"
+					       Content="Password:"
+					       FontWeight="Bold"
+					       Width="80"
+					       HorizontalContentAlignment="Left"
+					       Margin="0,0,10,0"/>
+               <TextBox x:Name="PasswordInputBox"
+					         Width="400"
+					         KeyDown="PasswordInputBox_KeyDown"/>
+            </StackPanel>
+            <StackPanel x:Name="StackPasswordList"
+				            Orientation="Horizontal"
+				            Margin="5,5,0,10">
+               <Label x:Name="LabelPasswords"
+					       Content="Passwords:"
+					       FontWeight="Bold"
+					       HorizontalContentAlignment="Left"
+					       Width="80"
+					       Margin="0,0,10,0"/>
+               <ListBox x:Name="ListBoxPasswords"
+					         ItemsSource="{Binding Passwords}"
+					         AllowDrop="True"
+					         Background="Transparent"
+					         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+					         BorderThickness="0"
+					         PreviewMouseLeftButtonDown="PasswordListBox_PreviewMouseLeftButtonDown"
+					         Drop="PasswordListBox_Drop"
+					         DragOver="PasswordListBox_DragOver"
+					         Width="690">
+                  <ListBox.ItemsPanel>
+                     <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                     </ItemsPanelTemplate>
+                  </ListBox.ItemsPanel>
+                  <ListBox.ItemTemplate>
+                     <DataTemplate>
+                        <Border Background="Orange"
+								        CornerRadius="5"
+								        Margin="1"
+								        Padding="2"
+								        BorderBrush="Red"
+								        BorderThickness="1">
+                           <StackPanel x:Name="StackOnePassword"
+									            Orientation="Horizontal"
+									            VerticalAlignment="Center">
+                              <TextBlock Text="{Binding}"
+										           Margin="0,0,1,0"/>
+                              <Button x:Name="ButtonRemovePassword"
+										        Content="X"
+										        Tag="{Binding}"
+										        Width="16"
+										        Height="16"
+										        Padding="0"
+										        FontWeight="Bold"
+										        Background="Transparent"
+										        BorderThickness="0"
+										        Foreground="DarkRed"
+										        Click="ButtonRemovePassword_Click"
+										        VerticalAlignment="Center"/>
+                           </StackPanel>
+                        </Border>
+                     </DataTemplate>
+                  </ListBox.ItemTemplate>
+               </ListBox>
+            </StackPanel>
+         </StackPanel>
+      </TabItem>
+      <TabItem x:Name="TabFile"
+		         Header="File"
+		         Background="GreenYellow"
+		         FontSize="14"
+		         Height="23"
+		         VerticalAlignment="Center" HorizontalAlignment="Left" Width="32">
+         <StackPanel x:Name="StackFiles"
+			            Orientation="Vertical">
+            <GroupBox x:Name="GroupFileOperation"
+				          HorizontalAlignment="Left"
+				          Height="50"
+				          Header="Operation"
+				          Margin="10,10,0,0"
+				          Width="171"
+				          RenderTransformOrigin="0.513,0.482">
+               <StackPanel x:Name="StackFileOperation"
+					            Orientation="Horizontal"
+					            Margin="0,0,0,0">
+                  <RadioButton Name="RadioEncrypt"
+						             Content="Encrypt"
+						             IsChecked="True"
+						             Margin="10,5,0,0"
+						             Checked="RadioEncrypt_Checked"/>
+                  <RadioButton Name="RadioDecrypt"
+						             Content="Decrypt"
+						             IsChecked="False"
+						             Margin="10,5,0,0"
+						             Checked="RadioDecrypt_Checked"/>
+               </StackPanel>
+            </GroupBox>
+            <GroupBox x:Name="GroupFiles"
+          HorizontalAlignment="Left"
+          Height="116"
+          Header="Files"
+          Margin="10,10,0,0"
+          Width="933">
+               <Grid Margin="10,5,10,5">
+                  <Grid.RowDefinitions>
+                     <RowDefinition Height="Auto"/>
+                     <RowDefinition Height="Auto"/>
+                     <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                     <ColumnDefinition Width="90"/>
+                     <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+
+                  <Button x:Name="ButtonSourceFile"
+              Grid.Row="0"
+              Grid.Column="0"
+              Content="Source File"
+              HorizontalAlignment="Left"
+              Margin="0,0,0,5"
+              Click="ButtonSourceFile_Click"
+              Width="81"/>
+
+                  <Label x:Name="LabelSource"
+             Grid.Row="1"
+             Grid.Column="0"
+             Content="Source:"
+             FontWeight="Bold"
+             Padding="0"
+             VerticalAlignment="Top"
+             Margin="0,0,8,5"/>
+                  <TextBlock x:Name="TextSourceFile"
+                 Grid.Row="1"
+                 Grid.Column="1"
+                 TextWrapping="Wrap"
+                 Text=""
+                 Margin="0,0,0,5"/>
+
+                  <Label x:Name="LabelDestination"
+             Grid.Row="2"
+             Grid.Column="0"
+             Content="Destination:"
+             FontWeight="Bold"
+             Padding="0"
+             VerticalAlignment="Top"
+             Margin="0,0,8,0"/>
+                  <TextBlock x:Name="TextDestinationFile"
+                 Grid.Row="2"
+                 Grid.Column="1"
+                 TextWrapping="Wrap"
+                 Text=""/>
+               </Grid>
+            </GroupBox>
+            <StackPanel x:Name="StackFileMisc" Orientation="Horizontal">
+               <GroupBox x:Name="GroupEncoding"
+					          Header="Encodings"
+					          Margin="10,10,0,0">
+                  <StackPanel x:Name="StackEncoding"
+						            Margin="10,0,0,0"
+						            Orientation="Vertical">
+                     <StackPanel x:Name="StackInputEncoding"
+							            Orientation="Horizontal"
+							            Margin="0,0,0,10">
+                        <Label Content="Input:"
+								       FontWeight="Bold"
+								       VerticalAlignment="Center"
+								       Width="60"/>
+                        <ComboBox x:Name="ComboInputEncoding"
+								          SelectedValuePath="CodePage"
+								          Height="25"
+								          Width="410"
+                                  Margin="45,0,0,0"
+								          IsReadOnly="True"
+                                  SelectionChanged="ComboInputEncoding_SelectionChanged">
+                           <ComboBox.ItemTemplate>
+                              <DataTemplate>
+                                 <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding NameUpper}"
+												           Width="120"/>
+                                    <TextBlock Text="{Binding DisplayName}"
+												           Width="300"
+												           Margin="10,0,0,0"/>
+                                 </StackPanel>
+                              </DataTemplate>
+                           </ComboBox.ItemTemplate>
+                        </ComboBox>
+                     </StackPanel>
+                     <StackPanel x:Name="StackOutputEncoding"
+							            Orientation="Horizontal"
+							            Margin="0,0,0,10">
+                        <Label Content="Output:"
+								       FontWeight="Bold"
+								       VerticalAlignment="Center"
+								       Width="60"/>
+                        <ComboBox x:Name="ComboOutputEncoding"
+								          SelectedValuePath="CodePage"
+								          Height="25"
+								          Width="410"
+                                  Margin="45,0,0,0"
+								          IsReadOnly="True"
+								          IsEnabled="False"
+								          IsEnabledChanged="ComboOutputEncoding_IsEnabledChanged"
+                                  SelectionChanged="ComboOutputEncoding_SelectionChanged">
+                           <ComboBox.ItemTemplate>
+                              <DataTemplate>
+                                 <StackPanel x:Name="StackEncodingDisplay"
+											            Orientation="Horizontal">
+                                    <TextBlock Text="{Binding NameUpper}"
+												           Width="120"/>
+                                    <TextBlock Text="{Binding DisplayName}"
+												           Width="300"
+												           Margin="10,0,0,0"/>
+                                 </StackPanel>
+                              </DataTemplate>
+                           </ComboBox.ItemTemplate>
+                        </ComboBox>
+                     </StackPanel>
+                     <CheckBox x:Name="CheckKeepEncoding"
+							          Margin="105,0,0,0"
+							          Content="Output encoding same as input encoding"
+							          IsChecked="True"
+							          Click="CheckKeepEncoding_Click"/>
+                     <StackPanel x:Name="StackBOM" 
+                                 Orientation="Horizontal"
+                                 HorizontalAlignment="Left"
+                                 Margin="0,10,0,0">
+                        <Label x:Name="LabelOutputBOM"
+                               Content="Output BOM:"
+  								       FontWeight="Bold"
+								       VerticalAlignment="Center"/>
+                        <RadioButton x:Name="RadioKeepBOM"
+                                     Content="Same as input"
+                                     VerticalAlignment="Center"
+                                     IsChecked="True"
+                                     Margin="5,0,0,0"/>
+                        <RadioButton x:Name="RadioWithBOM"
+                                     Content="With BOM"
+                                     VerticalAlignment="Center"
+                                     Margin="10,0,0,0"/>
+                        <RadioButton x:Name="RadioNoBOM"
+                                     Content="No BOM"
+                                     VerticalAlignment="Center"
+                                     Margin="10,0,0,0"/>
+                     </StackPanel>
+                  </StackPanel>
+               </GroupBox>
+               <GroupBox x:Name="GroupFileLayout"
+					          Header="File Layout"
+					          Margin="10,10,0,0"
+					          HorizontalAlignment="Left"
+					          Width="218">
+                  <!-- Breite etwas größer, damit alles Platz hat -->
+                  <Grid Margin="0,0,0,10">
+                     <!-- Spalten: Labels (Auto), NumericUpDown (* restlicher Platz) -->
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                     </Grid.ColumnDefinitions>
+                     <!-- Zeilen: eine pro Label+NumericUpDown -->
+                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                     </Grid.RowDefinitions>
+                     <!-- Erste Zeile -->
+                     <Label Grid.Row="0"
+							       Grid.Column="0"
+							       Content="Group Size:"
+							       FontWeight="Bold"
+							       VerticalAlignment="Center"/>
+                     <local:NumericUpDown x:Name="NumberGroupSize"
+							                     Grid.Row="0"
+							                     Grid.Column="1"
+							                     Value="0"
+							                     Minimum="0"
+							                     Maximum="20"
+							                     Width="60"/>
+                     <!-- Zweite Zeile -->
+                     <Label Grid.Row="1"
+							       Grid.Column="0"
+							       Content="Max. Line Length:"
+							       FontWeight="Bold"
+							       VerticalAlignment="Center"
+							       Margin="0,10,0,0"/>
+                     <local:NumericUpDown x:Name="NumberMaxLineLength"
+							                     Grid.Row="1"
+							                     Grid.Column="1"
+							                     Value="0"
+							                     Minimum="0"
+							                     Maximum="120"
+							                     Width="60"
+							                     Margin="0,10,0,0"/>
+                  </Grid>
+               </GroupBox>
+               <StackPanel Orientation="Vertical"
+					            Margin="0,10,0,0"
+					            VerticalAlignment="Center">
+                  <Button x:Name="ButtonGo"
+						        Content="Go!"
+						        FontWeight="Bold"
+						        HorizontalAlignment="Left"
+						        VerticalAlignment="Center"
+						        Margin="20,10,0,0"
+						        Width="75"
+						        Height="25"
+						        Background="#FF34EF2F"
+						        BorderBrush="#FF1B6715"
+						        Click="ButtonGo_Click"/>
+                  <Button x:Name="ButtonExit"
+						        Content="Exit"
+						        FontWeight="Bold"
+						        Margin="20,30,0,0"
+						        Width="75"
+						        Height="26"
+						        Background="#FFF77070"
+						        BorderBrush="#FF9C1C1C"
+						        HorizontalAlignment="Left"
+						        Click="ButtonExit_Click"/>
+               </StackPanel>
+            </StackPanel>
+         </StackPanel>
+      </TabItem>
+   </TabControl>
+</Window>
