@@ -85,10 +85,10 @@ namespace Alphabet {
       /// <see cref="AlphabetDescription"/> for this parameter combination.</exception>
       public static AlphabetDescription GetAlphabet(in byte numPlaces, in byte numCharacters) {
          if (numPlaces < MinNumPlaces || numPlaces > MaxNumPlaces)
-            throw new ArgumentException(String.Format(FormatErrorInvalidValue, "places", MinNumPlaces, MaxNumPlaces, numPlaces), nameof(numPlaces));
+            throw new ArgumentOutOfRangeException(String.Format(FormatErrorInvalidValue, "places", MinNumPlaces, MaxNumPlaces, numPlaces), nameof(numPlaces));
 
          if (numCharacters < MinNumCharacters || numCharacters > MaxNumCharacters)
-            throw new ArgumentException(String.Format(FormatErrorInvalidValue, "characters", MinNumCharacters, MaxNumCharacters, numCharacters), nameof(numPlaces));
+            throw new ArgumentOutOfRangeException(String.Format(FormatErrorInvalidValue, "characters", MinNumCharacters, MaxNumCharacters, numCharacters), nameof(numPlaces));
 
          byte key = (byte)(numPlaces * 10 + numCharacters);
          if (alphabets.TryGetValue(key, out var alphabet))

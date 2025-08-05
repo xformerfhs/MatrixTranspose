@@ -19,7 +19,7 @@
  * Author: Frank Schwab
  *
  * Change history:
- *    2025-08-03: V1.0.0: Created. fhs
+ *    2025-08-05: V1.0.0: Created. fhs
  */
 
 using System;
@@ -36,21 +36,21 @@ namespace MatrixTranspose {
 
       // Code pages
 
-      private const int CpUtf8 = 65001;
-      private const int CpUtf16Le = 1200;
-      private const int CpUtf16Be = 1201;
-      private const int CpUtf32Le = 12000;
-      private const int CpUtf32Be = 12001;
+      private const int CodepageUtf8 = 65001;
+      private const int CodepageUtf16Le = 1200;
+      private const int CodepageUtf16Be = 1201;
+      private const int CodepageUtf32Le = 12000;
+      private const int CodepageUtf32Be = 12001;
 
       /// <summary>
       /// Code pages that can have a BOM.
       /// </summary>
       private static readonly int[] BomCodePages = {
-         CpUtf8,
-         CpUtf16Le,
-         CpUtf16Be,
-         CpUtf32Le,
-         CpUtf32Be
+         CodepageUtf8,
+         CodepageUtf16Le,
+         CodepageUtf16Be,
+         CodepageUtf32Le,
+         CodepageUtf32Be
       };
 
 
@@ -58,7 +58,7 @@ namespace MatrixTranspose {
 
       // The following methods do not use "(bool, int)" or "(bool, Encoding) as the
       // return values, as this means to refer to the results as "result.Item1" and
-      // "result.Item2" which hides the meaning of the result. Multiple return values
+      // "result.Item2" which hides the semantic of the result. Multiple return values
       // are designed very badly in C#. Using "out" is definitely much more precise.
 
       /// <summary>
@@ -72,7 +72,7 @@ namespace MatrixTranspose {
             throw new ArgumentException(@"File path must not be null or empty", nameof(filePath));
 
          using (var f = File.OpenRead(filePath))
-            return DetectBomCodepage(f, out codePage);
+            return DetectBomCodepageNoCheck(f, out codePage);
       }
 
       /// <summary>
@@ -91,63 +91,7 @@ namespace MatrixTranspose {
          if (!stream.CanSeek)
             throw new ArgumentException(@"Stream must be seekable");
 
-         bool result = false;
-         codePage = 0;
-         long position = stream.Position;
-
-         byte[] readBuffer = new byte[4];
-         int readCount = stream.Read(readBuffer, 0, readBuffer.Length);
-
-         if (readCount >= 2) {
-            // The case statements are ordered by probability of occurrence.
-            switch (readBuffer[0]) {
-               case 0xEF:
-                  // UTF-8: EF BB BF
-                  if (readCount >= 3 && readBuffer[1] == 0xBB && readBuffer[2] == 0xBF) {
-                     codePage = CpUtf8;
-                     position += 3;
-                     result = true;
-                  }
-                  break;
-
-               case 0xFF:
-                  // UTF-16LE: FF FE
-                  // UTF-32LE: FF FE 00 00
-                  if (readBuffer[1] == 0xFE) {
-                     if (readCount >= 4 && readBuffer[2] == 0x00 && readBuffer[3] == 0x00) {
-                        codePage = CpUtf32Le;
-                        position += 4;
-                     } else {
-                        codePage = CpUtf16Le;
-                        position += 2;
-                     }
-                     result = true;
-                  }
-                  break;
-
-               case 0xFE:
-                  // UTF-16BE: FE FF
-                  if (readBuffer[1] == 0xFF) {
-                     codePage = CpUtf16Be;
-                     position += 2;
-                     result = true;
-                  }
-                  break;
-
-               case 0x00:
-                  // UTF-32BE: 00 00 FE FF
-                  if (readCount >= 4 && readBuffer[1] == 0x00 && readBuffer[2] == 0xFE && readBuffer[3] == 0xFF) {
-                     codePage = CpUtf32Be;
-                     position += 4;
-                     result = true;
-                  }
-                  break;
-            }
-         }
-
-         stream.Seek(position, SeekOrigin.Begin);
-
-         return result;
+         return DetectBomCodepageNoCheck(stream, out codePage);
       }
 
       /// <summary>
@@ -161,7 +105,7 @@ namespace MatrixTranspose {
             throw new ArgumentException(@"File path must not be null or empty", nameof(filePath));
 
          using (var f = File.OpenRead(filePath))
-            return DetectBomEncoding(f, out encoding);
+            return DetectBomEncodingNoCheck(f, out encoding);
       }
 
       /// <summary>
@@ -174,14 +118,7 @@ namespace MatrixTranspose {
          if (stream == null)
             throw new ArgumentNullException(nameof(stream));
 
-         bool result = DetectBomCodepage(stream, out int codePage);
-
-         if (result)
-            encoding = Encoding.GetEncoding(codePage);
-         else
-            encoding = null;
-
-         return result;
+         return DetectBomEncodingNoCheck(stream, out encoding);
       }
 
       /// <summary>
@@ -199,7 +136,7 @@ namespace MatrixTranspose {
          Encoding result = encoding;
 
          switch (encoding.CodePage) {
-            case CpUtf8:
+            case CodepageUtf8:
                if (withBom) {
                   if (!encoding.WritesBom())
                      result = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
@@ -209,7 +146,7 @@ namespace MatrixTranspose {
                }
                break;
 
-            case CpUtf16Le:
+            case CodepageUtf16Le:
                if (withBom) {
                   if (!encoding.WritesBom())
                      result = new UnicodeEncoding(bigEndian: false, byteOrderMark: true);
@@ -219,7 +156,7 @@ namespace MatrixTranspose {
                }
                break;
 
-            case CpUtf16Be:
+            case CodepageUtf16Be:
                if (withBom) {
                   if (!encoding.WritesBom())
                      result = new UnicodeEncoding(bigEndian: true, byteOrderMark: true);
@@ -229,7 +166,7 @@ namespace MatrixTranspose {
                }
                break;
 
-            case CpUtf32Le:
+            case CodepageUtf32Le:
                if (withBom) {
                   if (!encoding.WritesBom())
                      result = new UTF32Encoding(bigEndian: false, byteOrderMark: true);
@@ -239,7 +176,7 @@ namespace MatrixTranspose {
                }
                break;
 
-            case CpUtf32Be:
+            case CodepageUtf32Be:
                if (withBom) {
                   if (!encoding.WritesBom())
                      result = new UTF32Encoding(bigEndian: true, byteOrderMark: true);
@@ -260,6 +197,98 @@ namespace MatrixTranspose {
       /// <returns><c>True</c>, if the codepage may have a BOM; <c>False</c>, if not.</returns>
       public static bool SupportsBom(int codePage) {
          return BomCodePages.Contains(codePage);
+      }
+
+
+      // ******** Private methods ********
+
+      /// <summary>
+      /// Detects a BOM and returns either the corresponding codepage or <c>0</c>.
+      /// This method assumes that the arguments are already checked.
+      /// </summary>
+      /// <remarks>
+      /// After the call to this method, the <paramref name="stream"/> is positioned
+      /// after the BOM, if there was one, or where it was before, if there was none.
+      /// </remarks>
+      /// <param name="stream">Stream to read from.</param>
+      /// <param name="codePage">Out: Detected codepage or <c>0</c>.</param>
+      /// <returns><c>True</c>, if a BOM was detected; <c>False</c>, if not.</returns>
+      public static bool DetectBomCodepageNoCheck(in Stream stream, out int codePage) {
+         bool result = false;
+         codePage = 0;
+         long position = stream.Position;
+
+         byte[] readBuffer = new byte[4];
+         int readCount = stream.Read(readBuffer, 0, readBuffer.Length);
+
+         if (readCount >= 2) {
+            // The case statements are ordered by probability of occurrence.
+            switch (readBuffer[0]) {
+               case 0xEF:
+                  // UTF-8: EF BB BF
+                  if (readCount >= 3 && readBuffer[1] == 0xBB && readBuffer[2] == 0xBF) {
+                     codePage = CodepageUtf8;
+                     position += 3;
+                     result = true;
+                  }
+                  break;
+
+               case 0xFF:
+                  // UTF-16LE: FF FE
+                  // UTF-32LE: FF FE 00 00
+                  if (readBuffer[1] == 0xFE) {
+                     if (readCount >= 4 && readBuffer[2] == 0x00 && readBuffer[3] == 0x00) {
+                        codePage = CodepageUtf32Le;
+                        position += 4;
+                     } else {
+                        codePage = CodepageUtf16Le;
+                        position += 2;
+                     }
+                     result = true;
+                  }
+                  break;
+
+               case 0xFE:
+                  // UTF-16BE: FE FF
+                  if (readBuffer[1] == 0xFF) {
+                     codePage = CodepageUtf16Be;
+                     position += 2;
+                     result = true;
+                  }
+                  break;
+
+               case 0x00:
+                  // UTF-32BE: 00 00 FE FF
+                  if (readCount >= 4 && readBuffer[1] == 0x00 && readBuffer[2] == 0xFE && readBuffer[3] == 0xFF) {
+                     codePage = CodepageUtf32Be;
+                     position += 4;
+                     result = true;
+                  }
+                  break;
+            }
+         }
+
+         stream.Seek(position, SeekOrigin.Begin);
+
+         return result;
+      }
+
+      /// <summary>
+      /// Detects a BOM and returns either the corresponding encoding or the default encoding.
+      /// This method assumes that the arguments are already checked.
+      /// </summary>
+      /// <param name="stream">Stream to read from.</param>
+      /// <param name="encoding">Out: The found encoding or <c>null</c>.</param>
+      /// <returns><c>True</c>, if a BOM is detected; <c>False</c>, if not.</returns>
+      public static bool DetectBomEncodingNoCheck(in Stream stream, out Encoding encoding) {
+         bool result = DetectBomCodepageNoCheck(stream, out int codePage);
+
+         if (result)
+            encoding = Encoding.GetEncoding(codePage);
+         else
+            encoding = null;
+
+         return result;
       }
    }
 }

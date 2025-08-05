@@ -79,10 +79,10 @@ namespace Alphabet {
       /// <exception cref="ArgumentException">Thrown when a parameter is invalid.</exception>"
       public AlphabetDescription(in byte numPlaces, in byte numCharacters, in string alphabet) {
          if (numPlaces == 0 || numPlaces > MaxValue)
-            throw new ArgumentException(string.Format(FormatInvalidValue, @"places", MaxValue));
+            throw new ArgumentOutOfRangeException(string.Format(FormatInvalidValue, @"places", MaxValue));
 
          if (numCharacters == 0 || numCharacters > MaxValue)
-            throw new ArgumentException(string.Format(FormatInvalidValue, @"characters", MaxValue));
+            throw new ArgumentOutOfRangeException(string.Format(FormatInvalidValue, @"characters", MaxValue));
 
          if (string.IsNullOrEmpty(alphabet))
             throw new ArgumentException(@"Alphabet must not be null or empty");

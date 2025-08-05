@@ -52,7 +52,7 @@ namespace TranspositionNS {
       /// <param name="passwords">An array of passwords used to derive column orders.</param>
       public Transposition(in string[] passwords) {
          if (passwords == null)
-            throw new ArgumentNullException(nameof(passwords), @"Passwords cannot be null");
+            throw new ArgumentNullException(nameof(passwords));
          if (passwords.Length < 1)
             throw new ArgumentException(@"At least one password is required", nameof(passwords));
 

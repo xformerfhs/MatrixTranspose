@@ -62,9 +62,12 @@ namespace ArrayHelper {
       // ******** Public overriden methods ********
 
       public override int Compare(T[] x, T[] y) {
-         if (ReferenceEquals(x, y)) return 0;
-         if (x == null) return -1;
-         if (y == null) return 1;
+         if (ReferenceEquals(x, y))
+            return 0;
+         if (x == null)
+            return -1;
+         if (y == null)
+            return 1;
 
          int length = Math.Min(_maxLength, Math.Min(x.Length, y.Length));
 

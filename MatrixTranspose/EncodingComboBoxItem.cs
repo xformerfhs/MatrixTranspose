@@ -22,6 +22,7 @@
  *    2025-07-24: V1.0.0: Created. fhs
  */
 
+using System;
 using System.Text;
 
 namespace MatrixTranspose {
@@ -54,6 +55,9 @@ namespace MatrixTranspose {
       /// </summary>
       /// <param name="encodingInfo">The <see cref="EncodingInfo"/> from which the ComboBox data are derived.</param>
       public EncodingComboBoxItem(in EncodingInfo encodingInfo) {
+         if (encodingInfo == null)
+            throw new ArgumentNullException(nameof(encodingInfo));
+
          NameUpper = encodingInfo.Name.ToUpperInvariant();
          DisplayName = encodingInfo.DisplayName;
          CodePage = encodingInfo.CodePage;

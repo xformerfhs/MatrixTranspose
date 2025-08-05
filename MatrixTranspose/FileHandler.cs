@@ -47,7 +47,6 @@ namespace MatrixTranspose {
       private const string FormatErrorFileOperation = @"Error {0}ing file '{1}': {2}";
       private const string ErrorFilePathEmpty = @"File path must not be null or empty";
 
-
       // ******** Public methods ********
 
       /// <summary>
@@ -71,6 +70,10 @@ namespace MatrixTranspose {
          out int readLength,
          out Encoding usedEncoding) {
          long fileSize = CheckFileParameters(filePath, encoding);
+         if (substitutionCharacters == null)
+            throw new ArgumentNullException(nameof(substitutionCharacters));
+         if (numPlaces <= 0)
+            throw new ArgumentOutOfRangeException(nameof(numPlaces), string.Format(FormatErrorMustBePositive, @"number of places"));
 
          char[] result;
          try {
@@ -117,6 +120,10 @@ namespace MatrixTranspose {
          out int readLength,
          out Encoding usedEncoding) {
          long fileSize = CheckFileParameters(filePath, encoding);
+         if (substitutions == null)
+            throw new ArgumentNullException(nameof(substitutions));
+         if (numPlaces <= 0)
+            throw new ArgumentOutOfRangeException(nameof(numPlaces), string.Format(FormatErrorMustBePositive, @"number of places"));
 
          TextReader reader = null;
          char[] result;
@@ -171,12 +178,14 @@ namespace MatrixTranspose {
             throw new ArgumentException(ErrorFilePathEmpty, nameof(filePath));
          if (encoding == null)
             throw new ArgumentNullException(nameof(encoding));
+         if (data == null)
+            throw new ArgumentNullException(nameof(data));
          if (writeLength < 0)
-            throw new ArgumentException(string.Format(FormatErrorMustBePositive, @"Write length"), nameof(writeLength));
+            throw new ArgumentOutOfRangeException(string.Format(FormatErrorMustBePositive, @"Write length"), nameof(writeLength));
          if (groupSize < 0)
-            throw new ArgumentException(string.Format(FormatErrorMustBePositive, @"Group size"), nameof(groupSize));
+            throw new ArgumentOutOfRangeException(string.Format(FormatErrorMustBePositive, @"Group size"), nameof(groupSize));
          if (maxLineLength < 0)
-            throw new ArgumentException(string.Format(FormatErrorMustBePositive, @"Maximum line length"), nameof(maxLineLength));
+            throw new ArgumentOutOfRangeException(string.Format(FormatErrorMustBePositive, @"Maximum line length"), nameof(maxLineLength));
 
          if (groupSize > 1 && maxLineLength > 1)
             maxLineLength = maxLineLength / (groupSize + 1) * (groupSize + 1);
@@ -232,6 +241,8 @@ namespace MatrixTranspose {
             throw new ArgumentException(ErrorFilePathEmpty, nameof(filePath));
          if (encoding == null)
             throw new ArgumentNullException(nameof(encoding));
+         if (data == null)
+            throw new ArgumentNullException(nameof(data));
          if (writeLength < 0)
             throw new ArgumentException(string.Format(FormatErrorMustBePositive, @"Write length"), nameof(writeLength));
 
@@ -252,11 +263,13 @@ namespace MatrixTranspose {
       /// <summary>
       /// Gets the size of a file in bytes.
       /// </summary>
-      /// <param name="fileName">The path to the file.</param>
+      /// <param name="filePath">The path to the file.</param>
       /// <returns>The size of the file in bytes.</returns>
-      public static long GetFileSize(in string fileName) {
-         var fileInfo = new FileInfo(fileName);
-         return fileInfo.Length;
+      public static long GetFileSize(in string filePath) {
+         if (string.IsNullOrEmpty(filePath))
+            throw new ArgumentException(ErrorFilePathEmpty, nameof(filePath));
+
+         return GetFileSizeNoCheck(filePath);
       }
 
 
@@ -274,11 +287,22 @@ namespace MatrixTranspose {
          if (encoding == null)
             throw new ArgumentNullException(nameof(encoding));
 
-         long fileSize = GetFileSize(filePath);
+         long fileSize = GetFileSizeNoCheck(filePath);
          if (fileSize > MaxFileSize)
             throw new ArgumentException($"File size exceeds the maximum allowed size of {MaxFileSize} bytes.", nameof(filePath));
 
          return fileSize;
+      }
+
+      /// <summary>
+      /// Gets the size of a file in bytes.
+      /// This method assumes that the argument has been checked.
+      /// </summary>
+      /// <param name="filePath">The path to the file.</param>
+      /// <returns>The size of the file in bytes.</returns>
+      private static long GetFileSizeNoCheck(in string filePath) {
+         var fileInfo = new FileInfo(filePath);
+         return fileInfo.Length;
       }
 
       /// <summary>

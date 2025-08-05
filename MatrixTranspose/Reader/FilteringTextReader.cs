@@ -22,6 +22,7 @@
  *    2025-08-02: V1.0.0: Created. fhs
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -57,6 +58,9 @@ namespace Reader {
       /// <param name="allowedChars">Array of characters that are allowed to be read.</param>
       public FilteringTextReader(TextReader innerReader, char[] allowedChars)
           : base(innerReader) {
+         if (allowedChars == null)
+            throw new ArgumentNullException(nameof(allowedChars));
+
          this._allowedChars = new SortedSet<char>(allowedChars);
       }
 
