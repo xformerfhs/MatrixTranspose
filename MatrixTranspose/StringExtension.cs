@@ -26,7 +26,7 @@ using System;
 using System.Linq;
 
 namespace MatrixTranspose {
-   public static partial class StringExtension {
+   public static class StringExtension {
       /// <summary>
       /// Removes all whitespace characters from the string.
       /// </summary>
