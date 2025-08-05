@@ -22,7 +22,6 @@
  *    2025-08-02: V1.0.0: Created. fhs
  */
 
-using System;
 using System.Linq;
 
 namespace MatrixTranspose {
@@ -33,7 +32,7 @@ namespace MatrixTranspose {
       /// <param name="self">String to process.</param>
       /// <returns>New string with all whitespace characters removed.</returns>
       public static string RemoveWhiteSpace(this string self) {
-         return new string(self.Where(c => !Char.IsWhiteSpace(c)).ToArray());
+         return new string(self.Where(c => !char.IsWhiteSpace(c)).ToArray());
       }
    }
 }
