@@ -39,13 +39,13 @@ namespace MatrixTranspose {
       /// <summary>
       /// Maximum file size.
       /// </summary>
-      private const long MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MiB
+      private const long MaxFileSize = 100 * 1024 * 1024; // 100 MiB
 
       // Error messages.
 
-      private const string FORMAT_ERROR_MUST_BE_POSITIVE = @"{0} must be positive";
-      private const string FORMAT_ERROR_FILE_OPERATION = @"Error {0}ing file '{1}': {2}";
-      private const string ERROR_FILE_PATH_EMPTY = @"File path must not be null or empty";
+      private const string FormatErrorMustBePositive = @"{0} must be positive";
+      private const string FormatErrorFileOperation = @"Error {0}ing file '{1}': {2}";
+      private const string ErrorFilePathEmpty = @"File path must not be null or empty";
 
 
       // ******** Public methods ********
@@ -86,7 +86,7 @@ namespace MatrixTranspose {
                   result = ReadToEnd(filterReader, fileSize, usedEncoding.BytesPerCharacter(), numPlaces, out readLength);
             }
          } catch (Exception ex) {
-            throw new IOException(string.Format(FORMAT_ERROR_FILE_OPERATION, @"read", filePath, ex.Message));
+            throw new IOException(string.Format(FormatErrorFileOperation, @"read", filePath, ex.Message));
          }
 
          return result;
@@ -141,7 +141,7 @@ namespace MatrixTranspose {
                }
             }
          } catch (Exception ex) {
-            throw new IOException(string.Format(FORMAT_ERROR_FILE_OPERATION, @"read", filePath, ex.Message));
+            throw new IOException(string.Format(FormatErrorFileOperation, @"read", filePath, ex.Message));
          } finally {
             reader?.Dispose();
          }
@@ -168,15 +168,15 @@ namespace MatrixTranspose {
          int groupSize,
          int maxLineLength) {
          if (string.IsNullOrEmpty(filePath))
-            throw new ArgumentException(ERROR_FILE_PATH_EMPTY, nameof(filePath));
+            throw new ArgumentException(ErrorFilePathEmpty, nameof(filePath));
          if (encoding == null)
             throw new ArgumentNullException(nameof(encoding));
          if (writeLength < 0)
-            throw new ArgumentException(string.Format(FORMAT_ERROR_MUST_BE_POSITIVE, @"Write length"), nameof(writeLength));
+            throw new ArgumentException(string.Format(FormatErrorMustBePositive, @"Write length"), nameof(writeLength));
          if (groupSize < 0)
-            throw new ArgumentException(string.Format(FORMAT_ERROR_MUST_BE_POSITIVE, @"Group size"), nameof(groupSize));
+            throw new ArgumentException(string.Format(FormatErrorMustBePositive, @"Group size"), nameof(groupSize));
          if (maxLineLength < 0)
-            throw new ArgumentException(string.Format(FORMAT_ERROR_MUST_BE_POSITIVE, @"Maximum line length"), nameof(maxLineLength));
+            throw new ArgumentException(string.Format(FormatErrorMustBePositive, @"Maximum line length"), nameof(maxLineLength));
 
          if (groupSize > 1 && maxLineLength > 1)
             maxLineLength = maxLineLength / (groupSize + 1) * (groupSize + 1);
@@ -208,7 +208,7 @@ namespace MatrixTranspose {
                   linePos++;
                }
          } catch (Exception ex) {
-            throw new IOException(string.Format(FORMAT_ERROR_FILE_OPERATION, @"writ", filePath, ex.Message));
+            throw new IOException(string.Format(FormatErrorFileOperation, @"writ", filePath, ex.Message));
          }
       }
 
@@ -229,11 +229,11 @@ namespace MatrixTranspose {
          in char[] data,
          int writeLength) {
          if (string.IsNullOrEmpty(filePath))
-            throw new ArgumentException(ERROR_FILE_PATH_EMPTY, nameof(filePath));
+            throw new ArgumentException(ErrorFilePathEmpty, nameof(filePath));
          if (encoding == null)
             throw new ArgumentNullException(nameof(encoding));
          if (writeLength < 0)
-            throw new ArgumentException(string.Format(FORMAT_ERROR_MUST_BE_POSITIVE, @"Write length"), nameof(writeLength));
+            throw new ArgumentException(string.Format(FormatErrorMustBePositive, @"Write length"), nameof(writeLength));
 
          encoding = EncodingHelper.EncodingWithMatchingBom(encoding, withBom);
 
@@ -245,7 +245,7 @@ namespace MatrixTranspose {
                for (int i = 0; i < writeLength; i++)
                   unmappingWriter.Write(data[i]);
          } catch (Exception ex) {
-            throw new IOException(string.Format(FORMAT_ERROR_FILE_OPERATION, @"writ", filePath, ex.Message));
+            throw new IOException(string.Format(FormatErrorFileOperation, @"writ", filePath, ex.Message));
          }
       }
 
@@ -270,13 +270,13 @@ namespace MatrixTranspose {
       /// <returns>Size of file.</returns>
       private static long CheckFileParameters(in string filePath, in Encoding encoding) {
          if (string.IsNullOrEmpty(filePath))
-            throw new ArgumentException(ERROR_FILE_PATH_EMPTY, nameof(filePath));
+            throw new ArgumentException(ErrorFilePathEmpty, nameof(filePath));
          if (encoding == null)
             throw new ArgumentNullException(nameof(encoding));
 
          long fileSize = GetFileSize(filePath);
-         if (fileSize > MAX_FILE_SIZE)
-            throw new ArgumentException($"File size exceeds the maximum allowed size of {MAX_FILE_SIZE} bytes.", nameof(filePath));
+         if (fileSize > MaxFileSize)
+            throw new ArgumentException($"File size exceeds the maximum allowed size of {MaxFileSize} bytes.", nameof(filePath));
 
          return fileSize;
       }
@@ -286,6 +286,7 @@ namespace MatrixTranspose {
       /// </summary>
       /// <param name="reader"><see cref="TextReader"/> to read from.</param>
       /// <param name="fileSize">The size of the file.</param>
+      /// <param name="bytesPerCharacter">Number of bytes per character.</param>
       /// <param name="numPlaces">Number of places per substitution.</param>
       /// <param name="readLength">Out: Number of characters read.</param>
       /// <returns>Read characters.</returns>

@@ -35,27 +35,27 @@ namespace Alphabet {
       /// <summary>
       /// Minimum allowed number of places.
       /// </summary>
-      private const byte MIN_PLACES = 2;
+      private const byte MinNumPlaces = 2;
 
       /// <summary>
       /// Maximum allowed number of places.
       /// </summary>
-      private const byte MAX_PLACES = 4;
+      private const byte MaxNumPlaces = 4;
 
       /// <summary>
       /// Minimum allowed number of characters.
       /// </summary>
-      private const byte MIN_CHARACTERS = 3;
+      private const byte MinNumCharacters = 3;
 
       /// <summary>
       /// Maximum allowed number of characters.
       /// </summary>
-      private const byte MAX_CHARACTERS = 6;
+      private const byte MaxNumCharacters = 6;
 
       /// <summary>
       /// Format string for the exception message when a parameter is invalid.
       /// </summary>
-      private const string FORMAT_ERROR_INVALID_VALUE = "Number of {0} must lie between {1} and {2}, but is {3}";
+      private const string FormatErrorInvalidValue = "Number of {0} must lie between {1} and {2}, but is {3}";
 
       /// <summary>
       /// List of known alphabets.
@@ -84,11 +84,11 @@ namespace Alphabet {
       /// <exception cref="ArgumentException">Thrown, if any parameter is invalid or there is no
       /// <see cref="AlphabetDescription"/> for this parameter combination.</exception>
       public static AlphabetDescription GetAlphabet(in byte numPlaces, in byte numCharacters) {
-         if (numPlaces < MIN_PLACES || numPlaces > MAX_PLACES)
-            throw new ArgumentException(String.Format(FORMAT_ERROR_INVALID_VALUE, "places", MIN_PLACES, MAX_PLACES, numPlaces), nameof(numPlaces));
+         if (numPlaces < MinNumPlaces || numPlaces > MaxNumPlaces)
+            throw new ArgumentException(String.Format(FormatErrorInvalidValue, "places", MinNumPlaces, MaxNumPlaces, numPlaces), nameof(numPlaces));
 
-         if (numCharacters < MIN_CHARACTERS || numCharacters > MAX_CHARACTERS)
-            throw new ArgumentException(String.Format(FORMAT_ERROR_INVALID_VALUE, "characters", MIN_CHARACTERS, MAX_CHARACTERS, numCharacters), nameof(numPlaces));
+         if (numCharacters < MinNumCharacters || numCharacters > MaxNumCharacters)
+            throw new ArgumentException(String.Format(FormatErrorInvalidValue, "characters", MinNumCharacters, MaxNumCharacters, numCharacters), nameof(numPlaces));
 
          byte key = (byte)(numPlaces * 10 + numCharacters);
          if (alphabets.TryGetValue(key, out var alphabet))

@@ -126,6 +126,7 @@ namespace Alphabet {
       private static char[] KeyFromPassword(in string password, byte numPlaces, byte numCharacters, in char[] alphabetCharacters) {
          if (string.IsNullOrEmpty(password))
             throw new ArgumentException("Password must not be null or empty.", nameof(password));
+
          int count = (int)Math.Pow(numCharacters, numPlaces);
 
          char[] result = new char[count];

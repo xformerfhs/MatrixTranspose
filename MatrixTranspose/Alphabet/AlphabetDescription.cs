@@ -35,12 +35,12 @@ namespace Alphabet {
       /// <summary>
       /// Format string for exceptions when a parameter is invalid.
       /// </summary>
-      private const string FORMAT_INVALID_VALUE = "Number of {0} must not be 0 or larger than {1}";
+      private const string FormatInvalidValue = "Number of {0} must not be 0 or larger than {1}";
 
       /// <summary>
       /// Maximum value for places and characters.
       /// </summary>
-      private const byte MAX_VALUE = 9;
+      private const byte MaxValue = 9;
 
 
       // ******** Public Properties ********
@@ -78,11 +78,11 @@ namespace Alphabet {
       /// </summary> 
       /// <exception cref="ArgumentException">Thrown when a parameter is invalid.</exception>"
       public AlphabetDescription(in byte numPlaces, in byte numCharacters, in string alphabet) {
-         if (numPlaces == 0 || numPlaces > MAX_VALUE)
-            throw new ArgumentException(string.Format(FORMAT_INVALID_VALUE, @"places", MAX_VALUE));
+         if (numPlaces == 0 || numPlaces > MaxValue)
+            throw new ArgumentException(string.Format(FormatInvalidValue, @"places", MaxValue));
 
-         if (numCharacters == 0 || numCharacters > MAX_VALUE)
-            throw new ArgumentException(string.Format(FORMAT_INVALID_VALUE, @"characters", MAX_VALUE));
+         if (numCharacters == 0 || numCharacters > MaxValue)
+            throw new ArgumentException(string.Format(FormatInvalidValue, @"characters", MaxValue));
 
          if (string.IsNullOrEmpty(alphabet))
             throw new ArgumentException(@"Alphabet must not be null or empty");

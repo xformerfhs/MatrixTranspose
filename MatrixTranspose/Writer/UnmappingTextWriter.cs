@@ -122,13 +122,13 @@ namespace Writer {
 
          // If buffer has maximum possible length and we did not find a mappable sequence, we have an unmappable sequence.
          if (_buffer.Length == _maxLength)
-            throw new InvalidOperationException($"Unmappable character sequence found: '{_buffer.ToStringContent()}'");
+            throw new InvalidOperationException($"Unmappable character sequence found: \"{_buffer.ToStringContent()}\"");
       }
 
       public override void Flush() {
          // If there are remaining characters in buffer when flushing, this is an error.
          if (_buffer.Length > 0)
-            throw new InvalidOperationException($"Incomplete character sequence at end of stream: '{_buffer.ToStringContent()}'");
+            throw new InvalidOperationException($"Incomplete character sequence at end of stream: \"{_buffer.ToStringContent()}\"");
 
          _innerWriter.Flush();
       }

@@ -33,7 +33,7 @@ namespace MathHelperNS {
       /// <param name="a">First integer.</param>
       /// <param name="b">Second integer.</param>
       /// <returns>Greatest common divisor of <paramref name="a"/> and <paramref name="b"/>.</returns>
-      public static int GCD(int a, int b) {
+      public static int Gcd(int a, int b) {
          while (b != 0) {
             int temp = b;
             b = a % b;

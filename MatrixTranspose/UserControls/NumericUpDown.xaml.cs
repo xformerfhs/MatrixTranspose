@@ -55,6 +55,7 @@ namespace MatrixTranspose.UserControls {
           DependencyProperty.Register(nameof(Maximum), typeof(int), typeof(NumericUpDown),
               new PropertyMetadata(20, OnMinMaxChanged));
 
+
       // ******** Public Properties ********
 
       /// <summary>

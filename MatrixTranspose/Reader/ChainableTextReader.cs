@@ -60,10 +60,10 @@ namespace Reader {
          if (_isDisposed)
             return;
 
-            if (disposing) {
-               _innerReader.Dispose();
-               _innerReader = null;
-            }
+         if (disposing) {
+            _innerReader.Dispose();
+            _innerReader = null;
+         }
 
          base.Dispose(disposing);
 

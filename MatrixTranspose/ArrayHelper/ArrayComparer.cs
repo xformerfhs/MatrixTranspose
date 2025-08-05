@@ -33,11 +33,26 @@ namespace ArrayHelper {
    /// I do not understand why no programming framework provides this out of the box.
    /// </remarks>
    public class ArrayComparer<T> : Comparer<T[]> {
+      // ******** Instance variables ********
+
+      /// <summary>
+      /// Element comparer.
+      /// </summary>
       private readonly IComparer<T> _elementComparer;
 
+
+      // ******** Constructors ********
+
+      /// <summary>
+      /// Creates an instance of <see cref="ArrayComparer{T}"/>.
+      /// </summary>
+      /// <param name="elementComparer">Element comparer to use. If <c>null</c> the default comparer is used.</param>
       public ArrayComparer(IComparer<T> elementComparer = null) {
          _elementComparer = elementComparer ?? Comparer<T>.Default;
       }
+
+
+      // ******** Public overriden methods ********
 
       public override int Compare(T[] x, T[] y) {
          if (ReferenceEquals(x, y)) return 0;

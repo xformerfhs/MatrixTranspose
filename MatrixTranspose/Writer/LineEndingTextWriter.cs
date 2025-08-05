@@ -40,6 +40,7 @@ namespace Writer {
       // ******** Implementation of TextWriter ********
 
       public override void Write(char value) {
+         // If the character is LF, convert it to CRLF.
          if (value == '\n')
             _innerWriter.Write('\r');
 

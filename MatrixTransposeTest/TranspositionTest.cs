@@ -3,24 +3,24 @@
 namespace MatrixTransposeTest {
    [TestClass]
    public sealed class TranspositionTest {
-      private const int PASSWORD_LOOP_COUNT = 100;
-      private const int TRANSPOSITION_LOOP_COUNT = 21;
-      private const int MIN_SIZE = 2;
-      private const int MAX_SIZE = 100;
-      private const int MIN_PASSWORDS = 1;
-      private const int MAX_PASSWORDS = 10;
-      private const int MIN_PASSWORD_LENGTH = 2;
-      private const int MAX_PASSWORD_LENGTH = 20;
+      private const int PasswordLoopCount = 100;
+      private const int TranspositionLoopCount = 21;
+      private const int MinDataSize = 2;
+      private const int MaxDataSize = 100;
+      private const int MinNumPasswords = 1;
+      private const int MaxNumPasswords = 10;
+      private const int MinPasswordLength = 2;
+      private const int MaxPasswordLength = 20;
 
       private static readonly Random _random = new();
 
       [TestMethod]
       public void RandomTest() {
-         for (int i = 0; i < PASSWORD_LOOP_COUNT; i++) {
+         for (int i = 0; i < PasswordLoopCount; i++) {
             string[] passwords = MakeRandomPasswords();
 
             using (Transposition transposer = new(passwords))
-               for (int j = 0; j < TRANSPOSITION_LOOP_COUNT; j++) {
+               for (int j = 0; j < TranspositionLoopCount; j++) {
                   char[] data = GenerateRandomData();
 
                   // Save data because it will be overwritten by Transpose.
@@ -66,7 +66,7 @@ namespace MatrixTransposeTest {
       }
 
       private static char[] GenerateRandomData() {
-         int count = _random.Next(MIN_SIZE, MAX_SIZE+1);
+         int count = _random.Next(MinDataSize, MaxDataSize+1);
          char[] data = new char[count];
          for (int i = 0; i < count; i++)
             data[i] = (char)_random.Next(32, 127); // Printable ASCII characters
@@ -75,11 +75,11 @@ namespace MatrixTransposeTest {
       }
 
       private static string[] MakeRandomPasswords() {
-         int numPasswords = _random.Next(MIN_PASSWORDS, MAX_PASSWORDS + 1);
+         int numPasswords = _random.Next(MinNumPasswords, MaxNumPasswords + 1);
          string[] result = new string[numPasswords];
 
          for (int i = 0; i < numPasswords; i++) {
-            int passwordLength = _random.Next(MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH + 1);
+            int passwordLength = _random.Next(MinPasswordLength, MaxPasswordLength + 1);
             result[i] = new string(GenerateRandomPassword(passwordLength));
          }
 

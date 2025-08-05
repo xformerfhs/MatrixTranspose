@@ -52,7 +52,7 @@ namespace MatrixTranspose {
       // ******** Instance Variables ********
 
       /// <summary>
-      /// Desscription of the chosen substitution alphabet.
+      /// Description of the chosen substitution alphabet.
       /// </summary>
       private AlphabetDescription _alphabet;
 
@@ -535,7 +535,7 @@ namespace MatrixTranspose {
       private static bool CheckPasswordLengths(string[] passwords, string newPassword) {
          int textLength = newPassword.Length;
          foreach (string password in passwords) {
-            int gcd = MathHelper.GCD(password.Length, textLength);
+            int gcd = MathHelper.Gcd(password.Length, textLength);
             if (gcd != 1) {
                MessageBox.Show($"Length of \"{newPassword}\" has common divisor {gcd} with length of \"{password}\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                return false;

@@ -28,26 +28,29 @@ using System.Linq;
 using System.Text;
 
 namespace MatrixTranspose {
+   /// <summary>
+   /// Class that implements helper methods for <see cref="Encoding"/> handling.
+   /// </summary>
    public static class EncodingHelper {
       // ******** Private constants ********
 
       // Code pages
 
-      private const int CP_UTF8 = 65001;
-      private const int CP_UTF16_LE = 1200;
-      private const int CP_UTF16_BE = 1201;
-      private const int CP_UTF32_LE = 12000;
-      private const int CP_UTF32_BE = 12001;
+      private const int CpUtf8 = 65001;
+      private const int CpUtf16Le = 1200;
+      private const int CpUtf16Be = 1201;
+      private const int CpUtf32Le = 12000;
+      private const int CpUtf32Be = 12001;
 
       /// <summary>
       /// Code pages that can have a BOM.
       /// </summary>
       private static readonly int[] BomCodePages = {
-         CP_UTF8,
-         CP_UTF16_LE,
-         CP_UTF16_BE,
-         CP_UTF32_LE,
-         CP_UTF32_BE
+         CpUtf8,
+         CpUtf16Le,
+         CpUtf16Be,
+         CpUtf32Le,
+         CpUtf32Be
       };
 
 
@@ -101,7 +104,7 @@ namespace MatrixTranspose {
                case 0xEF:
                   // UTF-8: EF BB BF
                   if (readCount >= 3 && readBuffer[1] == 0xBB && readBuffer[2] == 0xBF) {
-                     codePage = CP_UTF8;
+                     codePage = CpUtf8;
                      position += 3;
                      result = true;
                   }
@@ -112,10 +115,10 @@ namespace MatrixTranspose {
                   // UTF-32LE: FF FE 00 00
                   if (readBuffer[1] == 0xFE) {
                      if (readCount >= 4 && readBuffer[2] == 0x00 && readBuffer[3] == 0x00) {
-                        codePage = CP_UTF32_LE;
+                        codePage = CpUtf32Le;
                         position += 4;
                      } else {
-                        codePage = CP_UTF16_LE;
+                        codePage = CpUtf16Le;
                         position += 2;
                      }
                      result = true;
@@ -125,7 +128,7 @@ namespace MatrixTranspose {
                case 0xFE:
                   // UTF-16BE: FE FF
                   if (readBuffer[1] == 0xFF) {
-                     codePage = CP_UTF16_BE;
+                     codePage = CpUtf16Be;
                      position += 2;
                      result = true;
                   }
@@ -134,7 +137,7 @@ namespace MatrixTranspose {
                case 0x00:
                   // UTF-32BE: 00 00 FE FF
                   if (readCount >= 4 && readBuffer[1] == 0x00 && readBuffer[2] == 0xFE && readBuffer[3] == 0xFF) {
-                     codePage = CP_UTF32_BE;
+                     codePage = CpUtf32Be;
                      position += 4;
                      result = true;
                   }
@@ -196,7 +199,7 @@ namespace MatrixTranspose {
          Encoding result = encoding;
 
          switch (encoding.CodePage) {
-            case CP_UTF8:
+            case CpUtf8:
                if (withBom) {
                   if (!encoding.WritesBom())
                      result = new UTF8Encoding(encoderShouldEmitUTF8Identifier: true);
@@ -206,7 +209,7 @@ namespace MatrixTranspose {
                }
                break;
 
-            case CP_UTF16_LE:
+            case CpUtf16Le:
                if (withBom) {
                   if (!encoding.WritesBom())
                      result = new UnicodeEncoding(bigEndian: false, byteOrderMark: true);
@@ -216,7 +219,7 @@ namespace MatrixTranspose {
                }
                break;
 
-            case CP_UTF16_BE:
+            case CpUtf16Be:
                if (withBom) {
                   if (!encoding.WritesBom())
                      result = new UnicodeEncoding(bigEndian: true, byteOrderMark: true);
@@ -226,7 +229,7 @@ namespace MatrixTranspose {
                }
                break;
 
-            case CP_UTF32_LE:
+            case CpUtf32Le:
                if (withBom) {
                   if (!encoding.WritesBom())
                      result = new UTF32Encoding(bigEndian: false, byteOrderMark: true);
@@ -236,7 +239,7 @@ namespace MatrixTranspose {
                }
                break;
 
-            case CP_UTF32_BE:
+            case CpUtf32Be:
                if (withBom) {
                   if (!encoding.WritesBom())
                      result = new UTF32Encoding(bigEndian: true, byteOrderMark: true);

@@ -26,10 +26,30 @@ using System;
    using System.Collections.Generic;
 
 namespace ArrayHelper {
+   /// <summary>
+   /// A class to compare arrays up to a given maximum length.
+   /// </summary>
    public class MaxLengthArrayComparer<T> : Comparer<T[]> {
-      private readonly int _maxLength;
+      // ******** Instance variables ********
+
+      /// <summary>
+      /// Element comparer.
+      /// </summary>
       private readonly IComparer<T> _elementComparer;
 
+      /// <summary>
+      /// The maximum length to compare.
+      /// </summary>
+      private readonly int _maxLength;
+
+
+      // ******** Constructors ********
+
+      /// <summary>
+      /// Creates an instance of <see cref="MaxLengthArrayComparer{T}"/>.
+      /// </summary>
+      /// <param name="maxLength">The maximum length to compare.</param>
+      /// <param name="elementComparer">Element comparer to use. If <c>null</c> the default comparer is used.</param>
       public MaxLengthArrayComparer(int maxLength, IComparer<T> elementComparer = null) {
          if (maxLength < 0)
             throw new ArgumentOutOfRangeException(nameof(maxLength), "Max length must be non-negative.");
@@ -37,6 +57,9 @@ namespace ArrayHelper {
          _maxLength = maxLength;
          _elementComparer = elementComparer ?? Comparer<T>.Default;
       }
+
+
+      // ******** Public overriden methods ********
 
       public override int Compare(T[] x, T[] y) {
          if (ReferenceEquals(x, y)) return 0;
@@ -55,7 +78,7 @@ namespace ArrayHelper {
          if (length == _maxLength)
             return 0;
 
-         // Compare lengths, if the arrays are shorther than _maxLength.
+         // Compare lengths, if the arrays are shorter than _maxLength.
          return x.Length.CompareTo(y.Length);
       }
    }

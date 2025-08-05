@@ -34,7 +34,7 @@ namespace Reader {
       /// <summary>
       /// Remember if the last character read was a carriage return (CR).
       /// </summary>
-      private bool _lastWasCR = false;
+      private bool _lastWasCr = false;
 
       /// <summary>
       /// Peeked character, if any.
@@ -88,19 +88,19 @@ namespace Reader {
 
          char c = (char)ch;
 
-         if (_lastWasCR) {
-            _lastWasCR = false;
+         if (_lastWasCr) {
+            _lastWasCr = false;
 
             if (c == '\n') {
                // CRLF -> skip the LF, we already returned LF for CR
                return ReadInternal();
             } else {
                // CR followed by something else, process this character
-               return HandleCR(c);
+               return HandleCr(c);
             }
          }
 
-         return HandleCR(c);
+         return HandleCr(c);
       }
 
       /// <summary>
@@ -108,11 +108,11 @@ namespace Reader {
       /// </summary>
       /// <param name="c">Character to handle.</param>
       /// <returns>Either <paramref name="c"/> or LF.</returns>
-      private int HandleCR(char c) {
+      private int HandleCr(char c) {
          if (c != '\r')
             return c;
 
-         _lastWasCR = true;
+         _lastWasCr = true;
          return '\n';
       }
    }
