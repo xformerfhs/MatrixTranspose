@@ -30,8 +30,7 @@ namespace Alphabet {
    /// Class that describes the characters that can be matrix encoded.
    /// </summary>
    public class AlphabetDescription {
-      // ******** Private Constants ********
-
+      #region Private constants
       /// <summary>
       /// Format string for exceptions when a parameter is invalid.
       /// </summary>
@@ -41,10 +40,9 @@ namespace Alphabet {
       /// Maximum value for places and characters.
       /// </summary>
       private const byte MaxValue = 9;
+      #endregion
 
-
-      // ******** Public Properties ********
-
+      #region Public properties
       /// <summary>
       /// Number of places for one encoding.
       /// </summary>
@@ -69,10 +67,10 @@ namespace Alphabet {
       /// <c>true</c> if all characters have to be converted to upper case, <c>false</c> otherwise.
       /// </summary>
       public bool ToUpper { get; }
+      #endregion
 
 
-      // ******** Constructor ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of <see cref="AlphabetDescription"/>.
       /// </summary> 
@@ -100,5 +98,6 @@ namespace Alphabet {
          TreatJAsI = !alphabetSet.Contains('J');
          ToUpper = !alphabetSet.Contains('a');
       }
+      #endregion
    }
 }

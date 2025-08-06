@@ -41,16 +41,15 @@ namespace MatrixTranspose {
    /// Interaction logic for MainWindow.xaml.
    /// </summary>
    public partial class MainWindow : Window {
-      // ******** Public Properties ********
-
+      #region Public properties
       /// <summary>
       /// List of passwords for transposition.
       /// </summary>
       public ObservableCollection<string> Passwords { get; set; } = new ObservableCollection<string>();
+      #endregion
 
 
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// Description of the chosen substitution alphabet.
       /// </summary>
@@ -60,10 +59,10 @@ namespace MatrixTranspose {
       /// Helper variable to store the currently dragged item in the ListBox.
       /// </summary>
       private string _draggedItem;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of <see cref="MainWindow"/>.
       /// </summary>
@@ -76,10 +75,10 @@ namespace MatrixTranspose {
 
          InitEncodingLists();
       }
+      #endregion
 
 
-      // ******** Event Handlers ********
-
+      #region Event Handlers
       /// <summary>
       /// Sets the TextAlphabet TextBox to a random substitution alphabet when the "Alphabet" button is clicked.
       /// </summary>
@@ -466,10 +465,10 @@ namespace MatrixTranspose {
          textBox.Text = textBox.Text.Insert(cursorPosition, inputChar.ToString());
          textBox.SelectionStart = cursorPosition + 1;
       }
+      #endregion
 
 
-      // ******** Private Helper Methods ********
-
+      #region Private Helper Methods
       /// <summary>
       /// Checks all parameters for validity that are needed for processing.
       /// </summary>
@@ -790,5 +789,6 @@ namespace MatrixTranspose {
             NumberMaxLineLength.Value
          );
       }
+      #endregion
    }
 }

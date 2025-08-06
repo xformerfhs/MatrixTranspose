@@ -30,8 +30,7 @@ namespace Reader {
    /// Base class for a chainable text reader.
    /// </summary>
    public abstract class ChainableTextReader : TextReader {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// The inner text reader that this chainable text reader wraps.
       /// </summary>
@@ -41,10 +40,10 @@ namespace Reader {
       /// Marks whether the object has been disposed.
       /// </summary>
       private bool _isDisposed;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of the <see cref="ChainableTextReader"/> class.
       /// </summary>
@@ -52,10 +51,10 @@ namespace Reader {
       protected ChainableTextReader(TextReader innerReader) {
          _innerReader = innerReader ?? throw new ArgumentNullException(nameof(innerReader));
       }
+      #endregion
 
 
-      // ******** Implementation of IDisposable ********
-
+      #region Implementation of IDisposable
       protected override void Dispose(bool disposing) {
          if (_isDisposed)
             return;
@@ -69,5 +68,6 @@ namespace Reader {
 
          _isDisposed = true;
       }
+      #endregion
    }
 }

@@ -30,8 +30,7 @@ namespace MatrixTranspose {
    /// Class representing an item in a ComboBox for Encoding selection.
    /// </summary>
    internal class EncodingComboBoxItem {
-      // ******** Public Properties ********
-
+      #region Public properties
       /// <summary>
       /// The name of the encoding in uppercase.
       /// </summary>
@@ -46,10 +45,10 @@ namespace MatrixTranspose {
       /// The code page of the encoding.
       /// </summary>
       public int CodePage { get; }
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of <see cref="EncodingComboBoxItem"/>.
       /// </summary>
@@ -62,5 +61,6 @@ namespace MatrixTranspose {
          DisplayName = encodingInfo.DisplayName;
          CodePage = encodingInfo.CodePage;
       }
+      #endregion
    }
 }

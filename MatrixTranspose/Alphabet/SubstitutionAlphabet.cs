@@ -32,8 +32,7 @@ namespace Alphabet {
    /// Class to handle a substitution alphabet.
    /// </summary>
    public class SubstitutionAlphabet {
-      // ******** Public Properties ********
-
+      #region Public properties
       /// <summary>
       /// Character to combination mapping.
       /// </summary>
@@ -48,10 +47,10 @@ namespace Alphabet {
       /// Number of places in the substitution.
       /// </summary>
       public int NumPlaces { get; private set; }
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of the SubstitutionAlphabet class.
       /// </summary>
@@ -91,9 +90,10 @@ namespace Alphabet {
 
          NumPlaces = numPlaces;
       }
+      #endregion
 
-      // ******** Public Methods ********
 
+      #region Public methods
       /// <summary>
       /// Creates a random set of substitution characters.
       /// </summary>
@@ -114,10 +114,10 @@ namespace Alphabet {
 
          return alphabetSet.ToArray();
       }
+      #endregion
 
 
-      // ******** Private Methods ********
-
+      #region Private methods
       /// <summary>
       /// Builds a character array from the given password and alphabet description that contains
       /// first the characters from the password and then the remaining characters from the alphabet.
@@ -188,5 +188,6 @@ namespace Alphabet {
 
          return -1; // This means that the password contained all valid characters.
       }
+      #endregion
    }
 }

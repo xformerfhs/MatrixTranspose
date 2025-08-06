@@ -29,8 +29,7 @@ namespace TranspositionNS {
    /// <typeparam name="K">Type of key.</typeparam>
    /// <typeparam name="V">Type of value.</typeparam>
    internal class ClearableKeyValuePair<K, V> {
-      // ******** Public Properties ********
-
+      #region Public properties
       /// <summary>
       /// Key.
       /// </summary>
@@ -40,10 +39,10 @@ namespace TranspositionNS {
       /// Value.
       /// </summary>
       public V Value { get; private set; }
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of the ClearableKeyValuePair.
       /// </summary>
@@ -53,10 +52,10 @@ namespace TranspositionNS {
          Key = key;
          Value = value;
       }
+      #endregion
 
 
-      // ******** Public Methods ********
-
+      #region Public methods
       /// <summary>
       /// Clears the key-value-pair to overwrite sensitive data.
       /// </summary>
@@ -64,5 +63,6 @@ namespace TranspositionNS {
          Key = default;
          Value = default;
       }
+      #endregion
    }
 }

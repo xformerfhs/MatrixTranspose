@@ -31,8 +31,7 @@ namespace Reader {
    /// Class to filter characters read from a text reader.
    /// </summary>
    public class FilteringTextReader : ChainableTextReader {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// Allowed characters for this reader.
       /// </summary>
@@ -47,10 +46,10 @@ namespace Reader {
       /// Marks whether the object has been disposed.
       /// </summary>
       private bool _isDisposed;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of the <see cref="FilteringTextReader"/> class.
       /// </summary>
@@ -63,10 +62,10 @@ namespace Reader {
 
          this._allowedChars = new SortedSet<char>(allowedChars);
       }
+      #endregion
 
 
-      // ******** Implementation of TextReader ********
-
+      #region Implementation of TextReader
       public override int Read() {
          // 1. Check if we have a peeked character and return it if available.
          if (_peekedChar.HasValue) {
@@ -102,10 +101,9 @@ namespace Reader {
 
          return -1;
       }
+      #endregion
 
-
-      // ******** Implementation of IDisposable ********
-
+      #region Implementation of IDisposable
       protected override void Dispose(bool disposing) {
          if (_isDisposed)
             return;
@@ -123,6 +121,6 @@ namespace Reader {
 
          _isDisposed = true;
       }
-
+      #endregion
    }
 }

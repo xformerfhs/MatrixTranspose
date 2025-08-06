@@ -31,16 +31,15 @@ namespace Writer {
    /// Class that replaces characters in the output based on a mapping.
    /// </summary>
    public class MappingTextWriter : ChainableTextWriter {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// The mapping from characters to their replacements.
       /// </summary>
       private readonly SortedDictionary<char, char[]> _mapping;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of <see cref="MappingTextWriter"/>.
       /// </summary>
@@ -50,15 +49,16 @@ namespace Writer {
           : base(innerWriter) {
          this._mapping = mapping ?? throw new ArgumentNullException(nameof(mapping));
       }
+      #endregion
 
 
-      // ******** Implementation of TextWriter ********
-
+      #region Implementation of TextWriter
       public override void Write(char value) {
          if (_mapping.TryGetValue(value, out char[] replacement))
             _innerWriter.Write(replacement);
          else
             _innerWriter.Write(value);
       }
+      #endregion
    }
 }

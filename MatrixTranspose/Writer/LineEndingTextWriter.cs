@@ -29,16 +29,15 @@ namespace Writer {
    /// Class that converts line endings from LF to CRLF.
    /// </summary>
    public class LineEndingTextWriter : ChainableTextWriter {
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of <see cref="LineEndingTextWriter"/>.
       /// </summary>
       public LineEndingTextWriter(TextWriter innerWriter) : base(innerWriter) { }
+      #endregion
 
 
-      // ******** Implementation of TextWriter ********
-
+      #region Implementation of TextWriter
       public override void Write(char value) {
          // If the character is LF, convert it to CRLF.
          if (value == '\n')
@@ -46,5 +45,6 @@ namespace Writer {
 
          _innerWriter.Write(value);
       }
+      #endregion
    }
 }

@@ -32,8 +32,7 @@ namespace MatrixTranspose.UserControls {
    /// Class to implement a spin button.
    /// </summary>
    public partial class NumericUpDown : UserControl {
-      // ******** Dependency Properties ********
-
+      #region Dependency Properties
       /// <summary>
       /// Registers the "Value" property of the NumericUpDown control.
       /// </summary>
@@ -54,10 +53,10 @@ namespace MatrixTranspose.UserControls {
       public static readonly DependencyProperty MaximumProperty =
           DependencyProperty.Register(nameof(Maximum), typeof(int), typeof(NumericUpDown),
               new PropertyMetadata(20, OnMinMaxChanged));
+      #endregion
 
 
-      // ******** Public Properties ********
-
+      #region Public properties
       /// <summary>
       /// Value of the NumericUpDown control.
       /// </summary>
@@ -81,20 +80,20 @@ namespace MatrixTranspose.UserControls {
          get => (int)GetValue(MaximumProperty);
          set => SetValue(MaximumProperty, value);
       }
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of the NumericUpDown control.
       /// </summary>
       public NumericUpDown() {
          InitializeComponent();
       }
+      #endregion
 
 
-      // ******** Callbacks ********
-
+      #region Callbacks
       /// <summary>
       /// Coerces the value of the "Value" property to ensure it is within the specified range.
       /// </summary>
@@ -137,10 +136,10 @@ namespace MatrixTranspose.UserControls {
       private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
          // This method is intentionally left empty.
       }
+      #endregion
 
 
-      // ******** Event Handlers ********
-
+      #region Event Handlers
       /// <summary>
       /// Handles clicks on the "down" button to decrement the value.
       /// </summary>
@@ -223,10 +222,10 @@ namespace MatrixTranspose.UserControls {
          if (Value < Maximum)
             Value++;
       }
+      #endregion
 
 
-      // ******** Private Helper Methods ********
-
+      #region Private helper methods
       /// <summary>
       /// Checks if the given text contains only digits.
       /// </summary>
@@ -235,5 +234,6 @@ namespace MatrixTranspose.UserControls {
       private static bool IsOnlyDigits(string text) {
          return text.All(c => c >= '0' && c <= '9'); // Only allow digits.
       }
+      #endregion
    }
 }

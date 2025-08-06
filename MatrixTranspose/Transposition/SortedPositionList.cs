@@ -34,8 +34,7 @@ namespace TranspositionNS {
    /// </remarks>
    /// <typeparam name="K">Key type.</typeparam>
    internal class SortedPositionList<K> : IDisposable where K : IComparable {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// The list of tuples containing keys and their corresponding indices.
       /// </summary>
@@ -45,20 +44,19 @@ namespace TranspositionNS {
       /// Flag to indicate whether the object has been disposed.
       /// </summary>
       private bool _isDisposed;
+      #endregion
 
-
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of the SortedPositionList class.
       /// </summary>
       public SortedPositionList() {
          _list = new LinkedList<ClearableKeyValuePair<K, int>>();
       }
+      #endregion
 
 
-      // ******** Public Methods ********
-
+      #region Public methods
       /// <summary>
       /// Adds a new key and its index to the sorted list.
       /// </summary>
@@ -105,17 +103,18 @@ namespace TranspositionNS {
 
          _list.Clear(); // Clear the linked list
       }
+      #endregion
 
 
-      // ********** Properties ********
-
+      #region Public properties
       /// <summary>
       /// Number of items in the sorted index list.
       /// </summary>
       public int Count => _list.Count;
+      #endregion
 
-      // ********** IDisposable Implementation ********
 
+      #region Implementation of IDisposable
       /// <summary>
       /// Disposes the resources used by the SortedPositionList.
       /// </summary>
@@ -143,5 +142,6 @@ namespace TranspositionNS {
          Dispose(disposing: true);
          GC.SuppressFinalize(this);
       }
+      #endregion
    }
 }

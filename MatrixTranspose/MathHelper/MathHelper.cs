@@ -27,6 +27,7 @@ namespace MathHelperNS {
    /// Class to provide mathematical helper functions.
    /// </summary>
    public static class MathHelper {
+      #region Public static methods
       /// <summary>
       /// Calculates the greatest common divisor (GCD) of two integers using the Euclidean algorithm.
       /// </summary>
@@ -42,5 +43,6 @@ namespace MathHelperNS {
 
          return a;
       }
+      #endregion
    }
 }

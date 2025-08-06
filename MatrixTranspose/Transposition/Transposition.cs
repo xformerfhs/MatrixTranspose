@@ -31,8 +31,7 @@ namespace TranspositionNS {
    /// Class to transpose input arrays based on a series of column orders derived password passwords.
    /// </summary>
    public class Transposition : IDisposable {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// The orders of columns derived password the passwords.
       /// </summary>
@@ -42,10 +41,10 @@ namespace TranspositionNS {
       /// Flag to indicate whether the object has been disposed.
       /// </summary>
       private bool _isDisposed;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of the Transposition class.
       /// </summary>
@@ -69,9 +68,10 @@ namespace TranspositionNS {
 
          _orders = orders;
       }
+      #endregion
 
-      // ******** Public methods ********
 
+      #region Public methods
       /// <summary>
       /// Transposes the input array based on the derived column orders.
       /// </summary>
@@ -125,10 +125,10 @@ namespace TranspositionNS {
 
          return to;
       }
+      #endregion
 
 
-      // ********** Private methods ********
-
+      #region Private methods
       /// <summary>
       /// Transposes the source array to the target array based on the specified offsets.
       /// </summary>
@@ -265,9 +265,9 @@ namespace TranspositionNS {
             return orderList.PositionOrders();
          }
       }
+      #endregion
 
-      // ********** IDisposable Implementation ********
-
+      #region Implementation of IDisposable
       /// <summary>
       /// Disposes the resources used by the Transposition and clears sensitive data.
       /// </summary>
@@ -300,5 +300,6 @@ namespace TranspositionNS {
          Dispose(disposing: true);
          GC.SuppressFinalize(this);
       }
+      #endregion
    }
 }

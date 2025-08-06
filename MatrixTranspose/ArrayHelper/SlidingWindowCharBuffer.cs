@@ -29,8 +29,7 @@ namespace ArrayHelper {
    /// Class to implement a sliding window buffer for characters.
    /// </summary>
    public class SlidingWindowCharBuffer : IDisposable {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// Buffer to hold the characters.
       /// </summary>
@@ -40,10 +39,10 @@ namespace ArrayHelper {
       /// Marks whether the object has been disposed.
       /// </summary>
       private bool _isDisposed;
+      #endregion
 
 
-      // ******** Public Properties ********
-
+      #region Public properties
       /// <summary>
       /// Length of the current content in the buffer.
       /// </summary>
@@ -58,10 +57,10 @@ namespace ArrayHelper {
       /// The raw character buffer for operations with the buffer.
       /// </summary>
       public char[] RawBuffer => _buffer;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of the SlidingWindowCharBuffer with the specified capacity.
       /// </summary>
@@ -74,7 +73,10 @@ namespace ArrayHelper {
          _buffer = new char[capacity];
          Length = 0;
       }
+      #endregion
 
+
+      #region Public methods
       /// <summary>
       /// Adds a character to the end of the buffer.
       /// </summary>
@@ -128,10 +130,10 @@ namespace ArrayHelper {
          Array.Clear(_buffer, 0, Length);
          Length = 0;
       }
+      #endregion
 
 
-      // ******** Implementation of IDisposable  ********
-
+      #region Implementation of IDisposable
       protected virtual void Dispose(bool disposing) {
          if (_isDisposed)
             return;
@@ -147,5 +149,6 @@ namespace ArrayHelper {
          Dispose(disposing: true);
          GC.SuppressFinalize(this);
       }
+      #endregion
    }
 }

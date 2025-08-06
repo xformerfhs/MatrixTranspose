@@ -29,8 +29,7 @@ namespace Reader {
    /// Class to normalize line endings in a text reader.
    /// </summary>
    public class LineEndingNormalizingTextReader : ChainableTextReader {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// Remember if the last character read was a carriage return (CR).
       /// </summary>
@@ -40,18 +39,17 @@ namespace Reader {
       /// Peeked character, if any.
       /// </summary>
       private int? _peekedChar;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of the <see cref="LineEndingNormalizingTextReader"/> class.
       /// </summary>
       public LineEndingNormalizingTextReader(TextReader innerReader) : base(innerReader) { }
+      #endregion
 
-
-      // ******** Implementation of TextReader ********
-
+      #region Implementation of TextReader
       public override int Read() {
          // 1. If there is no peeked character read the next one.
          if (!_peekedChar.HasValue)
@@ -73,10 +71,10 @@ namespace Reader {
 
          return _peekedChar.Value;
       }
+      #endregion
 
 
-      // ******** Private Methods ********
-
+      #region Private Methods
       /// <summary>
       /// Reads a character from the inner reader, normalizing line endings.
       /// </summary>
@@ -115,5 +113,6 @@ namespace Reader {
          _lastWasCr = true;
          return '\n';
       }
+      #endregion
    }
 }

@@ -29,6 +29,7 @@ namespace MatrixTranspose {
    /// Extension class for <see cref="Encoding"/>.
    /// </summary>
    public static class EncodingExtension {
+      #region Public static methods
       /// <summary>
       /// Reports, whether the encoding writes a BOM.
       /// </summary>
@@ -61,5 +62,6 @@ namespace MatrixTranspose {
                return 1;  // This is the default. We assume 1 byte / character.
          }
       }
+      #endregion
    }
 }

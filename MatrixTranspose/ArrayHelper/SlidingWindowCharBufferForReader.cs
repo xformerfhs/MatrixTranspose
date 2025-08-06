@@ -30,8 +30,7 @@ namespace ArrayHelper {
    /// Class to manage a sliding window character buffer for a <see cref="TextReader"/>.
    /// </summary>
    public class SlidingWindowCharBufferForReader : IDisposable {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// Buffer to hold the characters.
       /// </summary>
@@ -41,10 +40,10 @@ namespace ArrayHelper {
       /// Marks whether the object has been disposed.
       /// </summary>
       private bool _isDisposed;
+      #endregion
 
 
-      // ******** Public Properties ********
-
+      #region Public properties
       /// <summary>
       /// Length of the current content in the buffer.
       /// </summary>
@@ -54,10 +53,10 @@ namespace ArrayHelper {
       /// The raw character buffer for operations with the buffer.
       /// </summary>
       public char[] RawBuffer => _buffer;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of <see cref="SlidingWindowCharBufferForReader"/> with the specified capacity.
       /// </summary>
@@ -70,10 +69,10 @@ namespace ArrayHelper {
          _buffer = new char[capacity];
          Length = 0;
       }
+      #endregion
 
 
-      // ******** Public Methods ********
-
+      #region Public methods
       /// <summary>
       /// Fills the buffer.
       /// </summary>
@@ -101,10 +100,10 @@ namespace ArrayHelper {
 
          return Length > 0;
       }
+      #endregion
 
 
-      // ******** Implementation of IDisposable  ********
-
+      #region Implementation of IDisposable
       protected virtual void Dispose(bool disposing) {
          if (_isDisposed)
             return;
@@ -128,5 +127,6 @@ namespace ArrayHelper {
          Dispose(disposing: true);
          GC.SuppressFinalize(this);
       }
+      #endregion
    }
 }

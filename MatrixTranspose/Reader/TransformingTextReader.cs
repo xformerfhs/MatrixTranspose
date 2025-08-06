@@ -30,16 +30,15 @@ namespace Reader {
    /// Class to read characters from a text reader and transform them using a specified function.
    /// </summary>
    public class TransformingTextReader : ChainableTextReader {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// Transforming function to apply to each character read.
       /// </summary>
       private readonly Func<char, char> _transformer;
+      #endregion
 
 
-      // ******** Public Static Properties ********
-
+      #region Public static properties
       /// <summary>
       /// Function to transform characters to uppercase.
       /// </summary>
@@ -49,10 +48,10 @@ namespace Reader {
       /// Function to replace 'J' with 'I' and 'j' with 'i'.
       /// </summary>s
       public static Func<char, char> JToITransformer => c => c == 'J' ? 'I' : (c == 'j' ? 'i' : c);
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of the <see cref="TransformingTextReader"/> class.
       /// </summary>
@@ -60,9 +59,10 @@ namespace Reader {
           : base(innerReader) {
          _transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
       }
+      #endregion
 
 
-      // ******** Implementation of TextReader ********
+      #region Implementation of TextReader
 
       public override int Read() {
          int ch = _innerReader.Read();
@@ -79,5 +79,6 @@ namespace Reader {
 
          return _transformer((char)ch);
       }
+      #endregion
    }
 }

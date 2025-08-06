@@ -30,8 +30,7 @@ namespace Alphabet {
    /// Class that generates <see cref="AlphabetDescription"/> objects based on the number of places and characters.
    /// </summary>
    public static class AlphabetFactory {
-      // ******** Private Constants ********
-
+      #region Private constants
       /// <summary>
       /// Minimum allowed number of places.
       /// </summary>
@@ -71,10 +70,10 @@ namespace Alphabet {
          { 43, new AlphabetDescription(4, 3, " \n.,;:-!?'\"%&+#*/()ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") },
          { 36, new AlphabetDescription(3, 6, " \n.,;:-!?'\"§%&+#*/()|°^~<=>–—«»¡¿¥£¤€$¢ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ÀÁÂÃÄÅĄÆÇĆČÐÞĎÈÉÊËĘĚÌÍÎÏŁÑŃŇÒÓÔÕÖØŘŚŠŤÙÚÛÜŮÝŸŹŻŽàáâãäåąæçćčðþďèéêëęěìíîïłñńňòóôõöøřśšßťùúûüůýÿźżž") }
       };
+      #endregion
 
 
-      // ******** Public Methods ********
-
+      #region Public methods
       /// <summary>
       /// Get an <see cref="AlphabetDescription"/> for the given number of places and characters.
       /// </summary>
@@ -96,5 +95,6 @@ namespace Alphabet {
 
          throw new ArgumentException($"No alphabet found for {numPlaces} places and {numCharacters} characters");
       }
+      #endregion
    }
 }

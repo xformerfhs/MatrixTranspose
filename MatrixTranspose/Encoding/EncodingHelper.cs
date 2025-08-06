@@ -32,8 +32,7 @@ namespace MatrixTranspose {
    /// Class that implements helper methods for <see cref="Encoding"/> handling.
    /// </summary>
    public static class EncodingHelper {
-      // ******** Private constants ********
-
+      #region Private constants
       // Code pages
 
       private const int CodepageUtf8 = 65001;
@@ -52,10 +51,10 @@ namespace MatrixTranspose {
          CodepageUtf32Le,
          CodepageUtf32Be
       };
+      #endregion
 
 
-      // ******** Public methods ********
-
+      #region Public static methods
       // The following methods do not use "(bool, int)" or "(bool, Encoding) as the
       // return values, as this means to refer to the results as "result.Item1" and
       // "result.Item2" which hides the semantic of the result. Multiple return values
@@ -198,10 +197,10 @@ namespace MatrixTranspose {
       public static bool SupportsBom(int codePage) {
          return BomCodePages.Contains(codePage);
       }
+      #endregion
 
 
-      // ******** Private methods ********
-
+      #region Private static methods
       /// <summary>
       /// Detects a BOM and returns either the corresponding codepage or <c>0</c>.
       /// This method assumes that the arguments are already checked.
@@ -290,5 +289,6 @@ namespace MatrixTranspose {
 
          return result;
       }
+      #endregion
    }
 }

@@ -34,8 +34,7 @@ namespace MatrixTranspose {
    /// Class to handle filtered and transformed files.
    /// </summary>
    public static class FileHandler {
-      // ******** Private constants ********
-
+      #region Private constants
       /// <summary>
       /// Maximum file size.
       /// </summary>
@@ -46,9 +45,10 @@ namespace MatrixTranspose {
       private const string FormatErrorMustBePositive = @"{0} must be positive";
       private const string FormatErrorFileOperation = @"Error {0}ing file '{1}': {2}";
       private const string ErrorFilePathEmpty = @"File path must not be null or empty";
+      #endregion
 
-      // ******** Public methods ********
 
+      #region Public methods
       /// <summary>
       /// Reads an encrypted file and filters for substitution characters.
       /// </summary>
@@ -271,10 +271,10 @@ namespace MatrixTranspose {
 
          return GetFileSizeNoCheck(filePath);
       }
+      #endregion
 
 
-      // ******** Private Methods ********
-
+      #region Private Methods
       /// <summary>
       /// Checks if the file and encoding is suited.
       /// </summary>
@@ -325,5 +325,6 @@ namespace MatrixTranspose {
 
          return result;
       }
+      #endregion
    }
 }

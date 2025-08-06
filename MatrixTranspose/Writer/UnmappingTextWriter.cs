@@ -32,8 +32,7 @@ namespace Writer {
    /// Class that replaces a sequence of characters by a character according to a mapping.
    /// </summary>
    public class UnmappingTextWriter : ChainableTextWriter {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// Mapping from character sequences to their replacements, sorted by the lengths of the sequences.
       /// </summary>
@@ -58,10 +57,10 @@ namespace Writer {
       /// Marks whether the object has been disposed.
       /// </summary>
       private bool _isDisposed;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of <see cref="UnmappingTextWriter"/>.
       /// </summary>
@@ -99,10 +98,10 @@ namespace Writer {
          // Create buffer with maximum key length.
          _buffer = new SlidingWindowCharBuffer(_maxLength);
       }
+      #endregion
 
 
-      // ******** Implementation of TextWriter ********
-
+      #region Implementation of TextWriter
       public override void Write(char value) {
          // Add character to buffer.
          if (!_buffer.AddChar(value))
@@ -132,10 +131,10 @@ namespace Writer {
 
          _innerWriter.Flush();
       }
+      #endregion
 
 
-      // ******** Implementation of IDisposable ********
-
+      #region Implementation of IDisposable
       protected override void Dispose(bool disposing) {
          if (_isDisposed)
             return;
@@ -154,5 +153,6 @@ namespace Writer {
 
          _isDisposed = true;
       }
+      #endregion
    }
 }

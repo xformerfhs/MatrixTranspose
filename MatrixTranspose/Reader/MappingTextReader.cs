@@ -31,8 +31,7 @@ namespace Reader {
    /// Class to read characters from a text reader and replace them with a mapping.
    /// </summary>
    public class MappingTextReader : ChainableTextReader {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// Mapping of characters to their replacements.
       /// </summary>
@@ -52,10 +51,10 @@ namespace Reader {
       /// Marks whether the object has been disposed.
       /// </summary>
       private bool _isDisposed;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of the <see cref="MappingTextReader"/> class.
       /// </summary>
@@ -68,10 +67,10 @@ namespace Reader {
          _currentReplacement = null;
          _replacementIndex = 0;
       }
+      #endregion
 
 
-      // ******** Implementation of TextReader ********
-
+      #region Implementation of TextReader
       public override int Read() {
          // 1. Are there still replacements available from the current mapping?
          if (_currentReplacement != null &&
@@ -116,10 +115,10 @@ namespace Reader {
 
          return ch;
       }
+      #endregion
 
 
-      // ******** Implementation of IDisposable ********
-
+      #region Implementation of IDisposable
       protected override void Dispose(bool disposing) {
          if (!_isDisposed)
             return;
@@ -133,5 +132,6 @@ namespace Reader {
 
          _isDisposed = true;
       }
+      #endregion
    }
 }

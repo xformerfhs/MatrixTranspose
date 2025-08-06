@@ -31,8 +31,7 @@ namespace Writer {
    /// Base class for text writers that can be chained together.
    /// </summary>
    public abstract class ChainableTextWriter : TextWriter {
-      // ******** Instance Variables ********
-
+      #region Instance variables
       /// <summary>
       /// Text writer to which this writer writes.
       /// </summary>
@@ -42,28 +41,28 @@ namespace Writer {
       /// Marks whether the object has been disposed.
       /// </summary>
       private bool _isDisposed;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates a new instance of <see cref="ChainableTextWriter"/>.
       /// </summary>
       protected ChainableTextWriter(TextWriter innerWriter) {
          _innerWriter = innerWriter ?? throw new ArgumentNullException(nameof(innerWriter));
       }
+      #endregion
 
 
-      // ******** Public Attributes ********
-
+      #region Public Attributes
       /// <summary>
       /// Encoding used by the inner writer.
       /// </summary>
       public override Encoding Encoding => _innerWriter.Encoding;
+      #endregion
 
 
-      // ******** Implementation of IDisposable ********
-
+      #region Implementation of IDisposable
       protected override void Dispose(bool disposing) {
          if (_isDisposed)
             return;
@@ -77,5 +76,6 @@ namespace Writer {
 
          _isDisposed = true;
       }
+      #endregion
    }
 }

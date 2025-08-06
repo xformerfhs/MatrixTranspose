@@ -33,16 +33,15 @@ namespace ArrayHelper {
    /// I do not understand why no programming framework provides this out of the box.
    /// </remarks>
    public class ArrayComparer<T> : Comparer<T[]> {
-      // ******** Instance variables ********
-
+      #region Instance variables
       /// <summary>
       /// Element comparer.
       /// </summary>
       private readonly IComparer<T> _elementComparer;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates an instance of <see cref="ArrayComparer{T}"/>.
       /// </summary>
@@ -50,10 +49,10 @@ namespace ArrayHelper {
       public ArrayComparer(IComparer<T> elementComparer = null) {
          _elementComparer = elementComparer ?? Comparer<T>.Default;
       }
+      #endregion
 
 
-      // ******** Public overriden methods ********
-
+      #region Public overridden methods
       public override int Compare(T[] x, T[] y) {
          if (ReferenceEquals(x, y)) 
             return 0;
@@ -72,5 +71,6 @@ namespace ArrayHelper {
 
          return x.Length.CompareTo(y.Length);
       }
+      #endregion
    }
 }

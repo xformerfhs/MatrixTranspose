@@ -30,8 +30,7 @@ namespace ArrayHelper {
    /// A class to compare arrays up to a given maximum length.
    /// </summary>
    public class MaxLengthArrayComparer<T> : Comparer<T[]> {
-      // ******** Instance variables ********
-
+      #region Instance variables
       /// <summary>
       /// Element comparer.
       /// </summary>
@@ -41,10 +40,10 @@ namespace ArrayHelper {
       /// The maximum length to compare.
       /// </summary>
       private readonly int _maxLength;
+      #endregion
 
 
-      // ******** Constructors ********
-
+      #region Constructors
       /// <summary>
       /// Creates an instance of <see cref="MaxLengthArrayComparer{T}"/>.
       /// </summary>
@@ -57,10 +56,9 @@ namespace ArrayHelper {
          _maxLength = maxLength;
          _elementComparer = elementComparer ?? Comparer<T>.Default;
       }
+      #endregion
 
-
-      // ******** Public overriden methods ********
-
+      #region Public overridden methods
       public override int Compare(T[] x, T[] y) {
          if (ReferenceEquals(x, y))
             return 0;
@@ -84,5 +82,6 @@ namespace ArrayHelper {
          // Compare lengths, if the arrays are shorter than _maxLength.
          return x.Length.CompareTo(y.Length);
       }
+      #endregion
    }
 }
