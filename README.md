@@ -9,7 +9,7 @@ First each letter of the clear text is substituted by 2 or more letter (i.e. [fr
 This has the effect that the character substitutions are widely separated from each other, making it very hard to crack the cipher.
 I.e. it is hard if the clear text is long and there are at least two transpositions with very long random passwords.
 
-A failed cipher of this kind was then German [ADFG(V)X cipher](https://en.wikipedia.org/wiki/ADFGVX_cipher) used in world war I.
+A failed cipher of this kind was the German [ADFG(V)X cipher](https://en.wikipedia.org/wiki/ADFGVX_cipher) used in world war I.
 It failed because the matrix substitution is easily cracked and there was only one transposition with short passwords.
 
 The cipher needs two categories of passwords:
