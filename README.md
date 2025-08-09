@@ -41,6 +41,7 @@ Input for the substitution construction:
 1. The alphabet is all upper-case letters without `J`: `ABCDEFHIKLMNOPQRSTUVWXYZ`.
 2. The number of places is 2: `p=2`.
 3. The number of different encoding characters is 5: `ADFGX`.
+This yields `5`<sup>`2`</sup> = `25` character combinations which is exactly the length of the alphabet.
 4. The password is `PIPERATTHEGATESOFDAWN`
 
 Processing:
@@ -74,9 +75,118 @@ I.e. the letter `E` is in row `A` and column `F`, so `E` is encoded as `AF`.
 `U` is encoded as `GA`.
 
 Decryption works the other way around.
-One takes a character combination, e.g. `FG` and reads it as "the character at row `F` and column `G` which is `N`.
+One takes a character combination, e.g. `FG` and reads it as "the character at row `F` and column `G`" which is `N`.
 
 This encryption is easily to break by analyzing the frequencies of the 2-grams (two-letter combinations) which is the same as the frequencies of the letters in the clear text.
+
+When there are more places the dimension of the substitution matrix changes accordingly.
+I.e. when there are 3 places the matrix becomes a cube and when there are 4 places the matrix becomes a 4-dimensional cube, which is a bit hard to imagine ;-).
+
+Nevertheless, the method of filling these `p`-dimensional matrices is always the one that is described above.
+
+### Transposition
+
+Another encryption method that is fundamentally different from the substitution of the matrix encryption is transposition.
+The characters are not encoded but move around.
+They change there position in the text.
+
+The simplest transposition works like this:
+
+1. One chooses a password.
+2. It is used as the the header of a table, that has as many columns as the password has letters.
+3. Then one assigns a number to each letter of the password which corresponds to the order of the letter in the word according to the alphabet.
+4. The text is filled into the table from left to right and top to bottom.
+5. Then the text is read out in **columns** in the order that is given by the number beneath each letter of the password.
+
+Here is an example:
+
+Let the password be `MEDDLE`.
+
+This is written as the header of a table:
+
+| **M** | **E** | **D** | **D** | **L** | **E** |
+| - | - | - | - | - | - |
+| |  |  |  |  |  |
+
+Then the order of the letter according to the alphabet is written under each letter of the password:
+
+| **M** | **E** | **D** | **D** | **L** | **E** |
+| 6 | 3 | 1 | 2 | 5 | 4 |
+| - | - | - | - | - | - |
+| |  |  |  |  |  |
+
+This means:
+- The first `D` comes first in the alphabet.
+- The second `D` comes after the first `D`.
+- The first `E` is the third letter
+
+and so on until the `M` which comes last when the letters of the password are ordered according to the alphabet.
+
+Then the text is filled into the table.
+We assume a very simple clear text: `ABCDEFGHIJKLMNOPQRSTUVWXYZ`.
+
+The table then looks like this:
+
+| **M** | **E** | **D** | **D** | **L** | **E** |
+| 6 | 3 | 1 | 2 | 5 | 4 |
+| - | - | - | - | - | - |
+| A | B | C | D | E | F |
+| G | H | I | J | K | L |
+| M | N | O | P | Q | R |
+| S | T | U | V | W | X |
+| Y | Z |   |   |   |   |
+
+Then the text is read out in column order and becomes: `CIOUDJPVBHNTZFLRXEKQWAGMSY`.
+
+It`s is as easy as that!
+
+However, this is easily cracked, as well.
+Take, for example, the clear text letters `ABCDEF`.
+The end up at positions 1, 5, 9, 14, 18, 23`.
+The differences between these positions are 4, 4, 5, 4, 5.
+This regular spacing makes it easy to reverse the transposition.
+
+Transpositions can be chained.
+I.e., one can take the text just produced and feed it into another transposition.
+This will make it much harder to reverse the transposition.
+However, this is only the case, when the lengths of the passwords do not have a common factor.
+I.e. the lengths must be relatively prime.
+If they have a common factor it will show up as regular spacings of clear text characters in the resulting text.
+
+### Combining matrix encryption and transposition
+
+It is possible to construct a quite good encryption by combining matrix encryption and transposition.
+The idea is to first use a matrix substitution and then split the character combinations up by transposing the letters.
+
+Here is a combined example of the two examples above:
+
+The cleartext is `CRYPTOGRAPHYBENDSYOURMIND`.
+Note that `J` has been replaced by `I`, as the alphabet for the matrix substitution does not contain the letter `J`.
+
+With the matrix substitution this clear text becomes
+`XDAGGGAADADXDFAGAXAADDGGXAAFFGFDDGGGDXGAAGXXADFGFD`.
+
+This is filled into the transposition table:
+
+| **M** | **E** | **D** | **D** | **L** | **E** |
+| 6 | 3 | 1 | 2 | 5 | 4 |
+| - | - | - | - | - | - |
+| X | D | A | G | G | G |
+| A | A | D | A | D | X |
+| D | F | A | G | A | X |
+| A | A | D | D | G | G |
+| X | A | A | F | F | G |
+| F | D | D | G | G | G |
+| D | X | G | A | A | G |
+| X | X | A | D | F | G |
+| F | D |   |   |   |   |
+
+
+After the transposition this becomes:
+`ADADADGAGAGDFGADDAFAADXXDGXXGGGGGGDAGFGAFXADAXFDXF`
+
+If one uses just the substitution matrix without reversing the transposition this would translate to 
+`IIIUUVNUTFIMSMYYYTXUQIADK`.
 
 ## Contributing
 
