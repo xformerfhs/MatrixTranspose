@@ -20,10 +20,10 @@
  *
  * Change history:
  *    2025-07-24: V1.0.0: Created. fhs
+ *    2025-08-09: V1.1.0: Use arrays instead of lists for parallel tasks. fhs
  */
 
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace TranspositionNS {
@@ -141,20 +141,20 @@ namespace TranspositionNS {
          int transposeLen = offsets.Length;
 
          int destinationIndex = 0;
-         List<Task> tasks = new List<Task>(transposeLen);
-
+         Task[] tasks = new Task[transposeLen];
+         int i = 0;
          // Run each column transposition in parallel.
          foreach (int offset in offsets) {
             int destIdx = destinationIndex; // Capture for closure
-            tasks.Add(Task.Run(() =>
+            tasks[i++] = Task.Run(() =>
                TransposeColumn(source, target, sourceLen, transposeLen, offset, destIdx)
-            ));
+            );
 
             destinationIndex += ColumnLen(sourceLen, transposeLen, offset);
          }
 
          // Wait for all the column transpositions to complete.
-         Task.WaitAll(tasks.ToArray());
+         Task.WaitAll(tasks);
       }
 
       /// <summary>
@@ -192,21 +192,20 @@ namespace TranspositionNS {
          int transposeLen = offsets.Length;
 
          int sourceIndex = 0;
-         List<Task> tasks = new List<Task>(transposeLen);
-
+         Task[] tasks = new Task[transposeLen];
+         int i = 0;
          // Run each column untransposition in parallel.
          foreach (int offset in offsets) {
             int srcIdx = sourceIndex; // Capture for closure
-            tasks.Add(Task.Run(() =>
+            tasks[i++] = Task.Run(() =>
                UntransposeColumn(source, target, sourceLen, transposeLen, offset, srcIdx)
-            ));
+            );
 
             sourceIndex += ColumnLen(sourceLen, transposeLen, offset);
          }
 
          // Wait for all the column untranspositions to complete.
-         Task.WaitAll(tasks.ToArray());
-
+         Task.WaitAll(tasks);
       }
 
       /// <summary>
