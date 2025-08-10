@@ -4,13 +4,18 @@ This is a dummy text for the real documentation which I will add a later time.
 
 This is a small program that features a combined [Polybios (matrix) substitution](https://en.wikipedia.org/wiki/Polybius_square) and [transposition](https://en.wikipedia.org/wiki/Transposition_cipher) cipher.
 
+It is intended for educational purposes.
+It shows how cryptography works and how the security or insecurity of a cipher occurs.
+Modern ciphers like [ChaCha20-Poly1305](https://en.wikipedia.org/wiki/ChaCha20-Poly1305) or [AES-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) are far better suited for doing real encryption.
+
+Here is how the encryption in this program works:
+
 First each letter of the clear text is substituted by 2 or more letters (i.e. [fractionation](https://en.wikipedia.org/wiki/Transposition_cipher#Fractionation)) and then the letters of this substitution cipher are transposed a number of times.
 
-This has the effect that the character substitutions are widely separated from each other, making it very hard to crack the cipher.
+This has the effect that the characters of the multi-letter-substitutions are ripped apart, making it very hard to crack the cipher.
 I.e. it is hard if the clear text is long and there are at least two transpositions with very long random passwords.
 
-A failed cipher of this kind was the German [ADFG(V)X cipher](https://en.wikipedia.org/wiki/ADFGVX_cipher) used during World War I.
-It failed because the matrix substitution is easily cracked and there was only one transposition with short passwords.
+An example of this cipher was the German [ADFG(V)X cipher](https://en.wikipedia.org/wiki/ADFGVX_cipher) used during World War I.
 
 The cipher needs two categories of passwords:
 
@@ -22,10 +27,11 @@ The cipher needs two categories of passwords:
 ### Matrix encoding (Polybios square)
 
 The first encryption method is a replacement of one character by a combination of multiple characters.
-One parameter is the number of places (denoted by `p`) that the substitution is made of, i.e. how many characters a substitution has.
+This encryption method has two parameters:
+One parameter is the number of places (denoted by `p`) that the substitution is made of, i.e. how many characters are used to encode one character.
 The second parameter is the number of different characters (denoted by `n`).
 
-The number of possible combinations is `n`<sup>`p`</sup>.
+Then the number of possible character combinations is `n`<sup>`p`</sup>.
 One has to define a list of allowed characters with a length that must be at most the number of combinations.
 This list of allowed characters is called an "alphabet".
 
@@ -73,11 +79,12 @@ A letter is encoded by its row and column position.
 
 I.e. the letter `E` is in row `A` and column `F`, so `E` is encoded as `AF`.
 `U` is encoded as `GA`.
+And so on.
 
 Decryption works the other way around.
 One takes a character combination, e.g. `FG` and reads it as "the character at row `F` and column `G`" which is `N`.
 
-This encryption is easily to break by analyzing the frequencies of the 2-grams (two-letter combinations) which is the same as the frequencies of the letters in the clear text.
+This encryption is easy to break by analyzing the frequencies of the 2-grams (two-letter combinations) which is the same as the frequencies of the letters in the clear text.
 
 When there are more places the dimension of the substitution matrix changes accordingly.
 I.e. when there are 3 places the matrix becomes a cube and when there are 4 places the matrix becomes a 4-dimensional cube, which is a bit hard to imagine ;-).
@@ -87,7 +94,7 @@ Nevertheless, the method of filling these `p`-dimensional matrices is always the
 ### Transposition
 
 Another encryption method that is fundamentally different from the substitution of the matrix encryption is transposition.
-The characters are not encoded but move around.
+The characters are not encoded but moved around.
 They change there position in the text.
 
 The simplest transposition works like this:
@@ -142,7 +149,7 @@ It`s is as easy as that!
 
 However, this is easily cracked, as well.
 Take, for example, the clear text letters `ABCDEF`.
-The end up at positions 1, 5, 9, 14, 18, 23`.
+They end up at positions 1, 5, 9, 14, 18, 23`.
 The differences between these positions are 4, 4, 5, 4, 5.
 This regular spacing makes it easy to reverse the transposition.
 
@@ -153,6 +160,15 @@ However, this is only the case, when the lengths of the passwords do not have a 
 I.e. the lengths must be relatively prime.
 If they have a common factor it will show up as regular spacings of clear text characters in the resulting text.
 
+Decrypting works the other way around.
+I.e. one fills the encrypted text column-wise into the table with the order of the columns assigned by their numbers.
+Then one reads the decrypted text as the rows from top to bottom.
+
+In this example two columns have the length 5 and 4 have length 4.
+How does one know how long a specific column is?
+As the total length of the encrypted text is known, it is also known how long the last row is.
+So it is also known which columns are longer than the others.
+
 ### Combining matrix encryption and transposition
 
 It is possible to construct a quite good encryption by combining matrix encryption and transposition.
@@ -161,7 +177,6 @@ The idea is to first use a matrix substitution and then split the character comb
 Here is a combined example of the two examples above:
 
 The cleartext is `CRYPTOGRAPHYBENDSYOURMIND`.
-Note that `J` has been replaced by `I`, as the alphabet for the matrix substitution does not contain the letter `J`.
 
 With the matrix substitution this clear text becomes
 `XDAGGGAADADXDFAGAXAADDGGXAAFFGFDDGGGDXGAAGXXADFGFD`.
@@ -187,6 +202,17 @@ After the transposition this becomes:
 
 If one uses just the substitution matrix without reversing the transposition this would translate to 
 `IIIUUVNUTFIMSMYYYTXUQIADK`.
+
+It has to be said that the encryption in this example is **not** secure.
+There are 3 reasons for this:
+
+1. The plain text is very short.
+2. There is only one transposition.
+3. The transposition password is short.
+
+However, if a long plain text is encrypted and there are at least two transpositions and these transpositions use long random passwords with lengths 30 or more, than this encryption is indeed secure.
+
+Then one has to solve the problem of somehow securely storing long random passwords...
 
 ## Contributing
 
