@@ -1,5 +1,5 @@
-﻿using Alphabet;
-using ArrayHelper;
+﻿using AlphabetHandling;
+using ArrayHandling;
 using System.Collections;
 
 namespace MatrixTransposeTest {
