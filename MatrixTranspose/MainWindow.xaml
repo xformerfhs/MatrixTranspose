@@ -8,7 +8,7 @@
         xmlns:userControls="clr-namespace:MatrixTranspose.UserControls"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="441"
+        Height="470"
         Width="977">
    <TabControl x:Name="TabCon">
       <TabItem x:Name="TabMatrix"
@@ -189,7 +189,7 @@
 		         Height="23"
 		         VerticalAlignment="Center" HorizontalAlignment="Left" Width="32">
          <StackPanel x:Name="StackFiles"
-			            Orientation="Vertical">
+			            Orientation="Vertical" Height="432">
             <GroupBox x:Name="GroupFileOperation"
 				          HorizontalAlignment="Left"
 				          Height="50"
@@ -337,32 +337,36 @@
 							          Content="Output encoding same as input encoding"
 							          IsChecked="True"
 							          Click="CheckKeepEncoding_Click"/>
+                     <StackPanel x:Name="StackOutputOptions"
+                                 Orientation="Vertical"
+                                 Margin="0,10,0,0">
                      <StackPanel x:Name="StackBOM" 
                                  Orientation="Horizontal"
                                  HorizontalAlignment="Left"
-                                 Margin="0,10,0,0">
+                                 Margin="0,5,0,0">
                         <Label x:Name="LabelOutputBOM"
                                Content="Output BOM:"
   								       FontWeight="Bold"
 								       VerticalAlignment="Center"/>
-                        <RadioButton x:Name="RadioKeepBOM"
-                                     Content="Same as input"
-                                     VerticalAlignment="Center"
-                                     IsChecked="True"
-                                     Margin="5,0,0,0"/>
-                        <RadioButton x:Name="RadioWithBOM"
-                                     Content="With BOM"
-                                     VerticalAlignment="Center"
-                                     Margin="10,0,0,0"/>
-                        <RadioButton x:Name="RadioNoBOM"
-                                     Content="No BOM"
-                                     VerticalAlignment="Center"
-                                     Margin="10,0,0,0"/>
+                        <ComboBox x:Name="ComboBom"
+                                  Margin="44,0,0,0"/>
+                     </StackPanel>
+                     <StackPanel x:Name="StackLineEnding" 
+                                 Orientation="Horizontal"
+                                 HorizontalAlignment="Left"
+                                 Margin="0,5,0,0">
+                        <Label x:Name="LabelOutputLineEnding"
+                               Content="Output Line Ending:"
+  								       FontWeight="Bold"
+								       VerticalAlignment="Center"/>
+                        <ComboBox x:Name="ComboLineEnding"
+                                  Margin="0"/>
+                     </StackPanel>
                      </StackPanel>
                   </StackPanel>
                </GroupBox>
-               <GroupBox x:Name="GroupFileLayout"
-					          Header="File Layout"
+               <GroupBox x:Name="GroupTextLayout"
+					          Header="Text Layout"
 					          Margin="10,10,0,0"
 					          HorizontalAlignment="Left"
 					          Width="218">

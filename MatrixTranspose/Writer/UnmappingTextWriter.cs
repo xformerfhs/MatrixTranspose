@@ -22,12 +22,12 @@
  *    2025-08-02: V1.0.0: Created. fhs
  */
 
-using ArrayHelper;
+using ArrayHandling;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Writer {
+namespace WriteHandling {
    /// <summary>
    /// Class that replaces a sequence of characters by a character according to a mapping.
    /// </summary>

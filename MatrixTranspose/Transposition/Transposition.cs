@@ -26,7 +26,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace TranspositionNS {
+namespace TranspositionHandling {
    /// <summary>
    /// Class to transpose input arrays based on a series of column orders derived password passwords.
    /// </summary>

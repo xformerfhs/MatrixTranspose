@@ -20,20 +20,23 @@
  *
  * Change history:
  *    2025-08-02: V1.0.0: Created. fhs
+ *    2025-08-11: V2.0.0: Handle "Next Line" control character. fhs
  */
 
+using LineEndingHandling;
 using System.IO;
 
-namespace Reader {
+namespace ReadHandling {
    /// <summary>
    /// Class to normalize line endings in a text reader.
+   /// It converts CR, LF, CR/LF and NL to LF and leaves all other characters unchanged.
    /// </summary>
    public class LineEndingNormalizingTextReader : ChainableTextReader {
       #region Instance variables
       /// <summary>
       /// Remember if the last character read was a carriage return (CR).
       /// </summary>
-      private bool _lastWasCr = false;
+      private bool _lastWasCarriageReturn = false;
 
       /// <summary>
       /// Peeked character, if any.
@@ -48,6 +51,7 @@ namespace Reader {
       /// </summary>
       public LineEndingNormalizingTextReader(TextReader innerReader) : base(innerReader) { }
       #endregion
+
 
       #region Implementation of TextReader
       public override int Read() {
@@ -81,37 +85,36 @@ namespace Reader {
       private int ReadInternal() {
          int ch = _innerReader.Read();
 
-         if (ch == -1)
+         // 1. Return immediately, if we have a NMC.
+         if (ch == NoMoreCharacters)
             return ch;
 
          char c = (char)ch;
 
-         if (_lastWasCr) {
-            _lastWasCr = false;
+         // 2. Check, if we have a CR/LF pair.
+         if (_lastWasCarriageReturn) {
+            _lastWasCarriageReturn = false;
 
-            if (c == '\n') {
-               // CRLF -> skip the LF, we already returned LF for CR
-               return ReadInternal();
-            } else {
-               // CR followed by something else, process this character
-               return HandleCr(c);
-            }
+            // CR/LF -> Skip the LF, we already returned LF for CR.
+            if (c == LineEndingHandler.LineFeed)
+               return ReadInternal();  // This recursion will happen only once as _lastWasCarriageReturn is false now.
          }
 
-         return HandleCr(c);
-      }
+         // 3. Process the character, if it is not the LF of a CR/LF pair.
+         switch (c) {
+            // If we have a CR, remember it for CR/LF processing and return LF, instead.
+            case LineEndingHandler.CarriageReturn:
+               _lastWasCarriageReturn = true;
+               return LineEndingHandler.LineFeed;
 
-      /// <summary>
-      /// Returns <paramref name="c"/> if it is not CR, LF, if it is.
-      /// </summary>
-      /// <param name="c">Character to handle.</param>
-      /// <returns>Either <paramref name="c"/> or LF.</returns>
-      private int HandleCr(char c) {
-         if (c != '\r')
-            return c;
+            // If it is a NL, change it to a LF.
+            case LineEndingHandler.NextLine:
+               return LineEndingHandler.LineFeed;
 
-         _lastWasCr = true;
-         return '\n';
+            // Leave all other characters, as they are.
+            default:
+               return ch;
+         }
       }
       #endregion
    }

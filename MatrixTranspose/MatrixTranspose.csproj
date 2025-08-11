@@ -84,6 +84,11 @@
     <Compile Include="ArrayHelper\SlidingWindowCharBufferForReader.cs" />
     <Compile Include="Encoding\EncodingExtension.cs" />
     <Compile Include="Encoding\EncodingHelper.cs" />
+    <Compile Include="Encoding\EncodingInfoExtension.cs" />
+    <Compile Include="Encoding\EncodingInfoHelper.cs" />
+    <Compile Include="EnumComboBoxHelper.cs" />
+    <Compile Include="EnumItem.cs" />
+    <Compile Include="LineEnding\LineEndingHandler.cs" />
     <Compile Include="MathHelper\MathHelper.cs" />
     <Compile Include="UserControls\NumericUpDown.xaml.cs">
       <DependentUpon>NumericUpDown.xaml</DependentUpon>
@@ -97,10 +102,11 @@
     <Compile Include="Reader\TransformingTextReader.cs" />
     <Compile Include="Transposition\SortedPositionList.cs" />
     <Compile Include="Alphabet\SubstitutionAlphabet.cs" />
-    <Compile Include="StringExtension.cs" />
+    <Compile Include="String\StringExtension.cs" />
     <Compile Include="Transposition\Transposition.cs" />
     <Compile Include="Writer\ChainableTextWriter.cs" />
     <Compile Include="Writer\LineEndingTextWriter.cs" />
+    <Compile Include="Writer\TransformingTextWriter.cs" />
     <Compile Include="Writer\UnmappingTextWriter.cs" />
     <Compile Include="Writer\MappingTextWriter.cs" />
     <Page Include="MainWindow.xaml">

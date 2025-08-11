@@ -20,25 +20,19 @@
  *
  * Change history:
  *    2025-08-03: V1.0.0: Created. fhs
+ *    2025-08-10: V2.0.0: Added "IsEbcdic". fhs
  */
 
+using StringHandling;
+using System;
 using System.Text;
 
-namespace MatrixTranspose {
+namespace EncodingHandling {
    /// <summary>
    /// Extension class for <see cref="Encoding"/>.
    /// </summary>
    public static class EncodingExtension {
       #region Public static methods
-      /// <summary>
-      /// Reports, whether the encoding writes a BOM.
-      /// </summary>
-      /// <param name="encoding">Encoding to check.</param>
-      /// <returns><c>True</c>, if it writes a BOM; <c>False</c>, if not.</returns>
-      public static bool WritesBom(this Encoding encoding) {
-         return encoding.GetPreamble().Length != 0;
-      }
-
       /// <summary>
       /// Returns the minimum bytes per character of the encoding.
       /// </summary>
@@ -61,6 +55,23 @@ namespace MatrixTranspose {
             default:
                return 1;  // This is the default. We assume 1 byte / character.
          }
+      }
+
+      /// <summary>
+      /// Reports, whether the encoding is an EBCDIC encoding.
+      /// </summary>
+      /// <returns><c>true</c>, if the encoding is an EBCDIC encoding; otherwise <c>false</c>.</returns>
+      public static bool IsEbcdic(this Encoding encoding) {
+         return encoding.EncodingName.Contains("EBCDIC", StringComparison.InvariantCultureIgnoreCase);
+      }
+
+      /// <summary>
+      /// Reports, whether the encoding writes a BOM.
+      /// </summary>
+      /// <param name="encoding">Encoding to check.</param>
+      /// <returns><c>True</c>, if it writes a BOM; <c>False</c>, if not.</returns>
+      public static bool WritesBom(this Encoding encoding) {
+         return encoding.GetPreamble().Length != 0;
       }
       #endregion
    }

@@ -19,20 +19,23 @@
  * Author: Frank Schwab
  *
  * Change history:
- *    2025-08-02: V1.0.0: Created. fhs
+ *    2025-08-11: V1.0.0: Created. fhs
  */
 
-using System.Linq;
+using System;
 
 namespace MatrixTranspose {
-   public static class StringExtension {
-      /// <summary>
-      /// Removes all whitespace characters from the string.
-      /// </summary>
-      /// <param name="self">String to process.</param>
-      /// <returns>New string with all whitespace characters removed.</returns>
-      public static string RemoveWhiteSpace(this string self) {
-         return new string(self.Where(c => !char.IsWhiteSpace(c)).ToArray());
+   /// <summary>
+   /// Class to hold a ListBox or ComboBox item that has a display text and a corresponding Enum item.
+   /// </summary>
+   /// <typeparam name="T">Enum of the values.</typeparam>
+   public class EnumItem<T> where T : Enum {
+      public T Value { get; }
+      public string DisplayText { get; }
+
+      public EnumItem(T value, string displayText) {
+         Value = value;
+         DisplayText = displayText;
       }
    }
 }

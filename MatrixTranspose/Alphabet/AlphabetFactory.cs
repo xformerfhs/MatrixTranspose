@@ -25,7 +25,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Alphabet {
+namespace AlphabetHandling {
    /// <summary>
    /// Class that generates <see cref="AlphabetDescription"/> objects based on the number of places and characters.
    /// </summary>

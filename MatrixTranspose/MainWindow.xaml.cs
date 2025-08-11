@@ -22,10 +22,14 @@
  *    2025-08-02: V1.0.0: Created. fhs
  */
 
-using Alphabet;
-using MathHelperNS;
+using AlphabetHandling;
+using EncodingHandling;
+using LineEndingHandling;
+using MathHandling;
 using Microsoft.Win32;
+using StringHandling;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -34,13 +38,21 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using TranspositionNS;
+using TranspositionHandling;
 
 namespace MatrixTranspose {
    /// <summary>
    /// Interaction logic for MainWindow.xaml.
    /// </summary>
    public partial class MainWindow : Window {
+      #region Public enums
+      public enum BomOption {
+         SameAsInput,
+         NoBom,
+         WithBom
+      }
+      #endregion
+      
       #region Public properties
       /// <summary>
       /// List of passwords for transposition.
@@ -59,6 +71,11 @@ namespace MatrixTranspose {
       /// Helper variable to store the currently dragged item in the ListBox.
       /// </summary>
       private string _draggedItem;
+
+      /// <summary>
+      /// Set of code pages that use EBCDIC encoding.
+      /// </summary>
+      private SortedSet<int> _ebcdicCodePages;
       #endregion
 
 
@@ -74,6 +91,7 @@ namespace MatrixTranspose {
          this.DataContext = this;
 
          InitEncodingLists();
+         InitEnumComboBoxes();
       }
       #endregion
 
@@ -171,7 +189,7 @@ namespace MatrixTranspose {
       /// <param name="sender">Sender control.</param>
       /// <param name="e">Event parameters.</param>
       private void ComboInputEncoding_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-         StackBOM.IsEnabled = EncodingHelper.SupportsBom(GetOutputCodePage((int)ComboInputEncoding.SelectedValue));
+         SetBomAndLineEnding();
       }
 
       /// <summary>
@@ -193,7 +211,7 @@ namespace MatrixTranspose {
       /// <param name="sender">Sender control.</param>
       /// <param name="e">Event parameters.</param>
       private void ComboOutputEncoding_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-         StackBOM.IsEnabled = EncodingHelper.SupportsBom(GetOutputCodePage((int)ComboInputEncoding.SelectedValue));
+         SetBomAndLineEnding();
       }
 
       /// <summary>
@@ -574,13 +592,16 @@ namespace MatrixTranspose {
       /// <returns><c>True</c>, if output file has to write a BOM, <c>False</c>, if not.</returns>
       private bool GetBomForOutput(bool inputHasBom) {
          if (StackBOM.IsEnabled) {
-            if (RadioKeepBOM.IsChecked ?? false)
-               return inputHasBom;
+            switch (EnumComboBoxHelper.GetSelectedEnumValue<BomOption>(ComboBom)) {
+               case BomOption.SameAsInput:
+                  return inputHasBom;
 
-            if (RadioWithBOM.IsChecked ?? false)
-               return true;
+               case BomOption.WithBom:
+                  return true;
 
-            return false;
+               default:
+                  return false;
+            }
          }
 
          return inputHasBom;
@@ -655,11 +676,10 @@ namespace MatrixTranspose {
       /// <summary>
       /// Gets the output code page based on the supplied code page.
       /// </summary>
-      /// <param name="codePage">Code page to start with.</param>
       /// <returns>The code page to use for output.</returns>
-      private int GetOutputCodePage(int codePage) {
+      private int GetOutputCodePage() {
          if (CheckKeepEncoding.IsChecked ?? true)
-            return codePage;
+            return (int)ComboInputEncoding.SelectedValue;
          else
             return (int)ComboOutputEncoding.SelectedValue;
       }
@@ -693,7 +713,9 @@ namespace MatrixTranspose {
       /// Initializes the encoding lists for input and output encodings.
       /// </summary>
       private void InitEncodingLists() {
-         var encodingItems = Encoding.GetEncodings()
+         var encodingInfoList = Encoding.GetEncodings();
+         _ebcdicCodePages = EncodingInfoHelper.GetEbcdicCodePages(encodingInfoList);
+         var encodingItems = encodingInfoList
              .Where(enc => !enc.Name.StartsWith("X-", StringComparison.InvariantCultureIgnoreCase))
              .Select(enc => new EncodingComboBoxItem(enc))
              .OrderBy(ecbi => ecbi.NameUpper)
@@ -701,6 +723,56 @@ namespace MatrixTranspose {
          ComboInputEncoding.ItemsSource = encodingItems;
          ComboOutputEncoding.ItemsSource = encodingItems;
          ComboInputEncoding.SelectedValue = Encoding.UTF8.CodePage;
+      }
+
+      private void InitEnumComboBoxes() {
+         // BOM-ComboBox
+         EnumComboBoxHelper.SetupEnumComboBox<BomOption>(ComboBom, bomOption =>
+         {
+            switch (bomOption) {
+               case BomOption.SameAsInput:
+                  return "Same as input";
+               case BomOption.NoBom:
+                  return "No BOM";
+               case BomOption.WithBom:
+                  return "With BOM";
+               default:
+                  return bomOption.ToString();
+            }
+         });
+
+         // Line Ending-ComboBox
+         EnumComboBoxHelper.SetupEnumComboBox<LineEndingHandler.Option>(ComboLineEnding, bomOption => {
+            switch (bomOption) {
+               case LineEndingHandler.Option.Windows:
+                  return "Windows (CR/LF)";
+               case LineEndingHandler.Option.Unix:
+                  return "Unix (LF)";
+               case LineEndingHandler.Option.OldMac:
+                  return "Old Macintosh (CR)";
+               case LineEndingHandler.Option.Ebcdic:
+                  return "EBCDIC (NL)";
+               default:
+                  return bomOption.ToString();
+            }
+         });
+      }
+
+      /// <summary>
+      /// Set BOM and line endings according to the input and output encodings.
+      /// </summary>
+      private void SetBomAndLineEnding() {
+         int outputCodepage = GetOutputCodePage();
+         StackBOM.IsEnabled = EncodingHelper.SupportsBom(outputCodepage);
+
+         var oldLineEnding = EnumComboBoxHelper.GetSelectedEnumValue<LineEndingHandler.Option>(ComboLineEnding);
+         if (oldLineEnding != null)
+            if (_ebcdicCodePages.Contains(outputCodepage)) {
+               if (oldLineEnding != LineEndingHandler.Option.Ebcdic)
+                  ComboLineEnding.SelectedValue = LineEndingHandler.Option.Ebcdic;
+            } else
+               if (oldLineEnding == LineEndingHandler.Option.Ebcdic)
+                  ComboLineEnding.SelectedValue = LineEndingHandler.Option.Windows;
       }
 
       /// <summary>
@@ -746,6 +818,7 @@ namespace MatrixTranspose {
             TextDestinationFile.Text,
             GetOutputEncoding(usedEncoding.CodePage),
             GetBomForOutput(hasBom),
+            EnumComboBoxHelper.GetSelectedEnumValue<LineEndingHandler.Option>(ComboLineEnding) ?? LineEndingHandler.Option.Windows,
             substitutionAlphabet.CombinationToChar,
             transposedText,
             readLength);
@@ -783,6 +856,7 @@ namespace MatrixTranspose {
             TextDestinationFile.Text,
             GetOutputEncoding(usedEncoding.CodePage),
             GetBomForOutput(hasBom),
+            EnumComboBoxHelper.GetSelectedEnumValue<LineEndingHandler.Option>(ComboLineEnding) ?? LineEndingHandler.Option.Windows,
             transposedText,
             readLength,
             NumberGroupSize.Value,

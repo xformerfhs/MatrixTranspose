@@ -22,12 +22,14 @@
  *    2025-08-02: V1.0.0: Created. fhs
  */
 
-using Reader;
+using EncodingHandling;
+using LineEndingHandling;
+using ReadHandling;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Writer;
+using WriteHandling;
 
 namespace MatrixTranspose {
    /// <summary>
@@ -162,6 +164,7 @@ namespace MatrixTranspose {
       /// <param name="filePath">File path.</param>
       /// <param name="encoding">Wanted encoding of file.</param>
       /// <param name="withBom">Indicates, if a BOM must be written.</param>
+      /// <param name="lineEndingOption">Indicates, which line ending shall be written.</param>
       /// <param name="data">Data to write.</param>
       /// <param name="writeLength">Number of characters to write.</param>
       /// <param name="groupSize">Size of output group (0, if no grouping should be done).</param>
@@ -170,6 +173,7 @@ namespace MatrixTranspose {
          in string filePath,
          Encoding encoding,
          bool withBom,
+         LineEndingHandler.Option lineEndingOption,
          in char[] data,
          int writeLength,
          int groupSize,
@@ -197,7 +201,7 @@ namespace MatrixTranspose {
             int linePos = 0;
             using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
             using (var writer = new StreamWriter(fileStream, encoding))
-            using (var lineEndingNormalizer = new LineEndingTextWriter(writer))
+            using (var lineEndingNormalizer = new LineEndingTextWriter(writer, lineEndingOption))
                for (int i = 0; i < writeLength; i++) {
                   if (groupSize > 1 && groupPos >= groupSize) {
                      linePos++;
@@ -227,6 +231,7 @@ namespace MatrixTranspose {
       /// <param name="filePath">File path.</param>
       /// <param name="encoding">Wanted encoding of file.</param>
       /// <param name="withBom">Indicates, if a BOM must be written.</param>
+      /// <param name="lineEndingOption">Indicates, which line ending shall be written.</param>
       /// <param name="unsubstitutionMap">Mapping of matrix substitutions to characters.</param>
       /// <param name="data">Data to write.</param>
       /// <param name="writeLength">Number of characters to write.</param>
@@ -234,6 +239,7 @@ namespace MatrixTranspose {
          in string filePath,
          Encoding encoding,
          bool withBom,
+         LineEndingHandler.Option lineEndingOption,
          in SortedDictionary<char[], char> unsubstitutionMap,
          in char[] data,
          int writeLength) {
@@ -251,7 +257,7 @@ namespace MatrixTranspose {
          try {
             using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
             using (var writer = new StreamWriter(fileStream, encoding))
-            using (var lineEndingNormalizer = new LineEndingTextWriter(writer))
+            using (var lineEndingNormalizer = new LineEndingTextWriter(writer, lineEndingOption))
             using (var unmappingWriter = new UnmappingTextWriter(lineEndingNormalizer, unsubstitutionMap))
                for (int i = 0; i < writeLength; i++)
                   unmappingWriter.Write(data[i]);

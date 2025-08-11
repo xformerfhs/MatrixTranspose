@@ -19,17 +19,17 @@
  * Author: Frank Schwab
  *
  * Change history:
- *    2025-08-02: V1.0.0: Created. fhs
+ *    2025-08-10: V1.0.0: Created. fhs
  */
 
 using System;
 using System.IO;
 
-namespace ReadHandling {
+namespace WriteHandling {
    /// <summary>
    /// Class to read characters from a text reader and transform them using a specified function.
    /// </summary>
-   public class TransformingTextReader : ChainableTextReader {
+   public class TransformingTextWriter : ChainableTextWriter {
       #region Instance variables
       /// <summary>
       /// Transforming function to apply to each character read.
@@ -40,19 +40,19 @@ namespace ReadHandling {
 
       #region Public static properties
       /// <summary>
-      /// Function to replace 'J' with 'I' and 'j' with 'i'.
-      /// </summary>s
-      public static Func<char, char> JToITransformer => c => c == 'J' ? 'I' : (c == 'j' ? 'i' : c);
+      /// Function to convert an Line Feed to a Next Line, which is used in EBCDIC texts.
+      /// </summary>
+      public static Func<char, char> LfToNlTransformer => c => c == (char)0x0A ? (char)0x85 : c;
+
+      /// <summary>
+      /// Function to convert a Line Feed to a Carriage Return.
+      /// </summary>
+      public static Func<char, char> LfToCrTransformer => c => c == (char)0x0A ? (char)0x0D : c;
 
       /// <summary>
       /// Function to transform characters to uppercase.
       /// </summary>
       public static Func<char, char> ToUpperTransformer => char.ToUpper;
-
-      /// <summary>
-      /// Function to convert a Next Line to a Line Feed for reading EBCDIC texts.
-      /// </summary>
-      public static Func<char, char> NlToLfTransformer => c => c == (char)0x85 ? (char)0x0A : c;
       #endregion
 
 
@@ -60,31 +60,16 @@ namespace ReadHandling {
       /// <summary>
       /// Creates a new instance of the <see cref="TransformingTextWriter"/> class.
       /// </summary>
-      public TransformingTextReader(TextReader innerReader, Func<char, char> transformer)
-          : base(innerReader) {
+      public TransformingTextWriter(TextWriter innerWriter, Func<char, char> transformer)
+          : base(innerWriter) {
          _transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
       }
       #endregion
 
 
-      #region Implementation of TextReader
-
-      public override int Read() {
-         int ch = _innerReader.Read();
-         
-         if (ch == NoMoreCharacters)
-            return ch;
-
-         return _transformer((char)ch);
-      }
-
-      public override int Peek() {
-         int ch = _innerReader.Peek();
-         
-         if (ch == NoMoreCharacters)
-            return ch;
-
-         return _transformer((char)ch);
+      #region Implementation of TextWriter
+      public override void Write(char value) {
+         _innerWriter.Write(_transformer(value));
       }
       #endregion
    }

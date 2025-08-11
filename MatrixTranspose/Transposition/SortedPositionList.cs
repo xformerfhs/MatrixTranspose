@@ -25,7 +25,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TranspositionNS {
+namespace TranspositionHandling {
    /// <summary>
    /// Class to sort positions of a list by their keys.
    /// </summary>

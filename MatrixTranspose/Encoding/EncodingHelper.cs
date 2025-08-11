@@ -27,7 +27,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace MatrixTranspose {
+namespace EncodingHandling {
    /// <summary>
    /// Class that implements helper methods for <see cref="Encoding"/> handling.
    /// </summary>

@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Reader {
+namespace ReadHandling {
    /// <summary>
    /// Class to filter characters read from a text reader.
    /// </summary>
@@ -76,7 +76,7 @@ namespace Reader {
 
          // 2. Read characters from the inner reader until we find an allowed character or reach the end.
          int ch;
-         while ((ch = _innerReader.Read()) != -1) {
+         while ((ch = _innerReader.Read()) != NoMoreCharacters) {
             if (_allowedChars.Contains((char)ch))
                return ch;
          }
@@ -92,16 +92,17 @@ namespace Reader {
          // 2. Read characters from the inner reader until we find an allowed character or reach the end.
          //    Remember it for Read or Peek calls.
          int ch;
-         while ((ch = _innerReader.Read()) != -1) {
+         while ((ch = _innerReader.Read()) != NoMoreCharacters) {
             if (_allowedChars.Contains((char)ch)) {
                _peekedChar = ch;
                return ch;
             }
          }
 
-         return -1;
+         return NoMoreCharacters;
       }
       #endregion
+
 
       #region Implementation of IDisposable
       protected override void Dispose(bool disposing) {

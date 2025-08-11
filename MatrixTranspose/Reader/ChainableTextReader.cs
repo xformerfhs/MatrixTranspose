@@ -20,16 +20,25 @@
  *
  * Change history:
  *    2025-08-02: V1.0.0: Created. fhs
+ *    2025-08-11: V1.1.0: Add protected constant "NoMoreCharacters". fhs
  */
 
 using System;
 using System.IO;
 
-namespace Reader {
+namespace ReadHandling {
    /// <summary>
    /// Base class for a chainable text reader.
    /// </summary>
    public abstract class ChainableTextReader : TextReader {
+      #region Protected constants
+      /// <summary>
+      /// "No More Characters" (NMC) character.
+      /// </summary>
+      protected const int NoMoreCharacters = -1;
+      #endregion
+
+
       #region Instance variables
       /// <summary>
       /// The inner text reader that this chainable text reader wraps.

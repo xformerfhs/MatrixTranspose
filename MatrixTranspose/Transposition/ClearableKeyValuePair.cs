@@ -22,7 +22,7 @@
  *    2025-07-24: V1.0.0: Created. fhs
  */
 
-namespace TranspositionNS {
+namespace TranspositionHandling {
    /// <summary>
    /// Class representing a key-value pair that can be cleared.
    /// </summary>

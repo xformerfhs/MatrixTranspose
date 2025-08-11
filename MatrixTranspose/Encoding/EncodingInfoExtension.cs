@@ -19,30 +19,24 @@
  * Author: Frank Schwab
  *
  * Change history:
- *    2025-08-02: V1.0.0: Created. fhs
+ *    2025-08-10: V1.0.0: Created. fhs
  */
 
-namespace MathHandling {
-   /// <summary>
-   /// Class to provide mathematical helper functions.
-   /// </summary>
-   public static class MathHelper {
-      #region Public static methods
-      /// <summary>
-      /// Calculates the greatest common divisor (GCD) of two integers using the Euclidean algorithm.
-      /// </summary>
-      /// <param name="a">First integer.</param>
-      /// <param name="b">Second integer.</param>
-      /// <returns>Greatest common divisor of <paramref name="a"/> and <paramref name="b"/>.</returns>
-      public static int Gcd(int a, int b) {
-         while (b != 0) {
-            int temp = b;
-            b = a % b;
-            a = temp;
-         }
+using StringHandling;
+using System;
+using System.Text;
 
-         return a;
+namespace EncodingHandling {
+   /// <summary>
+   /// Extension class for <see cref="EncodingInfo"/>.
+   /// </summary>
+   public static class EncodingInfoExtension {
+      /// <summary>
+      /// Reports, whether the encoding is an EBCDIC encoding.
+      /// </summary>
+      /// <returns><c>true</c>, if the encoding is an EBCDIC encoding; otherwise <c>false</c>.</returns>
+      public static bool IsEbcdic(this EncodingInfo encodingInfo) {
+         return encodingInfo.DisplayName.Contains("EBCDIC", StringComparison.InvariantCultureIgnoreCase);
       }
-      #endregion
    }
 }

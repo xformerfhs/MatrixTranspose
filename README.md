@@ -149,7 +149,7 @@ It`s is as easy as that!
 
 However, this is easily cracked, as well.
 Take, for example, the clear text letters `ABCDEF`.
-They end up at positions 1, 5, 9, 14, 18, 23`.
+They end up at positions 1, 5, 9, 14, 18, 23.
 The differences between these positions are 4, 4, 5, 4, 5.
 This regular spacing makes it easy to reverse the transposition.
 

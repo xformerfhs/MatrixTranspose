@@ -22,12 +22,12 @@
  *    2025-08-02: V1.0.0: Created. fhs
  */
 
-using ArrayHelper;
+using ArrayHandling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Alphabet {
+namespace AlphabetHandling {
    /// <summary>
    /// Class to handle a substitution alphabet.
    /// </summary>

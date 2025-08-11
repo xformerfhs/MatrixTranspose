@@ -1,4 +1,4 @@
-﻿using TranspositionNS;
+﻿using TranspositionHandling;
 
 namespace MatrixTransposeTest {
    [TestClass]

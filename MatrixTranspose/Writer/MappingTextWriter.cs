@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Writer {
+namespace WriteHandling {
    /// <summary>
    /// Class that replaces characters in the output based on a mapping.
    /// </summary>

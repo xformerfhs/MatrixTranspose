@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Reader {
+namespace ReadHandling {
    /// <summary>
    /// Class to read characters from a text reader and replace them with a mapping.
    /// </summary>
@@ -79,7 +79,7 @@ namespace Reader {
 
          // 2. Read next character from the inner reader until a mapped character is found.
          int ch;
-         while ((ch = _innerReader.Read()) != -1) {
+         while ((ch = _innerReader.Read()) != NoMoreCharacters) {
             char c = (char)ch;
 
             // Is the character mapped?
@@ -101,7 +101,7 @@ namespace Reader {
 
          // 2. Read next character from the inner reader until a mapped character is found.
          int ch;
-         while ((ch = _innerReader.Read()) != -1) {
+         while ((ch = _innerReader.Read()) != NoMoreCharacters) {
             char c = (char)ch;
 
             if (_mapping.TryGetValue(c, out var replacements)) {

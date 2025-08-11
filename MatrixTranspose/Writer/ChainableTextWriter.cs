@@ -26,7 +26,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace Writer {
+namespace WriteHandling {
    /// <summary>
    /// Base class for text writers that can be chained together.
    /// </summary>

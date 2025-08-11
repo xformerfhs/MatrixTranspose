@@ -25,7 +25,7 @@
 using System;
    using System.Collections.Generic;
 
-namespace ArrayHelper {
+namespace ArrayHandling {
    /// <summary>
    /// A class to compare arrays up to a given maximum length.
    /// </summary>

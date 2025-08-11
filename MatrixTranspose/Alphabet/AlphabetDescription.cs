@@ -25,7 +25,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Alphabet {
+namespace AlphabetHandling {
    /// <summary>
    /// Class that describes the characters that can be matrix encoded.
    /// </summary>

@@ -24,7 +24,7 @@
 
 using System;
 
-namespace ArrayHelper {
+namespace ArrayHandling {
    /// <summary>
    /// Class to implement a sliding window buffer for characters.
    /// </summary>

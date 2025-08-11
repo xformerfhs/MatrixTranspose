@@ -25,7 +25,7 @@
 using System;
 using System.IO;
 
-namespace ArrayHelper {
+namespace ArrayHandling {
    /// <summary>
    /// Class to manage a sliding window character buffer for a <see cref="TextReader"/>.
    /// </summary>
