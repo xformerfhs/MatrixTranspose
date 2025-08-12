@@ -34,6 +34,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -52,7 +53,7 @@ namespace MatrixTranspose {
          WithBom
       }
       #endregion
-      
+
       #region Public properties
       /// <summary>
       /// List of passwords for transposition.
@@ -121,20 +122,30 @@ namespace MatrixTranspose {
       /// </summary>
       /// <param name="sender">Sender control.</param>
       /// <param name="e">Event parameters.</param>
-      private void ButtonGo_Click(object sender, RoutedEventArgs e) {
+      private async void ButtonGo_Click(object sender, RoutedEventArgs e) {
+         ButtonGo.IsEnabled = false;   // Do not allow multiple clicks.
+
          if (!CheckParameters() ||
-             !ContinueWithFile(TextDestinationFile.Text))
+             !ContinueWithFile(TextDestinationFile.Text)) {
+            // Some parameter was wrong or destination file should not be overwritten. Do nothing.
+            ButtonGo.IsEnabled = true; // Re-enable the button.
             return;
+         }
 
          try {
+            Cursor = Cursors.Wait;       // Change cursor to wait.
+
             if (RadioEncrypt.IsChecked ?? false)
-               WriteEncryptedFile();
+               await WriteEncryptedFileAsync();
             else
-               WriteDecryptedFile();
+               await WriteDecryptedFileAsync();
 
             MessageBox.Show("Operation completed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+         } finally {
+            ButtonGo.IsEnabled = true;   // Re-enable the button.
+            Cursor = Cursors.Arrow;      // Change cursor back to default.
          }
       }
 
@@ -473,7 +484,7 @@ namespace MatrixTranspose {
          // If the character had been converted to uppercase, replace it in the TextBox.
          if (inputChar == e.Text[0])
             return;
-         
+
          e.Handled = true;
 
          TextBox textBox = sender as TextBox;
@@ -606,7 +617,7 @@ namespace MatrixTranspose {
 
          return inputHasBom;
       }
- 
+
       /// <summary>
       /// Gets the destination index for the dragged item based on the mouse position.
       /// </summary>
@@ -727,8 +738,7 @@ namespace MatrixTranspose {
 
       private void InitEnumComboBoxes() {
          // BOM-ComboBox
-         EnumComboBoxHelper.SetupEnumComboBox<BomOption>(ComboBom, bomOption =>
-         {
+         EnumComboBoxHelper.SetupEnumComboBox<BomOption>(ComboBom, bomOption => {
             switch (bomOption) {
                case BomOption.SameAsInput:
                   return "Same as input";
@@ -770,9 +780,10 @@ namespace MatrixTranspose {
             if (_ebcdicCodePages.Contains(outputCodepage)) {
                if (oldLineEnding != LineEndingHandler.Option.Ebcdic)
                   ComboLineEnding.SelectedValue = LineEndingHandler.Option.Ebcdic;
-            } else
+            } else {
                if (oldLineEnding == LineEndingHandler.Option.Ebcdic)
                   ComboLineEnding.SelectedValue = LineEndingHandler.Option.Windows;
+            }
       }
 
       /// <summary>
@@ -787,82 +798,95 @@ namespace MatrixTranspose {
          TextAlphabet.Text = new string(SubstitutionAlphabet.GetRandomSubstitutionCharacters(numCharacters));
       }
 
-
       /// <summary>
-      /// Writes a decrypted file based on the input parameters.
+      /// Writes a decrypted file asynchronously based on the input parameters.
       /// </summary>
-      private void WriteDecryptedFile() {
-         // 1. Get input encoding.
-         Encoding inputEncoding = Encoding.GetEncoding((int)ComboInputEncoding.SelectedValue);
+      private async Task WriteDecryptedFileAsync() {
+         // 1. Werte aus UI sichern
+         var inputEncoding = Encoding.GetEncoding((int)ComboInputEncoding.SelectedValue);
+         var alphabetChars = TextAlphabet.Text.ToCharArray();
+         var numPlaces = _alphabet.NumPlaces;
+         var sourceFile = TextSourceFile.Text;
+         var destFile = TextDestinationFile.Text;
+         var matrixPassword = TextMatrixPassword.Text;
+         var lineEndingOption = EnumComboBoxHelper.GetSelectedEnumValue<LineEndingHandler.Option>(ComboLineEnding)
+                                ?? LineEndingHandler.Option.Windows;
+         var passwords = GetPasswordsFromListBox();
 
-         // 2. Read the source file where only characters of the encoding alphabet are read.
-         var substitutedText = FileHandler.ReadEncryptedTextFile(
-            TextSourceFile.Text,
-            inputEncoding,
-            TextAlphabet.Text.ToCharArray(),
-            _alphabet.NumPlaces,
-            out bool hasBom,
-            out int readLength,
-            out Encoding usedEncoding
-         );
+         // 2. Datei lesen
+         var (substitutedText, hasBom, readLength, usedEncoding) =
+             await FileHandlerAsync.ReadEncryptedTextFileAsync(
+                 sourceFile,
+                 inputEncoding,
+                 alphabetChars,
+                 numPlaces);
 
-         // 3. Untranspose the substituted text with the given passwords.
-         Transposition transposition = new Transposition(GetPasswordsFromListBox());
+         // 3. Untranspose
+         var transposition = new Transposition(passwords);
          var transposedText = transposition.Untranspose(substitutedText, readLength);
 
-         // 4. Convert the matrix encoding back to characters.
-         SubstitutionAlphabet substitutionAlphabet = new SubstitutionAlphabet(_alphabet, TextMatrixPassword.Text, TextAlphabet.Text.ToCharArray());
+         // 4. Substitution zurückwandeln
+         var substitutionAlphabet = new SubstitutionAlphabet(_alphabet, matrixPassword, alphabetChars);
 
-         // 5. Write the untransposed and unsubstituted data.
-         FileHandler.WriteUnsubstitutedCleartextFile(
-            TextDestinationFile.Text,
-            GetOutputEncoding(usedEncoding.CodePage),
-            GetBomForOutput(hasBom),
-            EnumComboBoxHelper.GetSelectedEnumValue<LineEndingHandler.Option>(ComboLineEnding) ?? LineEndingHandler.Option.Windows,
-            substitutionAlphabet.CombinationToChar,
-            transposedText,
-            readLength);
+         // 5. Schreiben
+         await FileHandlerAsync.WriteUnsubstitutedCleartextFileAsync(
+             destFile,
+             GetOutputEncoding(usedEncoding.CodePage),
+             GetBomForOutput(hasBom),
+             lineEndingOption,
+             substitutionAlphabet.CombinationToChar,
+             transposedText,
+             readLength);
       }
 
       /// <summary>
-      /// Writes an encrypted file based on the input parameters.
+      /// Writes an encrypted file asynchronously based on the input parameters.
       /// </summary>
-      private void WriteEncryptedFile() {
-         // 1. Get input encoding.
-         Encoding inputEncoding = Encoding.GetEncoding((int)ComboInputEncoding.SelectedValue);
+      private async Task WriteEncryptedFileAsync() {
+         // 1. Werte aus UI sichern
+         var inputEncoding = Encoding.GetEncoding((int)ComboInputEncoding.SelectedValue);
+         var alphabetChars = TextAlphabet.Text.ToCharArray();
+         var numPlaces = _alphabet.NumPlaces;
+         var sourceFile = TextSourceFile.Text;
+         var destFile = TextDestinationFile.Text;
+         var matrixPassword = TextMatrixPassword.Text;
+         var passwords = GetPasswordsFromListBox();
+         var groupSize = NumberGroupSize.Value;
+         var maxLineLength = NumberMaxLineLength.Value;
+         var treatJAsI = _alphabet.TreatJAsI;
+         var toUpper = _alphabet.ToUpper;
+         var lineEndingOption = EnumComboBoxHelper.GetSelectedEnumValue<LineEndingHandler.Option>(ComboLineEnding)
+                                ?? LineEndingHandler.Option.Windows;
 
-         // 2. Get substitution alphabet.
-         SubstitutionAlphabet substitutionAlphabet = new SubstitutionAlphabet(_alphabet, TextMatrixPassword.Text, TextAlphabet.Text.ToCharArray());
+         // 2. Alphabet aufbauen
+         var substitutionAlphabet = new SubstitutionAlphabet(_alphabet, matrixPassword, alphabetChars);
 
-         // 3. Read the source file where all characters have already been substituted.
-         var substitutedText = FileHandler.ReadSubstitutedCleartextFile(
-            TextSourceFile.Text,
-            inputEncoding,
-            substitutionAlphabet.CharToCombination,
-            _alphabet.NumPlaces,
-            _alphabet.TreatJAsI,
-            _alphabet.ToUpper,
-            out bool hasBom,
-            out int readLength,
-            out Encoding usedEncoding
-         );
+         // 3. Datei lesen
+         var (substitutedText, hasBom, readLength, usedEncoding) =
+             await FileHandlerAsync.ReadSubstitutedCleartextFileAsync(
+                 sourceFile,
+                 inputEncoding,
+                 substitutionAlphabet.CharToCombination,
+                 numPlaces,
+                 treatJAsI,
+                 toUpper);
 
-         // 4. Transpose the substituted text with the given passwords.
-         Transposition transposition = new Transposition(GetPasswordsFromListBox());
+         // 4. Transpose
+         var transposition = new Transposition(passwords);
          var transposedText = transposition.Transpose(substitutedText, readLength);
 
-         // 5. Write the substituted and transposed data.
-         FileHandler.WriteEncryptedFile(
-            TextDestinationFile.Text,
-            GetOutputEncoding(usedEncoding.CodePage),
-            GetBomForOutput(hasBom),
-            EnumComboBoxHelper.GetSelectedEnumValue<LineEndingHandler.Option>(ComboLineEnding) ?? LineEndingHandler.Option.Windows,
-            transposedText,
-            readLength,
-            NumberGroupSize.Value,
-            NumberMaxLineLength.Value
-         );
+         // 5. Schreiben
+         await FileHandlerAsync.WriteEncryptedFileAsync(
+             destFile,
+             GetOutputEncoding(usedEncoding.CodePage),
+             GetBomForOutput(hasBom),
+             lineEndingOption,
+             transposedText,
+             readLength,
+             groupSize,
+             maxLineLength);
       }
+
       #endregion
    }
 }

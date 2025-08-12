@@ -88,6 +88,7 @@
     <Compile Include="Encoding\EncodingInfoHelper.cs" />
     <Compile Include="EnumComboBoxHelper.cs" />
     <Compile Include="EnumItem.cs" />
+    <Compile Include="FileHandlerAsync.cs" />
     <Compile Include="LineEnding\LineEndingHandler.cs" />
     <Compile Include="MathHelper\MathHelper.cs" />
     <Compile Include="UserControls\NumericUpDown.xaml.cs">
