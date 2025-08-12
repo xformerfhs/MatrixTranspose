@@ -802,7 +802,7 @@ namespace MatrixTranspose {
       /// Writes a decrypted file asynchronously based on the input parameters.
       /// </summary>
       private async Task WriteDecryptedFileAsync() {
-         // 1. Werte aus UI sichern
+         // 1. Copy UI variables into local variables to avoid cross-thread issues.
          var inputEncoding = Encoding.GetEncoding((int)ComboInputEncoding.SelectedValue);
          var alphabetChars = TextAlphabet.Text.ToCharArray();
          var numPlaces = _alphabet.NumPlaces;
@@ -813,7 +813,7 @@ namespace MatrixTranspose {
                                 ?? LineEndingHandler.Option.Windows;
          var passwords = GetPasswordsFromListBox();
 
-         // 2. Datei lesen
+         // 2. Read encrypted file and substitute matrix entries with characters.
          var (substitutedText, hasBom, readLength, usedEncoding) =
              await FileHandlerAsync.ReadEncryptedTextFileAsync(
                  sourceFile,
@@ -825,10 +825,10 @@ namespace MatrixTranspose {
          var transposition = new Transposition(passwords);
          var transposedText = transposition.Untranspose(substitutedText, readLength);
 
-         // 4. Substitution zurückwandeln
+         // 4. Get substitution alphabet.
          var substitutionAlphabet = new SubstitutionAlphabet(_alphabet, matrixPassword, alphabetChars);
 
-         // 5. Schreiben
+         // 5. Write decrypted file.
          await FileHandlerAsync.WriteUnsubstitutedCleartextFileAsync(
              destFile,
              GetOutputEncoding(usedEncoding.CodePage),
@@ -843,7 +843,7 @@ namespace MatrixTranspose {
       /// Writes an encrypted file asynchronously based on the input parameters.
       /// </summary>
       private async Task WriteEncryptedFileAsync() {
-         // 1. Werte aus UI sichern
+         // 1. Copy UI variables into local variables to avoid cross-thread issues.
          var inputEncoding = Encoding.GetEncoding((int)ComboInputEncoding.SelectedValue);
          var alphabetChars = TextAlphabet.Text.ToCharArray();
          var numPlaces = _alphabet.NumPlaces;
@@ -858,10 +858,10 @@ namespace MatrixTranspose {
          var lineEndingOption = EnumComboBoxHelper.GetSelectedEnumValue<LineEndingHandler.Option>(ComboLineEnding)
                                 ?? LineEndingHandler.Option.Windows;
 
-         // 2. Alphabet aufbauen
+         // 2. Get substitution alphabet.
          var substitutionAlphabet = new SubstitutionAlphabet(_alphabet, matrixPassword, alphabetChars);
 
-         // 3. Datei lesen
+         // 3. Read source file and substitute characters with matrix entries.
          var (substitutedText, hasBom, readLength, usedEncoding) =
              await FileHandlerAsync.ReadSubstitutedCleartextFileAsync(
                  sourceFile,
@@ -875,7 +875,7 @@ namespace MatrixTranspose {
          var transposition = new Transposition(passwords);
          var transposedText = transposition.Transpose(substitutedText, readLength);
 
-         // 5. Schreiben
+         // 5. Write encrypted file.
          await FileHandlerAsync.WriteEncryptedFileAsync(
              destFile,
              GetOutputEncoding(usedEncoding.CodePage),
@@ -886,7 +886,6 @@ namespace MatrixTranspose {
              groupSize,
              maxLineLength);
       }
-
       #endregion
    }
 }
