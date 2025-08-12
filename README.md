@@ -95,7 +95,7 @@ Nevertheless, the method of filling these `p`-dimensional matrices is always the
 
 Another encryption method that is fundamentally different from the substitution of the matrix encryption is transposition.
 The characters are not encoded but moved around.
-They change there position in the text.
+They change their positions in the text.
 
 The simplest transposition works like this:
 
