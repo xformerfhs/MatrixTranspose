@@ -135,8 +135,9 @@ namespace MatrixTranspose {
             return;
          }
 
+         var savedCursor = Cursor; // Save the current cursor.
          try {
-            Cursor = Cursors.Wait;       // Change cursor to wait.
+            Cursor = Cursors.Wait; // Change cursor to wait.
 
             if (RadioEncrypt.IsChecked ?? false)
                await WriteEncryptedFileAsync();
@@ -147,8 +148,8 @@ namespace MatrixTranspose {
          } catch (Exception ex) {
             MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
          } finally {
-            ButtonGo.IsEnabled = true;   // Re-enable the button.
-            Cursor = Cursors.Arrow;      // Change cursor back to default.
+            ButtonGo.IsEnabled = true; // Re-enable the button.
+            Cursor = savedCursor;      // Change cursor back.
          }
       }
 

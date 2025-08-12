@@ -53,7 +53,7 @@ namespace TranspositionHandling {
          if (passwords == null)
             throw new ArgumentNullException(nameof(passwords));
          if (passwords.Length < 1)
-            throw new ArgumentException(@"At least one password is required", nameof(passwords));
+            throw new ArgumentException("At least one password is required", nameof(passwords));
 
          int[][] orders = new int[passwords.Length][];
 
@@ -63,7 +63,7 @@ namespace TranspositionHandling {
             if (password.Length < 2)
                throw new ArgumentException($"{i + 1}. password is too short", nameof(passwords));
 
-            orders[i] = ColumnOrder(passwords[i]);
+            orders[i] = GetColumnOrder(password);
          }
 
          _orders = orders;
@@ -90,9 +90,9 @@ namespace TranspositionHandling {
          T[] from = result;
          T[] to = source;
 
-         foreach (var offsets in _orders) {
+         foreach (var order in _orders) {
             (to, from) = (from, to);
-            TransposeToTarget(from, to, sourceLen, offsets);
+            TransposeToTarget(from, to, sourceLen, order);
          }
 
          return to;
@@ -130,105 +130,74 @@ namespace TranspositionHandling {
 
       #region Private methods
       /// <summary>
-      /// Transposes the source array to the target array based on the specified offsets.
+      /// Transposes the source array to the target array based on the specified orders.
       /// </summary>
       /// <typeparam name="T">Type of the input array data.</typeparam>
       /// <param name="source">The password array to be transposed.</param>
       /// <param name="target">The target array that receives the transposed data.</param>
       /// <param name="sourceLen">Length of the data in <paramref name="source"/>.</param>
-      /// <param name="offsets">The list of offsets for the transposition.</param>
-      private static void TransposeToTarget<T>(T[] source, T[] target, int sourceLen, in int[] offsets) {
-         int transposeLen = offsets.Length;
+      /// <param name="order">The column order for the transposition.</param>
+      private static void TransposeToTarget<T>(T[] source, T[] target, int sourceLen, int[] order) {
+         int transposeLen = order.Length;
+
+         // 1. Calculate the destination indices for each column.
+         int[] destIndices = BuildDestinationIndices(sourceLen, order, transposeLen);
+
+         // 2. Copy each column in parallel to the destination.
+         Parallel.For(0, transposeLen, i => {
+            int destinationIndex = destIndices[i];
+
+            for (int sourceIndex = i; sourceIndex < sourceLen; sourceIndex += transposeLen)
+               target[destinationIndex++] = source[sourceIndex];
+         });
+      }
+
+      /// <summary>
+      /// Untransposes the source array to the target array based on the specified orders.
+      /// </summary>
+      /// <typeparam name="T">Type of the input array data.</typeparam>
+      /// <param name="source">The password array to be transposed.</param>
+      /// <param name="target">The target array that receives the transposed data.</param>
+      /// <param name="sourceLen">Length of the data in <paramref name="source"/>.</param>
+      /// <param name="order">The column order for the transposition.</param>
+      private static void UntransposeToTarget<T>(T[] source, T[] target, int sourceLen, int[] order) {
+         int transposeLen = order.Length;
+
+         // 1. Calculate the destination indices for each column.
+         int[] destIndices = BuildDestinationIndices(sourceLen, order, transposeLen);
+
+         // 2. Copy each column in parallel to the destination.
+         Parallel.For(0, transposeLen, i => {
+            int sourceIndex = destIndices[i];
+            for (int destinationIndex = i; destinationIndex < sourceLen; destinationIndex += transposeLen)
+               target[destinationIndex] = source[sourceIndex++];
+         });
+      }
+
+      /// <summary>
+      /// Builds the start indices for each destination column in the transposed array.
+      /// </summary>
+      /// <param name="sourceLen"></param>
+      /// <param name="columnIndices"></param>
+      /// <param name="transposeLen"></param>
+      /// <returns></returns>
+      private static int[] BuildDestinationIndices(int sourceLen, int[] columnIndices, int transposeLen) {
+         int[] result = new int[transposeLen];
+
+         int columnLength = sourceLen / transposeLen;
+         int supOverflowColumn = sourceLen % transposeLen;
 
          int destinationIndex = 0;
-         Task[] tasks = new Task[transposeLen];
-         int i = 0;
-         // Run each column transposition in parallel.
-         foreach (int offset in offsets) {
-            int destIdx = destinationIndex; // Capture for closure
-            tasks[i++] = Task.Run(() =>
-               TransposeColumn(source, target, sourceLen, transposeLen, offset, destIdx)
-            );
+         for (int i = 0; i < transposeLen; i++) {
+            var columnIndex = columnIndices[i];
+            result[columnIndex] = destinationIndex;
 
-            destinationIndex += ColumnLen(sourceLen, transposeLen, offset);
+            destinationIndex += columnLength;
+            if (columnIndex < supOverflowColumn ) 
+               destinationIndex++; // Add one more for the overflow columns
          }
 
-         // Wait for all the column transpositions to complete.
-         Task.WaitAll(tasks);
-      }
-
-      /// <summary>
-      /// Transposes a single column from the source array to the target array.
-      /// </summary>
-      /// <typeparam name="T">Type of the input array data.</typeparam>
-      /// <param name="source">The password array to be transposed.</param>
-      /// <param name="target">The target array that receives the transposed data.</param>
-      /// <param name="sourceLen">Length of the data in <paramref name="source"/></param>.
-      /// <param name="transposeLen">Length of all column transpositions, i.e. length of password.</param>
-      /// <param name="offset">The offset of the column.</param>
-      /// <param name="destinationIndex">The start index in <paramref name="target"/>.</param>
-      private static void TransposeColumn<T>(
-         T[] source,
-         T[] target,
-         int sourceLen,
-         int transposeLen,
-         int offset,
-         int destinationIndex) {
-         for (int sourceIndex = offset; sourceIndex < sourceLen; sourceIndex += transposeLen) {
-            target[destinationIndex] = source[sourceIndex];
-            destinationIndex++;
-         }
-      }
-
-      /// <summary>
-      /// Untransposes the source array to the target array based on the specified offsets.
-      /// </summary>
-      /// <typeparam name="T">Type of the input array data.</typeparam>
-      /// <param name="source">The password array to be transposed.</param>
-      /// <param name="target">The target array that receives the transposed data.</param>
-      /// <param name="sourceLen">Length of the data in <paramref name="source"/>.</param>
-      /// <param name="offsets">The list of offsets for the transposition.</param>
-      private static void UntransposeToTarget<T>(T[] source, T[] target, int sourceLen, in int[] offsets) {
-         int transposeLen = offsets.Length;
-
-         int sourceIndex = 0;
-         Task[] tasks = new Task[transposeLen];
-         int i = 0;
-         // Run each column untransposition in parallel.
-         foreach (int offset in offsets) {
-            int srcIdx = sourceIndex; // Capture for closure
-            tasks[i++] = Task.Run(() =>
-               UntransposeColumn(source, target, sourceLen, transposeLen, offset, srcIdx)
-            );
-
-            sourceIndex += ColumnLen(sourceLen, transposeLen, offset);
-         }
-
-         // Wait for all the column untranspositions to complete.
-         Task.WaitAll(tasks);
-      }
-
-      /// <summary>
-      /// Untransposes a single column from the source array to the target array.
-      /// </summary>
-      /// <typeparam name="T">Type of the input array data.</typeparam>
-      /// <param name="source">The password array to be transposed.</param>
-      /// <param name="target">The target array that receives the transposed data.</param>
-      /// <param name="sourceLen">Length of the data in <paramref name="source"/>.</param>
-      /// <param name="transposeLen">Length of all column transpositions, i.e. length of password.</param>
-      /// <param name="offset">The offset of the column.</param>
-      /// <param name="sourceIndex">The start index in <paramref name="source"/>.</param>
-      private static void UntransposeColumn<T>(
-         T[] source,
-         T[] target,
-         int sourceLen,
-         int transposeLen,
-         int offset,
-         int sourceIndex) {
-         for (int destinationIndex = offset; destinationIndex < sourceLen; destinationIndex += transposeLen) {
-            target[destinationIndex] = source[sourceIndex];
-            sourceIndex++;
-         }
+         return result;
       }
 
       /// <summary>
@@ -236,7 +205,7 @@ namespace TranspositionHandling {
       /// </summary>
       /// <param name="sourceLen">Length of source.</param>
       /// <param name="transposeLen">Length of all column transpositions, i.e. length of password.</param>
-      /// <param name="offset">The offset of the column.</param>
+      /// <param name="offset">The columnIndex of the column.</param>
       /// <returns>The length of the column <paramref name="offset"/>.</returns>
       private static int ColumnLen(int sourceLen, int transposeLen, int offset) {
          sourceLen -= offset;
@@ -252,11 +221,27 @@ namespace TranspositionHandling {
       }
 
       /// <summary>
-      /// Converts a password into an array of column orders.
+      /// Get column orders for the given password.
       /// </summary>
-      /// <param name="password">The password to transform in a column order.</param>
-      /// <returns>The column order derived from the password.</returns>
-      private static int[] ColumnOrder(in string password) {
+      /// <param name="password">The password to transform in column offsets.</param>
+      /// <returns>Array of column offsets.</returns>
+      private static int[] GetColumnOrder(in string password) {
+         var columnPositions = GetColumnPositions(password);
+
+         var result = new int[columnPositions.Length];
+
+         for (int i = 0; i < columnPositions.Length; i++)
+            result[columnPositions[i]] = i;
+
+         return result;
+      }
+
+      /// <summary>
+      /// Converts a password into an array of column positions.
+      /// </summary>
+      /// <param name="password">The password to transform in a column orders.</param>
+      /// <returns>The column orders derived from the password.</returns>
+      private static int[] GetColumnPositions(in string password) {
          using (var orderList = new SortedPositionList<char>()) {
             foreach (char c in password)
                orderList.Add(c);
@@ -265,6 +250,7 @@ namespace TranspositionHandling {
          }
       }
       #endregion
+
 
       #region Implementation of IDisposable
       /// <summary>

@@ -35,10 +35,40 @@ namespace MatrixTransposeTest {
       }
 
       [TestMethod]
-      public void KnownTranspositionTest() {
-         using (Transposition transposer = new([@"quark"])) {
-            char[] data = @"Bieberburzel".ToCharArray();
-            char[] expected = @"euezBrebribl".ToCharArray();
+      public void KnownTranspositionTest1() {
+         using (Transposition transposer = new(["quark"])) {
+            char[] data = "Bieberburzel".ToCharArray();
+            char[] expected = "euezBrebribl".ToCharArray();
+            char[] transposed = transposer.Transpose(data, data.Length);
+            CollectionAssert.AreEqual(expected, transposed);
+         }
+      }
+
+      [TestMethod]
+      public void KnownTranspositionTest2() {
+         using (Transposition transposer = new(["meddle"])) {
+            char[] data = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+            char[] expected = "CIOUDJPVBHNTZFLRXEKQWAGMSY".ToCharArray();
+            char[] transposed = transposer.Transpose(data, data.Length);
+            CollectionAssert.AreEqual(expected, transposed);
+         }
+      }
+
+      [TestMethod]
+      public void KnownTranspositionFullLastRow() {
+         using (Transposition transposer = new(["pique"])) {
+            char[] data = "ABCDEFGHIKLMNOPQRSTUVWXYZ".ToCharArray();
+            char[] expected = "EKPUZBGMRWAFLQVCHNSXDIOTY".ToCharArray();
+            char[] transposed = transposer.Transpose(data, data.Length);
+            CollectionAssert.AreEqual(expected, transposed);
+         }
+      }
+
+      [TestMethod]
+      public void KnownDoubleTranspositionTest() {
+         using (Transposition transposer = new(["wonder", "charm"])) {
+            char[] data = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".ToCharArray();
+            char[] expected = "PtWCgHlRvYDhKoUyZFjMqJnQuaBfLpSwbEiOsTxdGkVzcImNrXAe".ToCharArray();
             char[] transposed = transposer.Transpose(data, data.Length);
             CollectionAssert.AreEqual(expected, transposed);
          }
