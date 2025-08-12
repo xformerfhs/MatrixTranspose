@@ -47,6 +47,9 @@ namespace MatrixTranspose {
    /// </summary>
    public partial class MainWindow : Window {
       #region Public enums
+      /// <summary>
+      /// Options for the BOM handling in the output file.
+      /// </summary>
       public enum BomOption {
          SameAsInput,
          NoBom,
