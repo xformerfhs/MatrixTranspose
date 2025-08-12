@@ -138,16 +138,16 @@ namespace TranspositionHandling {
       /// <param name="sourceLen">Length of the data in <paramref name="source"/>.</param>
       /// <param name="order">The column order for the transposition.</param>
       private static void TransposeToTarget<T>(T[] source, T[] target, int sourceLen, int[] order) {
-         int transposeLen = order.Length;
+         int orderLength = order.Length;
 
          // 1. Calculate the destination indices for each column.
-         int[] destIndices = BuildDestinationIndices(sourceLen, order, transposeLen);
+         int[] destIndices = BuildDestinationIndices(sourceLen, order, orderLength);
 
          // 2. Copy each column in parallel to the destination.
-         Parallel.For(0, transposeLen, i => {
+         Parallel.For(0, orderLength, i => {
             int destinationIndex = destIndices[i];
 
-            for (int sourceIndex = i; sourceIndex < sourceLen; sourceIndex += transposeLen)
+            for (int sourceIndex = i; sourceIndex < sourceLen; sourceIndex += orderLength)
                target[destinationIndex++] = source[sourceIndex];
          });
       }
@@ -161,15 +161,15 @@ namespace TranspositionHandling {
       /// <param name="sourceLen">Length of the data in <paramref name="source"/>.</param>
       /// <param name="order">The column order for the transposition.</param>
       private static void UntransposeToTarget<T>(T[] source, T[] target, int sourceLen, int[] order) {
-         int transposeLen = order.Length;
+         int orderLength = order.Length;
 
          // 1. Calculate the destination indices for each column.
-         int[] destIndices = BuildDestinationIndices(sourceLen, order, transposeLen);
+         int[] destIndices = BuildDestinationIndices(sourceLen, order, orderLength);
 
          // 2. Copy each column in parallel to the destination.
-         Parallel.For(0, transposeLen, i => {
+         Parallel.For(0, orderLength, i => {
             int sourceIndex = destIndices[i];
-            for (int destinationIndex = i; destinationIndex < sourceLen; destinationIndex += transposeLen)
+            for (int destinationIndex = i; destinationIndex < sourceLen; destinationIndex += orderLength)
                target[destinationIndex] = source[sourceIndex++];
          });
       }
@@ -177,45 +177,25 @@ namespace TranspositionHandling {
       /// <summary>
       /// Builds the start indices for each destination column in the transposed array.
       /// </summary>
-      /// <param name="sourceLen"></param>
-      /// <param name="columnIndices"></param>
-      /// <param name="transposeLen"></param>
+      /// <param name="sourceLen">Length of the source data/>.</param>
+      /// <param name="order">The column order for the transposition.</param>
+      /// <param name="orderLength">The number of columns of the transposition</param>
       /// <returns></returns>
-      private static int[] BuildDestinationIndices(int sourceLen, int[] columnIndices, int transposeLen) {
-         int[] result = new int[transposeLen];
+      private static int[] BuildDestinationIndices(int sourceLen, in int[] order, int orderLength) {
+         int[] result = new int[orderLength];
 
-         int columnLength = sourceLen / transposeLen;
-         int supOverflowColumn = sourceLen % transposeLen;
+         int columnLength = sourceLen / orderLength;
+         int supOverflowColumn = sourceLen % orderLength;
 
          int destinationIndex = 0;
-         for (int i = 0; i < transposeLen; i++) {
-            var columnIndex = columnIndices[i];
+         for (int i = 0; i < orderLength; i++) {
+            var columnIndex = order[i];
             result[columnIndex] = destinationIndex;
 
             destinationIndex += columnLength;
             if (columnIndex < supOverflowColumn ) 
                destinationIndex++; // Add one more for the overflow columns
          }
-
-         return result;
-      }
-
-      /// <summary>
-      /// Calculates the length of a column in the transposed array.
-      /// </summary>
-      /// <param name="sourceLen">Length of source.</param>
-      /// <param name="transposeLen">Length of all column transpositions, i.e. length of password.</param>
-      /// <param name="offset">The columnIndex of the column.</param>
-      /// <returns>The length of the column <paramref name="offset"/>.</returns>
-      private static int ColumnLen(int sourceLen, int transposeLen, int offset) {
-         sourceLen -= offset;
-
-         int result = sourceLen / transposeLen;
-
-         int remainder = sourceLen - (result * transposeLen);
-
-         if (remainder > 0)
-            result++;
 
          return result;
       }
