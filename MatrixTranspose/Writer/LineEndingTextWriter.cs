@@ -29,7 +29,7 @@ using System.IO;
 
 namespace WriteHandling {
    /// <summary>
-   /// Class that converts line endings from LF to CRLF.
+   /// Class that converts line endings from LF to a specified line ending.
    /// </summary>
    public class LineEndingTextWriter : ChainableTextWriter {
       #region Instance variables

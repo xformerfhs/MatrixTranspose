@@ -40,7 +40,8 @@ namespace MatrixTranspose {
       /// <param name="substitutionCharacters">Substitution characters.</param>
       /// <param name="numPlaces">Number of places per substitution.</param>
       /// <returns>Task with read data, BOM indicator, read length and used encoding.
-      /// The array length is "file size * <paramref name="numPlaces"/>" than the read length.</returns>
+      /// The array length is "file size * <paramref name="numPlaces"/>", which is probably larger 
+      /// than the read length.</returns>
       public static Task<(char[] Result, bool HasBom, int ReadLength, Encoding UsedEncoding)>
           ReadEncryptedTextFileAsync(
               string filePath,
