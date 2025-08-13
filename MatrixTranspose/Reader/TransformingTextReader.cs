@@ -48,11 +48,6 @@ namespace ReadHandling {
       /// Function to transform characters to uppercase.
       /// </summary>
       public static Func<char, char> ToUpperTransformer => char.ToUpper;
-
-      /// <summary>
-      /// Function to convert a Next Line to a Line Feed for reading EBCDIC texts.
-      /// </summary>
-      public static Func<char, char> NlToLfTransformer => c => c == (char)0x85 ? (char)0x0A : c;
       #endregion
 
 

@@ -107,7 +107,6 @@
     <Compile Include="Transposition\Transposition.cs" />
     <Compile Include="Writer\ChainableTextWriter.cs" />
     <Compile Include="Writer\LineEndingTextWriter.cs" />
-    <Compile Include="Writer\TransformingTextWriter.cs" />
     <Compile Include="Writer\UnmappingTextWriter.cs" />
     <Compile Include="Writer\MappingTextWriter.cs" />
     <Page Include="MainWindow.xaml">
