@@ -21,6 +21,8 @@
  * Change history:
  *    2025-07-24: V1.0.0: Created. fhs
  *    2025-08-09: V1.1.0: Use arrays instead of lists for parallel tasks. fhs
+ *    2025-08-12: V2.0.0: Corrected transpositions. They were simply plain wrong. fhs
+ *    2025-08-13: V2.0.1: Simplified transpositions. fhs
  */
 
 using System;
@@ -35,7 +37,7 @@ namespace TranspositionHandling {
       /// <summary>
       /// The orders of columns derived password the passwords.
       /// </summary>
-      private int[][] _orders;
+      private readonly int[][] _orders;
 
       /// <summary>
       /// Flag to indicate whether the object has been disposed.
@@ -230,8 +232,6 @@ namespace TranspositionHandling {
                Array.Clear(order, 0, order.Length);
 
             Array.Clear(_orders, 0, _orders.Length);
-
-            _orders = null; // Release the reference to the orders array.
          }
 
          _isDisposed = true;
