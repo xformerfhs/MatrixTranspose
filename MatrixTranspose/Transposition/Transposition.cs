@@ -143,7 +143,7 @@ namespace TranspositionHandling {
          int orderLength = order.Length;
 
          // 1. Calculate the destination indices for each column.
-         int[] destIndices = BuildDestinationIndices(sourceLen, order, orderLength);
+         int[] destIndices = BuildColumnTargetIndices(sourceLen, order, orderLength);
 
          // 2. Copy each column in parallel to the destination.
          Parallel.For(0, orderLength, i => {
@@ -166,7 +166,7 @@ namespace TranspositionHandling {
          int orderLength = order.Length;
 
          // 1. Calculate the destination indices for each column.
-         int[] destIndices = BuildDestinationIndices(sourceLen, order, orderLength);
+         int[] destIndices = BuildColumnTargetIndices(sourceLen, order, orderLength);
 
          // 2. Copy each column in parallel to the destination.
          Parallel.For(0, orderLength, i => {
@@ -183,7 +183,7 @@ namespace TranspositionHandling {
       /// <param name="order">The column order for the transposition.</param>
       /// <param name="orderLength">The number of columns of the transposition</param>
       /// <returns></returns>
-      private static int[] BuildDestinationIndices(int sourceLen, in int[] order, int orderLength) {
+      private static int[] BuildColumnTargetIndices(int sourceLen, in int[] order, int orderLength) {
          int[] result = new int[orderLength];
 
          int columnLength = sourceLen / orderLength;
