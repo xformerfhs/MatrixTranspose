@@ -201,32 +201,16 @@ namespace TranspositionHandling {
       }
 
       /// <summary>
-      /// Get column orders for the given password.
-      /// </summary>
-      /// <param name="password">The password to transform in column offsets.</param>
-      /// <returns>Array of column offsets.</returns>
-      private static int[] GetColumnOrder(in string password) {
-         var columnPositions = GetColumnPositions(password);
-
-         var result = new int[columnPositions.Length];
-
-         for (int i = 0; i < columnPositions.Length; i++)
-            result[columnPositions[i]] = i;
-
-         return result;
-      }
-
-      /// <summary>
-      /// Converts a password into an array of column positions.
+      /// Converts a password into an array of column order.
       /// </summary>
       /// <param name="password">The password to transform in a column orders.</param>
       /// <returns>The column orders derived from the password.</returns>
-      private static int[] GetColumnPositions(in string password) {
+      private static int[] GetColumnOrder(in string password) {
          using (var orderList = new SortedPositionList<char>()) {
             foreach (char c in password)
                orderList.Add(c);
 
-            return orderList.PositionOrders();
+            return orderList.Order();
          }
       }
       #endregion

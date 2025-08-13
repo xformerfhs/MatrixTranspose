@@ -20,6 +20,7 @@
  *
  * Change history:
  *    2025-07-24: V1.0.0: Created. fhs
+ *    2025-08-13: V2.0.0: Renamed "PositionOrders" to "Positions", added "Order". fhs
  */
 
 using System;
@@ -84,12 +85,26 @@ namespace TranspositionHandling {
       /// Retrieves the positions of the items in the order of their keys.
       /// </summary>
       /// <returns>Array of the order of each position in the list of keys.</returns>
-      public int[] PositionOrders() {
+      public int[] Positions() {
          int[] result = new int[_list.Count];
 
          int pos = 0;
          foreach (var item in _list)
             result[item.Value] = pos++;
+
+         return result;
+      }
+
+      /// <summary>
+      /// Retrieves the order of the items with respect to their keys.
+      /// </summary>
+      /// <returns>Array of the order of each position in the list of keys.</returns>
+      public int[] Order() {
+         int[] result = new int[_list.Count];
+
+         int pos = 0;
+         foreach (var item in _list)
+            result[pos++] = item.Value;
 
          return result;
       }
