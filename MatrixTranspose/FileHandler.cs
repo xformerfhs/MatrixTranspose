@@ -20,6 +20,7 @@
  *
  * Change history:
  *    2025-08-02: V1.0.0: Created. fhs
+ *    2025-08-14: V1.1.0: Use GroupingWriter. fhs
  */
 
 using EncodingHandling;
@@ -44,13 +45,14 @@ namespace MatrixTranspose {
 
       // Error messages.
 
-      private const string FormatErrorMustBePositive = @"{0} must be positive";
-      private const string FormatErrorFileOperation = @"Error {0}ing file '{1}': {2}";
-      private const string ErrorFilePathEmpty = @"File path must not be null or empty";
+      private const string FormatErrorMustBePositive = "{0} must be positive";
+      private const string FormatErrorFileOperation = "Error {0}ing file '{1}': {2}";
+      private const string ErrorFilePathEmpty = "File path must not be null or empty";
       #endregion
 
 
       #region Public methods
+      #region Read methods
       /// <summary>
       /// Reads an encrypted file and filters for substitution characters.
       /// </summary>
@@ -71,11 +73,11 @@ namespace MatrixTranspose {
          out bool hasBom,
          out int readLength,
          out Encoding usedEncoding) {
-         long fileSize = CheckFileParameters(filePath, encoding);
+         long fileSize = CheckReadBaseData(filePath, encoding);
          if (substitutionCharacters == null)
             throw new ArgumentNullException(nameof(substitutionCharacters));
          if (numPlaces <= 0)
-            throw new ArgumentOutOfRangeException(nameof(numPlaces), string.Format(FormatErrorMustBePositive, @"number of places"));
+            throw new ArgumentOutOfRangeException(nameof(numPlaces), string.Format(FormatErrorMustBePositive, "number of places"));
 
          char[] result;
          try {
@@ -91,7 +93,7 @@ namespace MatrixTranspose {
                   result = ReadToEnd(filterReader, fileSize, usedEncoding.BytesPerCharacter(), numPlaces, out readLength);
             }
          } catch (Exception ex) {
-            throw new IOException(string.Format(FormatErrorFileOperation, @"read", filePath, ex.Message));
+            throw new IOException(string.Format(FormatErrorFileOperation, "read", filePath, ex.Message));
          }
 
          return result;
@@ -121,11 +123,11 @@ namespace MatrixTranspose {
          out bool hasBom,
          out int readLength,
          out Encoding usedEncoding) {
-         long fileSize = CheckFileParameters(filePath, encoding);
+         long fileSize = CheckReadBaseData(filePath, encoding);
          if (substitutions == null)
             throw new ArgumentNullException(nameof(substitutions));
          if (numPlaces <= 0)
-            throw new ArgumentOutOfRangeException(nameof(numPlaces), string.Format(FormatErrorMustBePositive, @"number of places"));
+            throw new ArgumentOutOfRangeException(nameof(numPlaces), string.Format(FormatErrorMustBePositive, "number of places"));
 
          TextReader reader = null;
          char[] result;
@@ -150,14 +152,16 @@ namespace MatrixTranspose {
                }
             }
          } catch (Exception ex) {
-            throw new IOException(string.Format(FormatErrorFileOperation, @"read", filePath, ex.Message));
+            throw new IOException(string.Format(FormatErrorFileOperation, "read", filePath, ex.Message));
          } finally {
             reader?.Dispose();
          }
 
          return result;
       }
+      #endregion
 
+      #region Write methods
       /// <summary>
       /// Writes an encrypted file.
       /// </summary>
@@ -178,50 +182,19 @@ namespace MatrixTranspose {
          int writeLength,
          int groupSize,
          int maxLineLength) {
-         if (string.IsNullOrEmpty(filePath))
-            throw new ArgumentException(ErrorFilePathEmpty, nameof(filePath));
-         if (encoding == null)
-            throw new ArgumentNullException(nameof(encoding));
-         if (data == null)
-            throw new ArgumentNullException(nameof(data));
-         if (writeLength < 0)
-            throw new ArgumentOutOfRangeException(string.Format(FormatErrorMustBePositive, @"Write length"), nameof(writeLength));
-         if (groupSize < 0)
-            throw new ArgumentOutOfRangeException(string.Format(FormatErrorMustBePositive, @"Group size"), nameof(groupSize));
-         if (maxLineLength < 0)
-            throw new ArgumentOutOfRangeException(string.Format(FormatErrorMustBePositive, @"Maximum line length"), nameof(maxLineLength));
-
-         if (groupSize > 1 && maxLineLength > 1)
-            maxLineLength = maxLineLength / (groupSize + 1) * (groupSize + 1);
+         CheckWriteBaseData(filePath, encoding, data, writeLength);
 
          encoding = EncodingHelper.EncodingWithMatchingBom(encoding, withBom);
 
          try {
-            int groupPos = 0;
-            int linePos = 0;
             using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
             using (var writer = new StreamWriter(fileStream, encoding))
             using (var lineEndingNormalizer = new LineEndingTextWriter(writer, lineEndingOption))
-               for (int i = 0; i < writeLength; i++) {
-                  if (groupSize > 1 && groupPos >= groupSize) {
-                     linePos++;
-                     if (maxLineLength == 0 || linePos < maxLineLength)
-                        lineEndingNormalizer.Write(' ');
-                     groupPos = 0;
-                  }
-
-                  if (maxLineLength > 1 && linePos >= maxLineLength) {
-                     lineEndingNormalizer.Write('\n');
-                     linePos = 0;
-                  }
-
-                  lineEndingNormalizer.Write(data[i]);
-
-                  groupPos++;
-                  linePos++;
-               }
+            using (var groupingWriter = new GroupingWriter(lineEndingNormalizer, groupSize, maxLineLength))
+               for (int i = 0; i < writeLength; i++)
+                  groupingWriter.Write(data[i]);
          } catch (Exception ex) {
-            throw new IOException(string.Format(FormatErrorFileOperation, @"writ", filePath, ex.Message));
+            throw new IOException(string.Format(FormatErrorFileOperation, "writ", filePath, ex.Message));
          }
       }
 
@@ -243,14 +216,7 @@ namespace MatrixTranspose {
          in SortedDictionary<char[], char> unsubstitutionMap,
          in char[] data,
          int writeLength) {
-         if (string.IsNullOrEmpty(filePath))
-            throw new ArgumentException(ErrorFilePathEmpty, nameof(filePath));
-         if (encoding == null)
-            throw new ArgumentNullException(nameof(encoding));
-         if (data == null)
-            throw new ArgumentNullException(nameof(data));
-         if (writeLength < 0)
-            throw new ArgumentException(string.Format(FormatErrorMustBePositive, @"Write length"), nameof(writeLength));
+         CheckWriteBaseData(filePath, encoding, data, writeLength);
 
          encoding = EncodingHelper.EncodingWithMatchingBom(encoding, withBom);
 
@@ -262,9 +228,10 @@ namespace MatrixTranspose {
                for (int i = 0; i < writeLength; i++)
                   unmappingWriter.Write(data[i]);
          } catch (Exception ex) {
-            throw new IOException(string.Format(FormatErrorFileOperation, @"writ", filePath, ex.Message));
+            throw new IOException(string.Format(FormatErrorFileOperation, "writ", filePath, ex.Message));
          }
       }
+      #endregion
 
       /// <summary>
       /// Gets the size of a file in bytes.
@@ -286,18 +253,51 @@ namespace MatrixTranspose {
       /// </summary>
       /// <param name="filePath">File path.</param>
       /// <param name="encoding">Encoding.</param>
+      /// <exception cref="ArgumentException">Thrown if <paramref name="filePath"/> is null or an empty string
+      /// or if the file exceeds the maximum allowed size.</exception>
+      /// <exception cref="ArgumentNullException">Thrown if <paramref name="encoding"/> is null.</exception>
       /// <returns>Size of file.</returns>
-      private static long CheckFileParameters(in string filePath, in Encoding encoding) {
-         if (string.IsNullOrEmpty(filePath))
-            throw new ArgumentException(ErrorFilePathEmpty, nameof(filePath));
-         if (encoding == null)
-            throw new ArgumentNullException(nameof(encoding));
+      private static long CheckReadBaseData(in string filePath, in Encoding encoding) {
+         CheckFileBaseData(filePath, encoding);
 
          long fileSize = GetFileSizeNoCheck(filePath);
          if (fileSize > MaxFileSize)
             throw new ArgumentException($"File size exceeds the maximum allowed size of {MaxFileSize} bytes.", nameof(filePath));
 
          return fileSize;
+      }
+
+      /// <summary>
+      /// Checks if the file, encoding, data and write length are suited.
+      /// </summary>
+      /// <param name="filePath">The path to the file to be validated.</param>
+      /// <param name="encoding">The character encoding to be used.</param>
+      /// <param name="data">Data to write.</param>
+      /// <param name="writeLength">Length of data to write.</param>
+      /// <exception cref="ArgumentException">Thrown if <paramref name="filePath"/> is null or an empty string.</exception>
+      /// <exception cref="ArgumentNullException">Thrown if <paramref name="encoding"/> or <paramref name="data"/> is null.</exception>
+      /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="writeLength"/> is negative.</exception>
+      private static void CheckWriteBaseData(string filePath, Encoding encoding, char[] data, int writeLength) {
+         CheckFileBaseData(filePath, encoding);
+
+         if (data == null)
+            throw new ArgumentNullException(nameof(data));
+         if (writeLength < 0)
+            throw new ArgumentOutOfRangeException(string.Format(FormatErrorMustBePositive, "Write length"), nameof(writeLength));
+      }
+
+      /// <summary>
+      /// Validates the provided file path and encoding for correctness.
+      /// </summary>
+      /// <param name="filePath">The path to the file to be validated.</param>
+      /// <param name="encoding">The character encoding to be used.</param>
+      /// <exception cref="ArgumentException">Thrown if <paramref name="filePath"/> is null or an empty string.</exception>
+      /// <exception cref="ArgumentNullException">Thrown if <paramref name="encoding"/> is null.</exception>
+      private static void CheckFileBaseData(string filePath, Encoding encoding) {
+         if (string.IsNullOrEmpty(filePath))
+            throw new ArgumentException(ErrorFilePathEmpty, nameof(filePath));
+         if (encoding == null)
+            throw new ArgumentNullException(nameof(encoding));
       }
 
       /// <summary>

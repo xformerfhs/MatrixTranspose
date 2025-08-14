@@ -106,6 +106,7 @@
     <Compile Include="String\StringExtension.cs" />
     <Compile Include="Transposition\Transposition.cs" />
     <Compile Include="Writer\ChainableTextWriter.cs" />
+    <Compile Include="Writer\GroupingWriter.cs" />
     <Compile Include="Writer\LineEndingTextWriter.cs" />
     <Compile Include="Writer\UnmappingTextWriter.cs" />
     <Page Include="MainWindow.xaml">

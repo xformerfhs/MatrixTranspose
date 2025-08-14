@@ -108,7 +108,7 @@ namespace WriteHandling {
             // Buffer is full. That must never happen.
             throw new InvalidOperationException("Internal buffer overflow");
 
-         // Try to find a match starting from the current buffer length down to minimum length
+         // Try to find a match starting from the current buffer length down to minimum length.
          for (int currentLength = Math.Min(_buffer.Length, _maxLength); currentLength >= _minLength; currentLength--) {
             if (_mappingBySize.TryGetValue(currentLength, out var sizeMapping) &&
                 sizeMapping.TryGetValue(_buffer.RawBuffer, out char mappedChar)) {
