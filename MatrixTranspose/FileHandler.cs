@@ -138,9 +138,7 @@ namespace MatrixTranspose {
                if (toUpper)
                   reader.WithTransformation(TransformingTextReader.ToUpperTransformer);
 
-               reader.WithMapping(substitutions);
-
-               (result, readLength) = reader.ReadData(fileSize);
+               (result, readLength) = reader.WithMapping(substitutions).ReadData(fileSize);
                usedEncoding = reader.CurrentEncoding;
                hasBom = reader.HasBom;
             }
@@ -166,7 +164,7 @@ namespace MatrixTranspose {
       /// <param name="maxLineLength">Maximum line length (0, if there is no maximum line length)</param>
       public static void WriteEncryptedFile(
          in string filePath,
-         Encoding encoding,
+         in Encoding encoding,
          bool withBom,
          LineEndingHandler.Option lineEndingOption,
          in char[] data,
@@ -175,10 +173,8 @@ namespace MatrixTranspose {
          int maxLineLength) {
          CheckWriteBaseData(filePath, encoding, data, writeLength);
 
-         encoding = EncodingHelper.EncodingWithMatchingBom(encoding, withBom);
-
          try {
-            using (var writer = new ComposableTextWriter(filePath, encoding)
+            using (var writer = new ComposableTextWriter(filePath, EncodingHelper.EncodingWithMatchingBom(encoding, withBom))
                .WithNormalizedLineEndings(lineEndingOption)
                .WithGroupedOutput(groupSize, maxLineLength))
                writer.WriteData(data, writeLength);
@@ -199,7 +195,7 @@ namespace MatrixTranspose {
       /// <param name="writeLength">Number of characters to write.</param>
       public static void WriteUnsubstitutedCleartextFile(
          in string filePath,
-         Encoding encoding,
+         in Encoding encoding,
          bool withBom,
          LineEndingHandler.Option lineEndingOption,
          in SortedDictionary<char[], char> unsubstitutionMap,
@@ -207,10 +203,8 @@ namespace MatrixTranspose {
          int writeLength) {
          CheckWriteBaseData(filePath, encoding, data, writeLength);
 
-         encoding = EncodingHelper.EncodingWithMatchingBom(encoding, withBom);
-
          try {
-            using (var writer = new ComposableTextWriter(filePath, encoding)
+            using (var writer = new ComposableTextWriter(filePath, EncodingHelper.EncodingWithMatchingBom(encoding, withBom))
                .WithNormalizedLineEndings(lineEndingOption)
                .WithUnsubstitution(unsubstitutionMap))
                writer.WriteData(data, writeLength);
