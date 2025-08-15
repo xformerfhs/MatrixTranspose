@@ -8,11 +8,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MatrixTranspose")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Encryption and decryption with matrix substitution and transposition.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Frank Schwab")]
 [assembly: AssemblyProduct("MatrixTranspose")]
-[assembly: AssemblyCopyright("Copyright ©  2025")]
+[assembly: AssemblyCopyright("Copyright ©  2025, Frank Schwab")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

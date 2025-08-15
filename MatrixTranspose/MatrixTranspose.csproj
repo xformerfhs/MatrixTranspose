@@ -91,6 +91,7 @@
     <Compile Include="FileHandlerAsync.cs" />
     <Compile Include="LineEnding\LineEndingHandler.cs" />
     <Compile Include="MathHelper\MathHelper.cs" />
+    <Compile Include="Reader\ComposableTextReader.cs" />
     <Compile Include="UserControls\NumericUpDown.xaml.cs">
       <DependentUpon>NumericUpDown.xaml</DependentUpon>
     </Compile>
@@ -108,6 +109,7 @@
     <Compile Include="Writer\ChainableTextWriter.cs" />
     <Compile Include="Writer\GroupingWriter.cs" />
     <Compile Include="Writer\LineEndingTextWriter.cs" />
+    <Compile Include="Writer\ComposableTextWriter.cs" />
     <Compile Include="Writer\UnmappingTextWriter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

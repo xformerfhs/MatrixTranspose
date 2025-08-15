@@ -181,10 +181,11 @@ namespace MatrixTranspose {
 
             TextDestinationFile.Text = destinationFilePath;
 
-            EncodingHelper.DetectBomCodepage(sourceFilePath, out int codePage);
-            if (codePage != 0 &&
-                codePage != (int)ComboInputEncoding.SelectedValue)
-               ComboInputEncoding.SelectedValue = codePage;
+            int codepage;
+            (_, codepage) = EncodingHelper.DetectBomCodepage(sourceFilePath);
+            if (codepage != 0 &&
+                codepage != (int)ComboInputEncoding.SelectedValue)
+               ComboInputEncoding.SelectedValue = codepage;
          }
       }
 

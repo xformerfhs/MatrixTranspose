@@ -21,6 +21,7 @@
  * Change history:
  *    2025-08-02: V1.0.0: Created. fhs
  *    2025-08-14: V1.1.0: Use GroupingWriter. fhs
+ *    2025-08-15: V2.0.0: Use ComposableTextReader and ComposableTextWriter. fhs
  */
 
 using EncodingHandling;
@@ -81,16 +82,13 @@ namespace MatrixTranspose {
 
          char[] result;
          try {
-            using (var fileStream = File.OpenRead(filePath)) {
-               hasBom = EncodingHelper.DetectBomEncoding(fileStream, out usedEncoding);
-               if (usedEncoding == null)
-                  usedEncoding = encoding;
-
-               using (var fileReader = new StreamReader(fileStream, usedEncoding, true))
-               using (var lineReader = new LineEndingNormalizingTextReader(fileReader))
-               using (var upperReader = new TransformingTextReader(lineReader, TransformingTextReader.ToUpperTransformer))
-               using (var filterReader = new FilteringTextReader(upperReader, substitutionCharacters))
-                  result = ReadToEnd(filterReader, fileSize, usedEncoding.BytesPerCharacter(), numPlaces, out readLength);
+            using (var reader = new ComposableTextReader(filePath, encoding)
+               .WithNormalizedLineEnding()
+               .WithTransformation(TransformingTextReader.ToUpperTransformer)
+               .WithFiltering(substitutionCharacters)) {
+               (result, readLength) = reader.ReadData(fileSize);
+               usedEncoding = reader.CurrentEncoding;
+               hasBom = reader.HasBom;
             }
          } catch (Exception ex) {
             throw new IOException(string.Format(FormatErrorFileOperation, "read", filePath, ex.Message));
@@ -129,32 +127,25 @@ namespace MatrixTranspose {
          if (numPlaces <= 0)
             throw new ArgumentOutOfRangeException(nameof(numPlaces), string.Format(FormatErrorMustBePositive, "number of places"));
 
-         TextReader reader = null;
          char[] result;
          try {
-            using (var fileStream = File.OpenRead(filePath)) {
-               hasBom = EncodingHelper.DetectBomEncoding(fileStream, out usedEncoding);
-               if (usedEncoding == null)
-                  usedEncoding = encoding;
+            using (var reader = new ComposableTextReader(filePath, encoding)
+               .WithNormalizedLineEnding()) {
 
-               using (var fileReader = new StreamReader(fileStream, usedEncoding, detectEncodingFromByteOrderMarks: false)) {
-                  reader = new LineEndingNormalizingTextReader(fileReader);
+               if (treatJAsI)
+                  reader.WithTransformation(TransformingTextReader.JToITransformer);
 
-                  if (treatJAsI)
-                     reader = new TransformingTextReader(reader, TransformingTextReader.JToITransformer);
+               if (toUpper)
+                  reader.WithTransformation(TransformingTextReader.ToUpperTransformer);
 
-                  if (toUpper)
-                     reader = new TransformingTextReader(reader, TransformingTextReader.ToUpperTransformer);
+               reader.WithMapping(substitutions);
 
-                  reader = new MappingTextReader(reader, substitutions);
-
-                  result = ReadToEnd(reader, fileSize, usedEncoding.BytesPerCharacter(), numPlaces, out readLength);
-               }
+               (result, readLength) = reader.ReadData(fileSize);
+               usedEncoding = reader.CurrentEncoding;
+               hasBom = reader.HasBom;
             }
          } catch (Exception ex) {
             throw new IOException(string.Format(FormatErrorFileOperation, "read", filePath, ex.Message));
-         } finally {
-            reader?.Dispose();
          }
 
          return result;
@@ -187,12 +178,10 @@ namespace MatrixTranspose {
          encoding = EncodingHelper.EncodingWithMatchingBom(encoding, withBom);
 
          try {
-            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-            using (var writer = new StreamWriter(fileStream, encoding))
-            using (var lineEndingNormalizer = new LineEndingTextWriter(writer, lineEndingOption))
-            using (var groupingWriter = new GroupingWriter(lineEndingNormalizer, groupSize, maxLineLength))
-               for (int i = 0; i < writeLength; i++)
-                  groupingWriter.Write(data[i]);
+            using (var writer = new ComposableTextWriter(filePath, encoding)
+               .WithNormalizedLineEndings(lineEndingOption)
+               .WithGroupedOutput(groupSize, maxLineLength))
+               writer.WriteData(data, writeLength);
          } catch (Exception ex) {
             throw new IOException(string.Format(FormatErrorFileOperation, "writ", filePath, ex.Message));
          }
@@ -221,12 +210,10 @@ namespace MatrixTranspose {
          encoding = EncodingHelper.EncodingWithMatchingBom(encoding, withBom);
 
          try {
-            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-            using (var writer = new StreamWriter(fileStream, encoding))
-            using (var lineEndingNormalizer = new LineEndingTextWriter(writer, lineEndingOption))
-            using (var unmappingWriter = new UnmappingTextWriter(lineEndingNormalizer, unsubstitutionMap))
-               for (int i = 0; i < writeLength; i++)
-                  unmappingWriter.Write(data[i]);
+            using (var writer = new ComposableTextWriter(filePath, encoding)
+               .WithNormalizedLineEndings(lineEndingOption)
+               .WithUnsubstitution(unsubstitutionMap))
+               writer.WriteData(data, writeLength);
          } catch (Exception ex) {
             throw new IOException(string.Format(FormatErrorFileOperation, "writ", filePath, ex.Message));
          }
@@ -277,7 +264,7 @@ namespace MatrixTranspose {
       /// <exception cref="ArgumentException">Thrown if <paramref name="filePath"/> is null or an empty string.</exception>
       /// <exception cref="ArgumentNullException">Thrown if <paramref name="encoding"/> or <paramref name="data"/> is null.</exception>
       /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="writeLength"/> is negative.</exception>
-      private static void CheckWriteBaseData(string filePath, Encoding encoding, char[] data, int writeLength) {
+      private static void CheckWriteBaseData(in string filePath, in Encoding encoding, in char[] data, int writeLength) {
          CheckFileBaseData(filePath, encoding);
 
          if (data == null)
@@ -293,7 +280,7 @@ namespace MatrixTranspose {
       /// <param name="encoding">The character encoding to be used.</param>
       /// <exception cref="ArgumentException">Thrown if <paramref name="filePath"/> is null or an empty string.</exception>
       /// <exception cref="ArgumentNullException">Thrown if <paramref name="encoding"/> is null.</exception>
-      private static void CheckFileBaseData(string filePath, Encoding encoding) {
+      private static void CheckFileBaseData(in string filePath, in Encoding encoding) {
          if (string.IsNullOrEmpty(filePath))
             throw new ArgumentException(ErrorFilePathEmpty, nameof(filePath));
          if (encoding == null)
@@ -309,27 +296,6 @@ namespace MatrixTranspose {
       private static long GetFileSizeNoCheck(in string filePath) {
          var fileInfo = new FileInfo(filePath);
          return fileInfo.Length;
-      }
-
-      /// <summary>
-      /// Reads the full filtered and mapped content of a file from <paramref name="reader"/>.
-      /// </summary>
-      /// <param name="reader"><see cref="TextReader"/> to read from.</param>
-      /// <param name="fileSize">The size of the file.</param>
-      /// <param name="bytesPerCharacter">Number of bytes per character.</param>
-      /// <param name="numPlaces">Number of places per substitution.</param>
-      /// <param name="readLength">Out: Number of characters read.</param>
-      /// <returns>Read characters.</returns>
-      private static char[] ReadToEnd(TextReader reader, long fileSize, int bytesPerCharacter, byte numPlaces, out int readLength) {
-         char[] result = new char[(fileSize / bytesPerCharacter) * numPlaces];
-         int actIndex = 0;
-         int c;
-         while ((c = reader.Read()) != -1)
-            result[actIndex++] = (char)c;
-
-         readLength = actIndex;
-
-         return result;
       }
       #endregion
    }
