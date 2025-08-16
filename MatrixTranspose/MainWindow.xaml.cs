@@ -509,7 +509,10 @@ namespace MatrixTranspose {
       /// <remarks>
       /// This methods shows a message box if a parameter is not valid.
       /// </remarks>
-      /// <returns><c>true</c>, if all parameters are set and valid, <c>false</c>, if not.</returns>
+      /// <returns>
+      /// <see langword="true"/>, if all parameters are set and valid;
+      /// <see langword="false"/>, if not.
+      /// </returns>
       private bool CheckParameters() {
          if (_alphabet == null) {
             MessageBox.Show("Please select an alphabet first.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -564,7 +567,10 @@ namespace MatrixTranspose {
       /// <remarks>
       /// This method shows a message box if the lengths have a common divisor.
       /// </remarks>
-      /// <returns><c>true</c>, if the password lengths do not have a common divisor, <c>false</c>, if they do.</returns>
+      /// <returns>
+      /// <see langword="true"/>, if the password lengths do not have a common divisor;
+      /// <see langword="false"/>, if they do.
+      /// </returns>
       private static bool CheckPasswordLengths(string[] passwords, string newPassword) {
          int textLength = newPassword.Length;
          foreach (string password in passwords) {
@@ -582,7 +588,10 @@ namespace MatrixTranspose {
       /// Checks if the user wants to continue with the specified file path.
       /// </summary>
       /// <param name="filePath">Path of file to write.</param>
-      /// <returns><c>true</c>, if file should be written to, <c>false</c>, if not.</returns>
+      /// <returns>
+      /// <see langword="true"/>, if file should be written to;
+      /// <see langword="false"/>, if not.
+      /// </returns>
       private static bool ContinueWithFile(string filePath) {
          bool result = true;
 
@@ -605,7 +614,10 @@ namespace MatrixTranspose {
       /// Gets the BOM for the output file.
       /// </summary>
       /// <param name="inputHasBom">Indication, if input file has a BOM.</param>
-      /// <returns><c>True</c>, if output file has to write a BOM, <c>False</c>, if not.</returns>
+      /// <returns>
+      /// <see langword="true"/>, if output file has to write a BOM;
+      /// <see langword="false"/>, if not.
+      /// </returns>
       private bool GetBomForOutput(bool inputHasBom) {
          if (StackBOM.IsEnabled) {
             switch (EnumComboBoxHelper.GetSelectedEnumValue<BomOption>(ComboBom)) {
@@ -713,7 +725,10 @@ namespace MatrixTranspose {
       /// </summary>
       /// <typeparam name="T">Type of ancestor to find.</typeparam>
       /// <param name="current">Start object.</param>
-      /// <returns>Ancestor of <paramref name="current"/> of type <typeparamref name="T"/>, or <c>null</c> if none is found.</returns>
+      /// <returns>
+      /// Ancestor of <paramref name="current"/> of type <typeparamref name="T"/>;
+      /// <see langword="null"/> if none is found.
+      /// </returns>
       private static T FindAncestor<T>(DependencyObject current) where T : DependencyObject {
          while (current != null) {
             if (current is T match)

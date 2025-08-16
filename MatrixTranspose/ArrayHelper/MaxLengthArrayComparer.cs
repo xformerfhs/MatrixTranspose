@@ -48,7 +48,7 @@ namespace ArrayHandling {
       /// Creates an instance of <see cref="MaxLengthArrayComparer{T}"/>.
       /// </summary>
       /// <param name="maxLength">The maximum length to compare.</param>
-      /// <param name="elementComparer">Element comparer to use. If <c>null</c> the default comparer is used.</param>
+      /// <param name="elementComparer">Element comparer to use. If <see langword="null"/> the default comparer is used.</param>
       public MaxLengthArrayComparer(int maxLength, IComparer<T> elementComparer = null) {
          if (maxLength < 0)
             throw new ArgumentOutOfRangeException(nameof(maxLength), "Max length must be non-negative.");

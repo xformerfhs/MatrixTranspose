@@ -45,7 +45,7 @@ namespace ArrayHandling {
       /// <summary>
       /// Creates an instance of <see cref="ArrayComparer{T}"/>.
       /// </summary>
-      /// <param name="elementComparer">Element comparer to use. If <c>null</c> the default comparer is used.</param>
+      /// <param name="elementComparer">Element comparer to use. If <see langword="null"/> the default comparer is used.</param>
       public ArrayComparer(IComparer<T> elementComparer = null) {
          _elementComparer = elementComparer ?? Comparer<T>.Default;
       }

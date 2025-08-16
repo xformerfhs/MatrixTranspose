@@ -230,7 +230,10 @@ namespace MatrixTranspose.UserControls {
       /// Checks if the given text contains only digits.
       /// </summary>
       /// <param name="text">Text to check.</param>
-      /// <returns><c>true</c>, if the text contains only digits, <c>false</c>, if not.</returns>
+      /// <returns>
+      /// <see langword="true"/>, if the text contains only digits;
+      /// <see langword="false"/>, if not.
+      /// </returns>
       private static bool IsOnlyDigits(string text) {
          return text.All(c => c >= '0' && c <= '9'); // Only allow digits.
       }

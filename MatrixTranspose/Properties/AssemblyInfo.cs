@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Frank Schwab")]
 [assembly: AssemblyProduct("MatrixTranspose")]
-[assembly: AssemblyCopyright("Copyright ©  2025, Frank Schwab")]
+[assembly: AssemblyCopyright("Copyright © 2025, Frank Schwab")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

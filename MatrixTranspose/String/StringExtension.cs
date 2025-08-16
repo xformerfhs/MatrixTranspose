@@ -34,19 +34,20 @@ namespace StringHandling {
       /// </summary>
       /// <param name="value">String to search for.</param>
       /// <param name="comparison">The <see cref="StringComparison"/> to use.</param>
-      /// <returns><c>true</c>, if the <paramref name="value"/> parameter occurs
+      /// <returns>
+      /// <see langword="true"/>, if the <paramref name="value"/> parameter occurs
       /// within this string, or if <paramref name="value"/> is the empty string ("");
-      /// otherwise <c>false</c>.
+      /// otherwise <see langword="false"/>.
       /// </returns>
       public static bool Contains(this string self, string value, StringComparison comparison) {
          return self?.IndexOf(value, comparison) >= 0;
       }
-      
+
       /// <summary>
-             /// Removes all whitespace characters from the string.
-             /// </summary>
-             /// <param name="self">String to process.</param>
-             /// <returns>New string with all whitespace characters removed.</returns>
+      /// Removes all whitespace characters from the string.
+      /// </summary>
+      /// <param name="self">String to process.</param>
+      /// <returns>New string with all whitespace characters removed.</returns>
       public static string RemoveWhiteSpace(this string self) {
          return new string(self.Where(c => !char.IsWhiteSpace(c)).ToArray());
       }

@@ -61,7 +61,7 @@ namespace EncodingHandling {
       /// </summary>
       /// <param name="filePath">Path of file to check.</param>
       /// <returns>
-      /// <c>True</c>, if a BOM was detected; <c>False</c>, if not.
+      /// <see langword="true"/>, if a BOM was detected; <see langword="false"/>, if not.
       /// The second return value is the code page or <c>0</c>, if no BOM was detected.
       /// </returns>
       public static (bool, int) DetectBomCodepage(in string filePath) {
@@ -81,7 +81,7 @@ namespace EncodingHandling {
       /// </remarks>
       /// <param name="stream">Stream to read from.</param>
       /// <returns>
-      /// <c>True</c>, if a BOM was detected; <c>False</c>, if not.
+      /// <see langword="true"/>, if a BOM was detected; <see langword="false"/>, if not.
       /// The second return value is the code page or <c>0</c>, if no BOM was detected.
       /// </returns>
       public static (bool, int) DetectBomCodepage(in Stream stream) {
@@ -94,10 +94,11 @@ namespace EncodingHandling {
       }
 
       /// <summary>
-      /// Detects a BOM and returns either the corresponding encoding or <c>null</c>.
+      /// Detects a BOM and returns either the corresponding encoding or <see langword="null"/>.
       /// </summary>
       /// <param name="filePath">Path of file to check.</param>
-      /// <returns><c>True</c>, if a BOM is detected; <c>False</c>, if not. The second return value
+      /// <returns>
+      /// <see langword="true"/>, if a BOM is detected; <see langword="false"/>, if not. The second return value
       /// is the encoding, if a BOM was found or <see langword="null"/>.</returns>
       public static (bool, Encoding) DetectBomEncoding(in string filePath) {
          if (string.IsNullOrEmpty(filePath))
@@ -111,10 +112,10 @@ namespace EncodingHandling {
       /// Detects a BOM and returns either the corresponding encoding or the default encoding.
       /// </summary>
       /// <param name="stream">Stream to read from.</param>
-      /// <param name="encoding">Out: The found encoding or <c>null</c>.</param>
       /// <returns>
-      /// <c>True</c>, if a BOM is detected; <c>False</c>, if not. The second return value
-      /// is the found <see cref="Encoding"/> or <see langword="null"/>, if none was found.
+      /// <see langword="true"/>, if a BOM is detected; <see langword="false"/>, if not.
+      /// The second return value is the found <see cref="Encoding"/> or <see langword="null"/>,
+      /// if none was found.
       /// </returns>
       public static (bool, Encoding) DetectBomEncoding(in Stream stream) {
          if (stream == null)
@@ -127,10 +128,12 @@ namespace EncodingHandling {
       /// Get the encoding that matches the value of <paramref name="withBom"/>.
       /// </summary>
       /// <param name="encoding">Encoding to be used as a base.</param>
-      /// <param name="withBom"><c>True</c>, if a BOM must be written; <c>False</c>, if not.</param>
-      /// <returns><paramref name="encoding"/>, if <paramref name="withBom"/> matches the BOM setting
+      /// <param name="withBom"><see langword="true"/>, if a BOM must be written; <see langword="false"/>, if not.</param>
+      /// <returns>
+      /// <paramref name="encoding"/>, if <paramref name="withBom"/> matches the BOM setting
       /// of <paramref name="encoding"/>. A new encoding of the same type as <paramref name="encoding"/>,
-      /// but with the correct BOM setting.</returns>
+      /// but with the correct BOM setting.
+      /// </returns>
       public static Encoding EncodingWithMatchingBom(in Encoding encoding, bool withBom) {
          if (encoding == null)
             throw new ArgumentNullException(nameof(encoding));
@@ -196,7 +199,9 @@ namespace EncodingHandling {
       /// Checks, if the given codepage can have a BOM.
       /// </summary>
       /// <param name="codePage">Codepage to check.</param>
-      /// <returns><c>True</c>, if the codepage may have a BOM; <c>False</c>, if not.</returns>
+      /// <returns>
+      /// <see langword="true"/>, if the codepage may have a BOM; <see langword="false"/>, if not.
+      /// </returns>
       public static bool SupportsBom(int codePage) {
          return BomCodePages.Contains(codePage);
       }
@@ -215,7 +220,7 @@ namespace EncodingHandling {
       /// <param name="stream">Stream to read from.</param>
       /// <param name="codePage">Out: Detected codepage or <c>0</c>.</param>
       /// <returns>
-      /// <c>True</c>, if a BOM was detected; <c>False</c>, if not.
+      /// <see langword="true"/>, if a BOM was detected; <see langword="false"/>, if not.
       /// The second return value is the code page or <c>0</c>, if no BOM was detected.
       /// </returns>
       public static (bool, int) DetectBomCodepageNoCheck(in Stream stream) {
@@ -283,8 +288,11 @@ namespace EncodingHandling {
       /// This method assumes that the arguments are already checked.
       /// </summary>
       /// <param name="stream">Stream to read from.</param>
-      /// <returns><c>True</c>, if a BOM is detected; <c>False</c>, if not. The second return value
-      /// is the <see cref="Encoding"/>, or <see langword="null"/>, if no BOM was detected.</returns>
+      /// <returns>
+      /// <see langword="true"/>, if a BOM is detected; <see langword="false"/>, if not.
+      /// The second return value is the <see cref="Encoding"/>, or <see langword="null"/>,
+      /// if no BOM was detected.
+      /// </returns>
       public static (bool, Encoding) DetectBomEncodingNoCheck(in Stream stream) {
          bool hasBom;
          int codepage;

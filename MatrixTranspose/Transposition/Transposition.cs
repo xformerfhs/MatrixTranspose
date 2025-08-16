@@ -182,7 +182,7 @@ namespace TranspositionHandling {
       /// <param name="sourceLen">Length of the source data/>.</param>
       /// <param name="order">The column order for the transposition.</param>
       /// <param name="orderLength">The number of columns of the transposition</param>
-      /// <returns></returns>
+      /// <returns>An array of start indices for each destination column.</returns>
       private static int[] BuildColumnTargetIndices(int sourceLen, in int[] order, int orderLength) {
          int[] result = new int[orderLength];
 

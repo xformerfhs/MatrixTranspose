@@ -34,7 +34,10 @@ namespace EncodingHandling {
       /// <summary>
       /// Reports, whether the encoding is an EBCDIC encoding.
       /// </summary>
-      /// <returns><c>true</c>, if the encoding is an EBCDIC encoding; otherwise <c>false</c>.</returns>
+      /// <returns>
+      /// <see langword="true"/>, if the encoding is an EBCDIC encoding;
+      /// otherwise <see langword="false"/>.
+      /// </returns>
       public static bool IsEbcdic(this EncodingInfo encodingInfo) {
          return encodingInfo.DisplayName.Contains("EBCDIC", StringComparison.InvariantCultureIgnoreCase);
       }

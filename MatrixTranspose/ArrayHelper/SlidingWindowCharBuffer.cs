@@ -81,7 +81,10 @@ namespace ArrayHandling {
       /// Adds a character to the end of the buffer.
       /// </summary>
       /// <param name="c">Character to add.</param>
-      /// <returns><c>True</c>, if the character was added successfully; <c>False</c>, if the buffer is full.</returns>
+      /// <returns>
+      /// <see langword="true"/>, if the character was added successfully;
+      /// <see langword="false"/>, if the buffer is full.
+      /// </returns>
       public bool AddChar(char c) {
          if (Length >= _buffer.Length)
             return false; // Buffer is full.

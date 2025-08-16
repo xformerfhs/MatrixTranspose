@@ -170,9 +170,11 @@ namespace AlphabetHandling {
       /// <param name="lastChar">Last used character from password.</param>
       /// <param name="isPresent">List of characters that have already been filled in.</param>
       /// <param name="alphabetCharacters">The characters of the alphabet.</param>
-      /// <returns>The start index of the first character in <paramref name="alphabetCharacters"/> 
-      /// that has a higher value than <paramref name="lastChar"/>. <c>-1</c>, if the password already
-      /// contained all characters in <paramref name="alphabetCharacters"/>.</returns>
+      /// <returns>
+      /// The start index of the first character in <paramref name="alphabetCharacters"/> 
+      /// that has a higher value than <paramref name="lastChar"/>.
+      /// <c>-1</c>, if the password already contained all characters in <paramref name="alphabetCharacters"/>.
+      /// </returns>
       private static int GetStartIndex(char lastChar, in SortedSet<char> isPresent, in char[] alphabetCharacters) {
          for (int i = 0; i < alphabetCharacters.Length; i++) {
             char c = alphabetCharacters[i];

@@ -64,8 +64,10 @@ namespace MatrixTranspose {
       /// <param name="hasBom">Out: Reports, whether file has a BOM.</param>
       /// <param name="readLength">Out: Length of read data.</param>
       /// <param name="usedEncoding">Out: Encoding used for reading.</param>
-      /// <returns>Read data. The array length is file size * <paramref name="numPlaces"/>,
-      /// which is probably larger than <paramref name="readLength"/>.</returns>
+      /// <returns>
+      /// Read data. The array length is file size * <paramref name="numPlaces"/>,
+      /// which is probably larger than <paramref name="readLength"/>.
+      /// </returns>
       public static char[] ReadEncryptedTextFile(
          in string filePath,
          in Encoding encoding,
@@ -109,8 +111,10 @@ namespace MatrixTranspose {
       /// <param name="hasBom">Out: Reports, whether file has a BOM.</param>
       /// <param name="readLength">Out: Length of read data.</param>
       /// <param name="usedEncoding">Out: Encoding used for reading.</param>
-      /// <returns>Read data. The array length is file size * <paramref name="numPlaces"/>,
-      /// which is probably larger than <paramref name="readLength"/>.</returns>
+      /// <returns>
+      /// Read data. The array length is file size * <paramref name="numPlaces"/>,
+      /// which is probably larger than <paramref name="readLength"/>.
+      /// </returns>
       public static char[] ReadSubstitutedCleartextFile(
          in string filePath,
          in Encoding encoding,
@@ -237,7 +241,7 @@ namespace MatrixTranspose {
       /// <exception cref="ArgumentException">Thrown if <paramref name="filePath"/> is null or an empty string
       /// or if the file exceeds the maximum allowed size.</exception>
       /// <exception cref="ArgumentNullException">Thrown if <paramref name="encoding"/> is null.</exception>
-      /// <returns>Size of file.</returns>
+      /// <returns>Size of file in bytes.</returns>
       private static long CheckReadBaseData(in string filePath, in Encoding encoding) {
          CheckFileBaseData(filePath, encoding);
 

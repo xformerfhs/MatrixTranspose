@@ -37,7 +37,7 @@ namespace EncodingHandling {
       /// Returns the minimum bytes per character of the encoding.
       /// </summary>
       /// <param name="encoding">Encoding.</param>
-      /// <returns>Minimum bytes per character.</returns>
+      /// <returns>The minimum number of bytes per character.</returns>
       public static int BytesPerCharacter(this Encoding encoding) {
          if (encoding.IsSingleByte)
             return 1;
@@ -60,7 +60,10 @@ namespace EncodingHandling {
       /// <summary>
       /// Reports, whether the encoding is an EBCDIC encoding.
       /// </summary>
-      /// <returns><c>true</c>, if the encoding is an EBCDIC encoding; otherwise <c>false</c>.</returns>
+      /// <returns>
+      /// <see langword="true"/>, if the encoding is an EBCDIC encoding;
+      /// otherwise <see langword="false"/>.
+      /// </returns>
       public static bool IsEbcdic(this Encoding encoding) {
          return encoding.EncodingName.Contains("EBCDIC", StringComparison.InvariantCultureIgnoreCase);
       }
@@ -69,7 +72,7 @@ namespace EncodingHandling {
       /// Reports, whether the encoding writes a BOM.
       /// </summary>
       /// <param name="encoding">Encoding to check.</param>
-      /// <returns><c>True</c>, if it writes a BOM; <c>False</c>, if not.</returns>
+      /// <returns><see langword="true"/>, if it writes a BOM; <see langword="false"/>, if not.</returns>
       public static bool WritesBom(this Encoding encoding) {
          return encoding.GetPreamble().Length != 0;
       }

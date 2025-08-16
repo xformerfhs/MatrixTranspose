@@ -39,9 +39,11 @@ namespace MatrixTranspose {
       /// <param name="encoding">Wanted encoding of file.</param>
       /// <param name="substitutionCharacters">Substitution characters.</param>
       /// <param name="numPlaces">Number of places per substitution.</param>
-      /// <returns>Task with read data, BOM indicator, read length and used encoding.
-      /// The array length is "file size * <paramref name="numPlaces"/>", which is probably larger 
-      /// than the read length.</returns>
+      /// <returns>
+      /// Task with read data, BOM indicator, read length and used encoding.
+      /// The array length is "file size * <paramref name="numPlaces"/>",
+      /// which is probably larger than the read length.
+      /// </returns>
       public static Task<(char[] Result, bool HasBom, int ReadLength, Encoding UsedEncoding)>
           ReadEncryptedTextFileAsync(
               string filePath,
@@ -75,9 +77,11 @@ namespace MatrixTranspose {
       /// <param name="hasBom">Out: Reports, whether file has a BOM.</param>
       /// <param name="readLength">Out: Length of read data.</param>
       /// <param name="usedEncoding">Out: Encoding used for reading.</param>
-      /// <returns>task with read data, BOM indicator, read length and used encoding.
+      /// <returns>
+      /// Task with read data, BOM indicator, read length and used encoding.
       /// The array length is "file size * <paramref name="numPlaces"/>",
-      /// which is probably larger than the read length.</returns>
+      /// which is probably larger than the read length.
+      /// </returns>
       public static Task<(char[] Result, bool HasBom, int ReadLength, Encoding UsedEncoding)>
           ReadSubstitutedCleartextFileAsync(
               string filePath,

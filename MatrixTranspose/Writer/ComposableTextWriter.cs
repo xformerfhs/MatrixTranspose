@@ -57,7 +57,7 @@ namespace WriteHandling {
       /// </summary>
       /// <param name="stream">The <see cref="Stream"/> to wrap.</param>
       /// <param name="encoding">The <see cref="Encoding"/> to use in the writer.</param>
-      /// <exception cref="ArgumentNullException">Thrown, if any parameter is <c>null</c>.</exception>
+      /// <exception cref="ArgumentNullException">Thrown, if any parameter is <see langword="null"/>.</exception>
       /// <exception cref="ArgumentException">Thrown, if <paramref name="stream"/> is not writable.</exception>
       public ComposableTextWriter(Stream stream, Encoding encoding) {
          if (stream == null)
@@ -78,7 +78,7 @@ namespace WriteHandling {
       /// </summary>
       /// <param name="filePath">File path of the file to write.</param>
       /// <param name="encoding">The <see cref="Encoding"/> to use in the writer.</param>
-      /// <exception cref="ArgumentNullException">Thrown, if any parameter is <c>null</c>.</exception>
+      /// <exception cref="ArgumentNullException">Thrown, if any parameter is <see langword="null"/>.</exception>
       /// <exception cref="ArgumentException">Thrown, if <paramref name="stream"/> is not writable.</exception>
       public ComposableTextWriter(string filePath, Encoding encoding) :
          this(new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read), encoding) { 

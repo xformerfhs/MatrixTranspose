@@ -79,7 +79,9 @@ namespace AlphabetHandling {
       /// </summary>
       /// <param name="numPlaces">Number of places.</param>
       /// <param name="numCharacters">Number of characters.</param>
-      /// <returns><see cref="AlphabetDescription"/> for the given <paramref name="numCharacters"/> and <paramref name="numPlaces"/>.</returns>
+      /// <returns>
+      /// <see cref="AlphabetDescription"/> for the given <paramref name="numCharacters"/> and <paramref name="numPlaces"/>.
+      /// </returns>
       /// <exception cref="ArgumentException">Thrown, if any parameter is invalid or there is no
       /// <see cref="AlphabetDescription"/> for this parameter combination.</exception>
       public static AlphabetDescription GetAlphabet(in byte numPlaces, in byte numCharacters) {

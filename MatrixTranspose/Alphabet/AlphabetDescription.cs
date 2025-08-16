@@ -59,12 +59,12 @@ namespace AlphabetHandling {
       public SortedSet<char> AlphabetSet { get; }
 
       /// <summary>
-      /// <c>true</c> if 'J' has to be treated as 'I', <c>false</c> otherwise.
+      /// <see langword="true"/> if 'J' has to be treated as 'I', <see langword="false"/> otherwise.
       /// </summary>
       public bool TreatJAsI { get; }
 
       /// <summary>
-      /// <c>true</c> if all characters have to be converted to upper case, <c>false</c> otherwise.
+      /// <see langword="true"/> if all characters have to be converted to upper case, <see langword="false"/> otherwise.
       /// </summary>
       public bool ToUpper { get; }
       #endregion
