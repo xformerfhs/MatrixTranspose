@@ -236,7 +236,7 @@ I.e. the entry that starts with `3x6` means that each character is encoded by th
 | 3 | 3 | 27 | ABCDEFGHIJKLMNOPRSTUVWXYZ  | All upper-case characters and a blank. |
 | 3 | 4 | 64 | ABCDEFGHIJKLMNOPRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 . | This is the first character class with lower-case letters. |
 | 4 | 3 | 81 |  {LF}.,;:-!?'"%&+#*/()ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 | ./. |
-| 3 | 6 | 216 |  {LF}.,;:-!?'"§%&+#*/()|°^~<=>–—«»¡¿¥£¤€$¢ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ÀÁÂÃÄÅĄÆÇĆČÐÞĎÈÉÊËĘĚÌÍÎÏŁÑŃŇÒÓÔÕÖØŘŚŠŤÙÚÛÜŮÝŸŹŻŽàáâãäåąæçćčðþďèéêëęěìíîïłñńňòóôõöøřśšßťùúûüůýÿźżž | ./. |
+| 3 | 6 | 216 |  {LF}.,;:-!?'"§%&+#*/()\|°^~<=>–—«»¡¿¥£¤€$¢ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ÀÁÂÃÄÅĄÆÇĆČÐÞĎÈÉÊËĘĚÌÍÎÏŁÑŃŇÒÓÔÕÖØŘŚŠŤÙÚÛÜŮÝŸŹŻŽàáâãäåąæçćčðþďèéêëęěìíîïłñńňòóôõöøřśšßťùúûüůýÿźżž | ./. |
 
 When a character class with only upper-case letters is chosen, all characters read will be converted to upper-case.
 
