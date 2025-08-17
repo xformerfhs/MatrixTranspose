@@ -356,7 +356,7 @@ The default is "Windows (CR/LF)".
 If an EBCDIC encoding is chosen as the destination encoding, "EBCDIC (NL)" is chosen as the default.
 
 The line endings can only be specified for the destination file.
-The program recognizes all possible line endings and converts them into a standardized internal form before further processing.
+When reading the source file the program recognizes all possible line endings and converts them into a standardized internal form before further processing.
 
 #### Text Layout
 
