@@ -342,7 +342,7 @@ This combo box is only enabled if the destination encoding supports a BOM.
 
 As if this would be not complicated enough, there is a further complication: Line endings.
 
-Historically there have been many different ways to indicate the end of text line:
+Historically there have been many different ways to indicate the end of a text line:
 
 | Line Ending                       | Byte value(s) | Meaning                                  |
 | :-------------------------------- | :----------- | :---------------------------------------- |
@@ -375,7 +375,7 @@ It has no effect on decryption.
 
 #### Buttons
 
-Clicking the green `GO` button starts the selected operation.
+Clicking the green `Go!` button starts the selected operation.
 
 Clicking the red `Exit` button exits the program.
 
