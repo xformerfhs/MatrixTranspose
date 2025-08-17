@@ -212,6 +212,9 @@ However, if a long plain text is encrypted and there are at least two transposit
 
 Then one has to solve the problem of somehow securely storing long random passwords...
 
+Note also that this encryption is not fault tolerant.
+If only one character is omitted or only one character added to the encrypted text the encryption can no longer be decrypted.
+
 ## Usage
 
 When the program is started the main windows appears.
