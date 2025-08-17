@@ -295,8 +295,9 @@ There are two encoding fields.
 One for the source file and one for the destination file.
 
 Each is a combo box that shows all encodings that can be handled by the program.
+There are 98 encodings known to the program.
 
-Here are the most important encodings:
+Here are the most important ones:
 
 | Name           | Meaning                                                                       |
 | :------------- | :---------------------------------------------------------------------------- |
@@ -312,7 +313,6 @@ Here are the most important encodings:
 | `WINDOWS-1250` | [Windows 1250](https://en.wikipedia.org/wiki/Windows-1250)                    |
 | `WINDOWS-1252` | [Windows 1252](https://en.wikipedia.org/wiki/Windows-1252)                    |
 
-As can be seen there are quite a lot of different ways to encode characters in bytes.
 Since files are a sequence of bytes and there is no way to read the encoding of a file, it has to be specified by the user.
 
 The default is `UTF-8` as it is the most commonly used encoding.
