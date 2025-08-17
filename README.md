@@ -1,7 +1,5 @@
 # MatrixTranspose
 
-This is a dummy text for the real documentation which I will add a later time.
-
 This is a small program that features a combined [Polybios (matrix) substitution](https://en.wikipedia.org/wiki/Polybius_square) and [transposition](https://en.wikipedia.org/wiki/Transposition_cipher) cipher.
 
 It is intended for educational purposes.
@@ -213,6 +211,168 @@ There are 3 reasons for this:
 However, if a long plain text is encrypted and there are at least two transpositions and these transpositions use long random passwords with lengths 30 or more, than this encryption is indeed secure.
 
 Then one has to solve the problem of somehow securely storing long random passwords...
+
+## Usage
+
+When the program is started the main windows appears.
+It has three tabs named `Matrix Substitution`, `Transposition` and `Files`.
+
+### Matrix substitution
+
+The `Matrix Substitution` deals with the first part of the encryption, the substitution.
+The window has three sections: `Character Classes`, `Matix Characters` and `Password`.
+
+#### Character Classes
+
+This section has 6 entries that deal with the characters that are encrypted and how they are matrix encrypted.
+An entry can be chosen by clicking the its radio button.
+An entry first states how many characters are used to encode a character, followed by an `x` and then the number of different characters.
+I.e. the entry that starts with `3x6` means that each character is encoded by three characters and there are 6 different characters.
+
+| **Places** | **# Characters** | **Combinations** | **Allowed characters** | **Remarks** |
+| :--------: | :--------------: | ---------------: | :----------------- | :------ |
+| 2 | 5 | 25 | ABCDEFGHIKLMNOPRSTUVWXYZ | Note that there is no J. Each J is replaced by an I. |
+| 2 | 6 | 36 | ABCDEFGHIJKLMNOPRSTUVWXYZ0123456890 | ./. |
+| 3 | 3 | 27 | ABCDEFGHIJKLMNOPRSTUVWXYZ  | All upper-case characters and a blank. |
+| 3 | 4 | 64 | ABCDEFGHIJKLMNOPRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 . | This is the first character class with lower-case letters. |
+| 4 | 3 | 81 |  {LF}.,;:-!?'"%&+#*/()ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 | ./. |
+| 3 | 6 | 216 |  {LF}.,;:-!?'"§%&+#*/()|°^~<=>–—«»¡¿¥£¤€$¢ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ÀÁÂÃÄÅĄÆÇĆČÐÞĎÈÉÊËĘĚÌÍÎÏŁÑŃŇÒÓÔÕÖØŘŚŠŤÙÚÛÜŮÝŸŹŻŽàáâãäåąæçćčðþďèéêëęěìíîïłñńňòóôõöøřśšßťùúûüůýÿźżž | ./. |
+
+When a character class with only upper-case letters is chosen, all characters read will be converted to upper-case.
+
+#### Matrix Characters
+
+Here the characters for the substitution are specified.
+They can only be upper-case latin characters.
+There is a button `Random Alphabet` that generates a random alphabet of the allowed length.
+The characters can be edited.
+
+#### Password
+
+Here the password for the matrix substitution is specified.
+It can be built with the characters of the chosen character class.
+
+### Transposition
+
+The `Transposition` tab has only two sections: `Password` and `Passwords`.
+
+One can enter a paassword in the `Password` field.
+Upon pressing the `Enter` key, the entered password is converted to lower-case and copied into the `Passwords` section.
+The passwords can be reordered by clicking on a password and dragging it to its new position.
+Each password in the `Passwords` section can be deleted by clicking the `X` behind it.
+
+Since it is essential that the password lengths do not have a common divisor, a password is rejected that has a length that has a common divisor with a password that is already present.
+
+### File
+
+The `File` tab is the most complex one as the handling of text files is complex and complicated.
+It features four sections entitled `Operation`, `Files`, `Encodings` and `Text Layout` and two buttons `Go` and `Exit`.
+
+#### Operation
+
+Here one can decide whether encryption or decryption should be performed.
+
+#### Files
+
+There is a button `Source File`.
+When one clicks it, a file dialog appears where one can select the source file to be used for the operation chosen in the section above.
+
+When a file is chosen its path appears in the `Source` subsection.
+The name of the destination file appears below in the `Destination` subsection.
+
+When encrypting, the destination file path is constructed by appending `_encrypted` to the base file name.
+When decrypting, `_decrypted` is appended.
+
+#### Encodings
+
+This is the most complex setting.
+Files are just bytes with no inherent meaning.
+They become text files by assigning a meaning to byte sequences.
+Characters are encoded by a specific byte sequence.
+This is called an encoding.
+
+There are two encoding fields.
+One for the source file and one for the destination file.
+
+Each is a combo box that shows all encodings that can be handled by the program.
+
+Here are the most important encodings:
+
+| Name           | Meaning                                                                       |
+| :------------- | :---------------------------------------------------------------------------- |
+| `IBM273`       | [IBM Code Page 273](https://en.wikipedia.org/wiki/EBCDIC) (EBCDIC)            |
+| `IBM437`       | [IBM Code Page 437](https://en.wikipedia.org/wiki/Code_page_437)              |
+| `IBM850`       | [IBM Code Page 850](https://en.wikipedia.org/wiki/Code_page_850)              |
+| `IBM852`       | [IBM Code Page 852](https://en.wikipedia.org/wiki/Code_page_852)              |
+| `ISO-8859-1`   | [ISO 8859-1](https://en.wikipedia.org/wiki/ISO/IEC_8859-1)                    |
+| `ISO-8859-15`  | [ISO 8859-15](https://en.wikipedia.org/wiki/ISO/IEC_8859-15)                  |
+| `UTF-16BE`     | [UTF-16BE](https://en.wikipedia.org/wiki/UTF-16) (`BE` means "big-endian")    |
+| `UTF-16`       | [UTF-16LE](https://en.wikipedia.org/wiki/UTF-16) (`LE` means "little-endian") |
+| `UTF-8`        | [UTF-8](https://en.wikipedia.org/wiki/UTF-8)                                  |
+| `WINDOWS-1250` | [Windows 1250](https://en.wikipedia.org/wiki/Windows-1250)                    |
+| `WINDOWS-1252` | [Windows 1252](https://en.wikipedia.org/wiki/Windows-1252)                    |
+
+As can be seen there are quite a lot of different ways to encode characters in bytes.
+Since files are a sequence of bytes and there is no way to read the encoding of a file, it has to be specified by the user.
+
+The default is `UTF-8` as it is the most commonly used encoding.
+
+And - in fact - there are five common encodings that __may__ include an indication of the used encoding by means of a "[Byte Order Mark (BOM)](https://en.wikipedia.org/wiki/Byte_order_mark)".
+These encodings are UTF-8, UTF-16BE, UTF-16LE, UTF-32BE and UTF32-LE.
+They are the only encodings that can be recognized automatically.
+A byte order mark may be present.
+It does not have to be present for these encodings.
+
+If the program encounters a byte order mark at the beginning of a file, it uses this encoding and discards the encoding that is specified by the user.
+
+Below the two combo boxes is a check box that reads "Destination encoding same as source encoding".
+If this is checked, the destination encoding will be the same as the source encoding.
+This is default.
+
+Below this is another combo box that is labeled "Destination BOM".
+It has the following values:
+
+| Setting        | Meaning                                                                      |
+| :------------- | :--------------------------------------------------------------------------- |
+| Same as source | The destination file has a BOM if - and only if - the source file has a BOM. |
+| No BOM         | The destination has no BOM, regardless of a BOM presence in the source file. |
+| With BOM       | The destination has a BOM, regardless of a BOM presence in the source file.  |
+
+This is combo box is only enabled if the destination encoding supports a BOM.
+
+As if this would be not complicated enough, there is a further complication: Line endings.
+
+Historically there have been many different ways to indicate the end of text line:
+
+| Line Ending                       | Byte value(s) | Meaning                                  |
+| :-------------------------------- | :----------- | :---------------------------------------- |
+| ASCII Line Feed                   | `0A`         | Line ending of Unix and Linux text files. |
+| ASCII Carriage Return / Line Feed | `0D 0A`      | Line ending of Windows text files.        |
+| ASCII Carriage Return             | `0D`         | Line ending of old Macintosh text files.  |
+| EBCDIC New Line                   | `15`         | Line ending of IBM EBCDIC files.          |
+
+So, there is another combo box at the end of this section to specify the line ending of the destination file.
+The default is "Windows (CR/LF)".
+If an EBCDIC encoding is chosen as the destination encoding, "EBCDIC (NL)" is chosen as the default.
+
+#### Text Layout
+
+When encrypting a file, the output is just a long stream of characters.
+In order to structure these characters, it is possible to specify a group size and a maximum line length.
+If any of these is different from `0`, the text is structured accordingly.
+I.e. if the group size is larger than 0, the encrypted text will be grouped.
+If the maximum line length is set, there will be line breaks after this length.
+If both group size and maximum line length are set, the effective maximum line length is the largest multiple of "group size + 1" that is less than or equal to the specified maximum line length.
+This is done, so that groups are not split between lines.
+
+The "Text Layout" section vis only enabled, if encryption is chosen.
+It has no effect on decryption.
+
+#### Buttons
+
+Clicking the green `GO` button starts the selected operation.
+
+Clicking the red `Exit` button exits the program.
 
 ## Contributing
 

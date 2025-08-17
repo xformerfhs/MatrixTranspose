@@ -761,7 +761,7 @@ namespace MatrixTranspose {
          EnumComboBoxHelper.SetupEnumComboBox<BomOption>(ComboBom, bomOption => {
             switch (bomOption) {
                case BomOption.SameAsInput:
-                  return "Same as input";
+                  return "Same as source";
                case BomOption.NoBom:
                   return "No BOM";
                case BomOption.WithBom:

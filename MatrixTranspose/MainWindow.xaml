@@ -182,12 +182,13 @@
             </StackPanel>
          </StackPanel>
       </TabItem>
-      <TabItem x:Name="TabFile"
-		         Header="File"
+      <TabItem x:Name="TabFiles"
+		         Header="Files"
 		         Background="GreenYellow"
 		         FontSize="14"
 		         Height="23"
-		         VerticalAlignment="Center" HorizontalAlignment="Left" Width="32">
+		         VerticalAlignment="Center"
+               HorizontalAlignment="Left">
          <StackPanel x:Name="StackFiles"
 			            Orientation="Vertical" Height="432">
             <GroupBox x:Name="GroupFileOperation"
@@ -278,7 +279,8 @@
                      <StackPanel x:Name="StackInputEncoding"
 							            Orientation="Horizontal"
 							            Margin="0,0,0,10">
-                        <Label Content="Input:"
+                        <Label x:Name="LabelSourceEncoding"
+                               Content="Source:"
 								       FontWeight="Bold"
 								       VerticalAlignment="Center"
 								       Width="60"/>
@@ -305,15 +307,16 @@
                      <StackPanel x:Name="StackOutputEncoding"
 							            Orientation="Horizontal"
 							            Margin="0,0,0,10">
-                        <Label Content="Output:"
+                        <Label x:Name="LabelDestinationEncoding"
+                               Content="Destination:"
 								       FontWeight="Bold"
 								       VerticalAlignment="Center"
-								       Width="60"/>
+								       Width="93"/>
                         <ComboBox x:Name="ComboOutputEncoding"
 								          SelectedValuePath="CodePage"
 								          Height="25"
 								          Width="410"
-                                  Margin="45,0,0,0"
+                                  Margin="12,0,0,0"
 								          IsReadOnly="True"
 								          IsEnabled="False"
 								          IsEnabledChanged="ComboOutputEncoding_IsEnabledChanged"
@@ -334,7 +337,7 @@
                      </StackPanel>
                      <CheckBox x:Name="CheckKeepEncoding"
 							          Margin="105,0,0,0"
-							          Content="Output encoding same as input encoding"
+							          Content="Destination encoding same as source encoding"
 							          IsChecked="True"
 							          Click="CheckKeepEncoding_Click"/>
                      <StackPanel x:Name="StackOutputOptions"
@@ -345,18 +348,18 @@
                                  HorizontalAlignment="Left"
                                  Margin="0,5,0,0">
                         <Label x:Name="LabelOutputBOM"
-                               Content="Output BOM:"
+                               Content="Destination BOM:"
   								       FontWeight="Bold"
 								       VerticalAlignment="Center"/>
                         <ComboBox x:Name="ComboBom"
-                                  Margin="44,0,0,0"/>
+                                  Margin="43,0,0,0"/>
                      </StackPanel>
                      <StackPanel x:Name="StackLineEnding" 
                                  Orientation="Horizontal"
                                  HorizontalAlignment="Left"
                                  Margin="0,5,0,0">
                         <Label x:Name="LabelOutputLineEnding"
-                               Content="Output Line Ending:"
+                               Content="Destination Line Ending:"
   								       FontWeight="Bold"
 								       VerticalAlignment="Center"/>
                         <ComboBox x:Name="ComboLineEnding"
