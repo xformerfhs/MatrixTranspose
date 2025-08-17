@@ -220,16 +220,16 @@ It has three tabs named `Matrix Substitution`, `Transposition` and `Files`.
 ### Matrix substitution
 
 The `Matrix Substitution` deals with the first part of the encryption, the substitution.
-The window has three sections: `Character Classes`, `Matix Characters` and `Password`.
+The window has three sections: `Character Classes`, `Matrix Characters` and `Password`.
 
 #### Character Classes
 
 This section has 6 entries that deal with the characters that are encrypted and how they are matrix encrypted.
-An entry can be chosen by clicking the its radio button.
+An entry can be chosen by clicking its radio button.
 An entry first states how many characters are used to encode a character, followed by an `x` and then the number of different characters.
 I.e. the entry that starts with `3x6` means that each character is encoded by three characters and there are 6 different characters.
 
-| **Places** | **# Characters** | **Combinations** | **Allowed characters** | **Remarks** |
+| **Places** | **#&nbsp;Characters** | **Combinations** | **Allowed characters** | **Remarks** |
 | :--------: | :--------------: | ---------------: | :----------------- | :------ |
 | 2 | 5 | 25 | ABCDEFGHIKLMNOPRSTUVWXYZ | Note that there is no J. Each J is replaced by an I. |
 | 2 | 6 | 36 | ABCDEFGHIJKLMNOPRSTUVWXYZ0123456890 | ./. |
@@ -258,7 +258,7 @@ The `Transposition` tab has only two sections: `Password` and `Passwords`.
 
 One can enter a paassword in the `Password` field.
 Upon pressing the `Enter` key, the entered password is converted to lower-case and copied into the `Passwords` section.
-The passwords can be reordered by clicking on a password and dragging it to its new position.
+The passwords can be reordered by clicking on a password and dragging it to a new position.
 Each password in the `Passwords` section can be deleted by clicking the `X` behind it.
 
 Since it is essential that the password lengths do not have a common divisor, a password is rejected that has a length that has a common divisor with a password that is already present.
@@ -338,7 +338,7 @@ It has the following values:
 | No BOM         | The destination has no BOM, regardless of a BOM presence in the source file. |
 | With BOM       | The destination has a BOM, regardless of a BOM presence in the source file.  |
 
-This is combo box is only enabled if the destination encoding supports a BOM.
+This combo box is only enabled if the destination encoding supports a BOM.
 
 As if this would be not complicated enough, there is a further complication: Line endings.
 
@@ -358,14 +358,16 @@ If an EBCDIC encoding is chosen as the destination encoding, "EBCDIC (NL)" is ch
 #### Text Layout
 
 When encrypting a file, the output is just a long stream of characters.
+
 In order to structure these characters, it is possible to specify a group size and a maximum line length.
 If any of these is different from `0`, the text is structured accordingly.
 I.e. if the group size is larger than 0, the encrypted text will be grouped.
 If the maximum line length is set, there will be line breaks after this length.
+
 If both group size and maximum line length are set, the effective maximum line length is the largest multiple of "group size + 1" that is less than or equal to the specified maximum line length.
 This is done, so that groups are not split between lines.
 
-The "Text Layout" section vis only enabled, if encryption is chosen.
+The "Text Layout" section is only enabled, if encryption is chosen.
 It has no effect on decryption.
 
 #### Buttons
