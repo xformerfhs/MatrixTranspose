@@ -355,6 +355,9 @@ So, there is another combo box at the end of this section to specify the line en
 The default is "Windows (CR/LF)".
 If an EBCDIC encoding is chosen as the destination encoding, "EBCDIC (NL)" is chosen as the default.
 
+The line endings can only be specified for the destination file.
+The program recognizes all possible line endings and converts them into a standardized internal form before further processing.
+
 #### Text Layout
 
 When encrypting a file, the output is just a long stream of characters.
