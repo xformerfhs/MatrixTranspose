@@ -110,13 +110,13 @@ Let the password be `MEDDLE`.
 This is written as the header of a table:
 
 | **M** | **E** | **D** | **D** | **L** | **E** |
-| - | - | - | - | - | - |
+| :-: | :-: | :-: | :-: | :-: | :-: |
 | |  |  |  |  |  |
 
 Then the order of the letter according to the alphabet is written under each letter of the password:
 
 | **M** | **E** | **D** | **D** | **L** | **E** |
-| - | - | - | - | - | - |
+| :-: | :-: | :-: | :-: | :-: | :-: |
 | **6** | **3** | **1** | **2** | **5** | **4** |
 | |  |  |  |  |  |
 
@@ -133,7 +133,7 @@ We assume a very simple clear text: `ABCDEFGHIJKLMNOPQRSTUVWXYZ`.
 The table then looks like this:
 
 | **M** | **E** | **D** | **D** | **L** | **E** |
-| - | - | - | - | - | - |
+| :-: | :-: | :-: | :-: | :-: | :-: |
 | **6** | **3** | **1** | **2** | **5** | **4** |
 | A | B | C | D | E | F |
 | G | H | I | J | K | L |
@@ -182,7 +182,7 @@ With the matrix substitution this clear text becomes
 This is filled into the transposition table:
 
 | **M** | **E** | **D** | **D** | **L** | **E** |
-| - | - | - | - | - | - |
+| :-: | :-: | :-: | :-: | :-: | :-: |
 | **6** | **3** | **1** | **2** | **5** | **4** |
 | X | D | A | G | G | G |
 | A | A | D | A | D | X |
