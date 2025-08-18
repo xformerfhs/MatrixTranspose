@@ -779,7 +779,7 @@ namespace MatrixTranspose {
                case LineEndingHandler.Option.Unix:
                   return "Unix (LF)";
                case LineEndingHandler.Option.OldMac:
-                  return "Old Macintosh (CR)";
+                  return "Old MacOS (CR)";
                case LineEndingHandler.Option.Ebcdic:
                   return "EBCDIC (NL)";
                default:
