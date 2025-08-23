@@ -4,7 +4,7 @@ This is a small program that features a combined [Polybios (matrix) substitution
 
 It is intended for educational purposes.
 It shows how cryptography works and how the security or insecurity of a cipher occurs.
-Modern ciphers like [ChaCha20-Poly1305](https://en.wikipedia.org/wiki/ChaCha20-Poly1305) or [AES-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) are far better suited for doing real encryption.
+Modern ciphers like [(X)ChaCha20-Poly1305](https://en.wikipedia.org/wiki/ChaCha20-Poly1305) or [AES-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) are far better suited for doing real encryption.
 
 Here is how the encryption in this program works:
 
