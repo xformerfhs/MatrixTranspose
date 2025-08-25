@@ -13,7 +13,7 @@ namespace LineEndingHandling {
       public const char LineFeed = '\n';
 
       /// <summary>
-      /// "Next Line" (NL) control character. Used in EBCDIC texts.
+      /// "Next Line" (NEL) control character. Used in EBCDIC texts.
       /// </summary>
       public const char NextLine = '\u0085';
 

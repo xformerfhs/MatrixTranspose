@@ -353,11 +353,11 @@ Historically there have been many different ways to indicate the end of a text l
 | ASCII Line Feed                   | `0A`         | Line ending of Unix and Linux text files. |
 | ASCII Carriage Return / Line Feed | `0D 0A`      | Line ending of Windows text files.        |
 | ASCII Carriage Return             | `0D`         | Line ending of old MacOS text files.      |
-| EBCDIC New Line                   | `15`         | Line ending of IBM EBCDIC files.          |
+| EBCDIC Next Line                  | `15`         | Line ending of IBM EBCDIC files.          |
 
 So, there is another combo box at the end of this section to specify the line ending of the destination file.
 The default is "Windows (CR/LF)".
-If an EBCDIC encoding is selected as the destination encoding, "EBCDIC (NL)" is used as the default.
+If an EBCDIC encoding is selected as the destination encoding, "EBCDIC (NEL)" is used as the default.
 
 The line endings can only be specified for the destination file.
 When reading the source file the program recognizes all possible line endings and converts them into a standardized internal form before further processing.
