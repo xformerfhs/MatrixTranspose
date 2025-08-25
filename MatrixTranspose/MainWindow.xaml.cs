@@ -781,7 +781,7 @@ namespace MatrixTranspose {
                case LineEndingHandler.Option.OldMac:
                   return "Old MacOS (CR)";
                case LineEndingHandler.Option.Ebcdic:
-                  return "EBCDIC (NL)";
+                  return "EBCDIC (NEL)";
                default:
                   return bomOption.ToString();
             }
