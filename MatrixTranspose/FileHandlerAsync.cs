@@ -74,9 +74,6 @@ namespace MatrixTranspose {
       /// <param name="numPlaces">Number of places per substitution.</param>
       /// <param name="treatJAsI">Should a "J" be treated as "I".</param>
       /// <param name="toUpper">Convert all characters to uppercase on read.</param>
-      /// <param name="hasBom">Out: Reports, whether file has a BOM.</param>
-      /// <param name="readLength">Out: Length of read data.</param>
-      /// <param name="usedEncoding">Out: Encoding used for reading.</param>
       /// <returns>
       /// Task with read data, BOM indicator, read length and used encoding.
       /// The array length is "file size * <paramref name="numPlaces"/>",
