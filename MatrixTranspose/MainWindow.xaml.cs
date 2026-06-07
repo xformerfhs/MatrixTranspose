@@ -179,9 +179,7 @@ namespace MatrixTranspose {
          if (openFileDialog.ShowDialog() == true) {
             string sourceFilePath = openFileDialog.FileName;
             TextSourceFile.Text = sourceFilePath;
-            string destinationFilePath = GetDestinationFilePath(sourceFilePath, GetOperationPrefix());
-
-            TextDestinationFile.Text = destinationFilePath;
+            TextDestinationFile.Text = GetDestinationFilePath(sourceFilePath, GetOperationPrefix());
 
             int codepage;
             (_, codepage) = EncodingHelper.DetectBomCodepage(sourceFilePath);
