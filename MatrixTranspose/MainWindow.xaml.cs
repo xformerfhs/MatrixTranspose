@@ -20,6 +20,7 @@
  *
  * Change history:
  *    2025-08-02: V1.0.0: Created. fhs
+ *    2026-06-07: V1.0.1: Some parts simplified. fhs
  */
 
 using AlphabetHandling;
@@ -366,11 +367,8 @@ namespace MatrixTranspose {
       /// <param name="e">Event parameters.</param>
       private void RadioDecrypt_Checked(object sender, RoutedEventArgs e) {
          if (TextSourceFile != null &&
-             !string.IsNullOrEmpty(TextSourceFile.Text)) {
-            string destinationFilePath = GetDestinationFilePath(TextSourceFile.Text, @"de");
-
-            TextDestinationFile.Text = destinationFilePath;
-         }
+             !string.IsNullOrEmpty(TextSourceFile.Text))
+            TextDestinationFile.Text = GetDestinationFilePath(TextSourceFile.Text, @"de");
 
          // Disable the group size and max line length controls for decryption.
          if (NumberGroupSize != null)
@@ -387,11 +385,8 @@ namespace MatrixTranspose {
       /// <param name="e">Event parameters.</param>
       private void RadioEncrypt_Checked(object sender, RoutedEventArgs e) {
          if (TextSourceFile != null &&
-             !string.IsNullOrEmpty(TextSourceFile.Text)) {
-            string destinationFilePath = GetDestinationFilePath(TextSourceFile.Text, @"en");
-
-            TextDestinationFile.Text = destinationFilePath;
-         }
+             !string.IsNullOrEmpty(TextSourceFile.Text))
+            TextDestinationFile.Text = GetDestinationFilePath(TextSourceFile.Text, @"en");
 
          // Enable the group size and max line length controls for encryption.
          if (NumberGroupSize != null)
@@ -405,7 +400,7 @@ namespace MatrixTranspose {
       /// Handles the preview key down event for the TextAlphabet TextBox to prevent entering spaces.
       /// </summary>
       /// <remarks>
-      /// It is really a strange idea, that a blank is "control" character.
+      /// It is really a strange idea, that a blank is a "control" character.
       /// </remarks>
       /// <param name="sender">Sender control.</param>
       /// <param name="e">Event parameters.</param>
@@ -458,7 +453,7 @@ namespace MatrixTranspose {
       /// if the alphabet does not contain a space character.
       /// </summary>
       /// <remarks>
-      /// It is really a strange idea, that a blank is "control" character.
+      /// It is really a strange idea, that a blank is a "control" character.
       /// </remarks>
       /// <param name="sender">Sender control.</param>
       /// <param name="e">Event parameters.</param>
