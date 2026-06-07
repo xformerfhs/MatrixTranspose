@@ -58,6 +58,7 @@ namespace MatrixTranspose {
       }
       #endregion
 
+
       #region Public properties
       /// <summary>
       /// List of passwords for transposition.

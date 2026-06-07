@@ -42,6 +42,7 @@ namespace AlphabetHandling {
       private const byte MaxValue = 9;
       #endregion
 
+
       #region Public properties
       /// <summary>
       /// Number of places for one encoding.

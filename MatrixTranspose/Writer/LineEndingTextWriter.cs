@@ -44,6 +44,7 @@ namespace WriteHandling {
       private readonly bool _prefixWithCarriageReturn = false;
       #endregion
 
+
       #region Constructors
       /// <summary>
       /// Creates a new instance of <see cref="LineEndingTextWriter"/>.

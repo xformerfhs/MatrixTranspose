@@ -28,6 +28,7 @@ using System.Linq;
 
 namespace StringHandling {
    public static class StringExtension {
+      #region "Public static methods"
       /// <summary>
       /// Returns a value indicating whether a specified substring occurs within this string.
       /// The comparison is made with the specified <see cref="StringComparison"/>.
@@ -51,5 +52,6 @@ namespace StringHandling {
       public static string RemoveWhiteSpace(this string self) {
          return new string(self.Where(c => !char.IsWhiteSpace(c)).ToArray());
       }
+      #endregion
    }
 }

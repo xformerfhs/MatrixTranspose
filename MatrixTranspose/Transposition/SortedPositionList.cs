@@ -47,6 +47,7 @@ namespace TranspositionHandling {
       private bool _isDisposed;
       #endregion
 
+
       #region Constructors
       /// <summary>
       /// Creates a new instance of the SortedPositionList class.

@@ -31,6 +31,7 @@ namespace MatrixTranspose {
    /// Helper class for Enum ComboBoxes.
    /// </summary>
    public static class EnumComboBoxHelper {
+      #region "Public static methods"
       /// <summary>
       /// Set up the Enum ComboBox.
       /// </summary>
@@ -61,5 +62,6 @@ namespace MatrixTranspose {
       public static T? GetSelectedEnumValue<T>(ComboBox comboBox) where T : struct, Enum {
          return comboBox.SelectedValue as T?;
       }
+      #endregion
    }
 }

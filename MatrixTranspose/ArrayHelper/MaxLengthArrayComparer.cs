@@ -58,6 +58,7 @@ namespace ArrayHandling {
       }
       #endregion
 
+
       #region Public overridden methods
       public override int Compare(T[] x, T[] y) {
          if (ReferenceEquals(x, y))

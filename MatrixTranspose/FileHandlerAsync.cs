@@ -32,6 +32,7 @@ namespace MatrixTranspose {
    /// Wrapper class for asynchronous file handling operations.
    /// </summary>
    public static class FileHandlerAsync {
+      #region "Public static methods"
       /// <summary>
       /// Reads an encrypted file asynchronously and filters for substitution characters.
       /// </summary>
@@ -169,5 +170,6 @@ namespace MatrixTranspose {
                 writeLength);
          });
       }
+      #endregion
    }
 }

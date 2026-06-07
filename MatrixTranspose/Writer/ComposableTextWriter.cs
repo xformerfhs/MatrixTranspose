@@ -85,6 +85,7 @@ namespace WriteHandling {
       }
       #endregion
 
+
       #region Pulic builder methods
       /// <summary>
       /// Adds a <see cref="LineEndingTextWriter"/> to the composition that normalizes line endings to the specified option.
